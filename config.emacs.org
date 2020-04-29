@@ -76,6 +76,7 @@ TeX-source-correlate-start-server t)
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 
+
 ;; for export purposes
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
@@ -142,7 +143,7 @@ TeX-source-correlate-start-server t)
 
 ;; evaluate latex code blocks without asking
 (defun my-org-confirm-babel-evaluate (lang body)
-  (not (string= lang "latex")))  ;don't ask for ditaa
+  (not (string= lang "latex")))  ;don't ask for latex
 (setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
 
 ;; agenda toggle mode
@@ -169,7 +170,16 @@ TeX-source-correlate-start-server t)
       '(("t" "Todo" entry (file+headline "~/todo.org" "Tasks")
          "* TODO %?\n %i\n %a")))
 #+END_SRC
+** yasnippet
+#+BEGIN_SRC emacs-lisp
+;; require latex snippets in org mode
+(defun my-org-latex-yas ()
+  "Activate org and LaTeX yas expansion in org-mode buffers."
+  (yas-minor-mode)
+  (yas-activate-extra-mode 'latex-mode))
 
+(add-hook 'org-mode-hook #'my-org-latex-yas)
+#+END_SRC
 ** global enables
 #+BEGIN_SRC emacs-lisp
 (menu-bar-mode t)
