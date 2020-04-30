@@ -57,6 +57,13 @@
 
 
 * Default settings
+
+** global
+#+BEGIN_SRC emacs-lisp
+;; turn off #?!&/!!-bell
+(setq ring-bell-function 'ignore)
+
+#+END_SRC
 ** pdf-tools
 #+BEGIN_SRC 
 (pdf-tools-install)
