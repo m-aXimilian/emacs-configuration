@@ -376,7 +376,7 @@ TeX-source-correlate-start-server t)
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
- '(custom-enabled-themes (quote (leuven)))
+ '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
     (pdf-tools markdown-mode+ markdown-mode htmlize dirtree-prosjekt org-bullets dirtree yasnippet-snippets ox-twbs auto-complete-auctex auto-complete auctex))))
