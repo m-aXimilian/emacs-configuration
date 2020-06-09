@@ -20,9 +20,18 @@
 (package-initialize)
 #+END_SRC
 
-** disable splash screen
+** appearance
+*** disable splash screen
 #+BEGIN_SRC emacs-lisp
 (setq inhibit-splash-screen t)
+#+END_SRC
+*** disable toolbar
+#+BEGIN_SRC emacs-lisp
+(tool-bar-mode -1)
+#+END_SRC
+*** disable scroll bar
+#+BEGIN_SRC emacs-lisp
+(toggle-scroll-bar -1)
 #+END_SRC
 ** encoding and keyboard
 #+BEGIN_SRC emacs-lisp
