@@ -6,7 +6,7 @@
    #+BEGIN_SRC shell
    mkdir ~/.emacs.d
    cd .emacs.d
-   git pull [...]
+   git clone [...]
    #+END_SRC
 2. Load and evaluate the config file and secret files
    #+BEGIN_SRC shell
