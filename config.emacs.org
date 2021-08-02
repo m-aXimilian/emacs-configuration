@@ -8,9 +8,9 @@
 #+BEGIN_SRC emacs-lisp
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/") 
                          ("melpa" . "https://melpa.org/packages/")
-			     ("melpayas" . "http://melpa.milkbox.net/packages/")))
+			 ("melpayas" . "http://melpa.milkbox.net/packages/")))
 ;; from https://github.com/danielfm/spotify.el
-(add-to-list 'load-path "~/.emacs.d/spotify.el")
+;;(add-to-list 'load-path "~/.emacs.d/spotify.el")
 #+END_SRC
 
 ** settings and inits
@@ -39,11 +39,80 @@
 (require 'auto-complete-config)
 (require 'ac-math)
 (require 'org-bullets)
+(require 'ox)
 (require 'ox-publish)
 (require 'ox-latex)
 (require 'ox-beamer)
 (require 'ox-twbs)
-(require 'spotify)
+(require 'parse-time)
+;(require 'spotify)
+#+END_SRC
+
+
+* User functions
+** time-string conversions
+#+BEGIN_SRC emacs-lisp
+(defun round-to (n d)
+  "round the number n to d specified decimals"
+  (/ (fround (* (expt 10 d) n)) (expt 10 d)))
+  
+(defun revert (l)
+  "reverts a list"
+  (cond
+   ((null l) '())
+   (t (append (revert (cdr l)) (list (car l))))))
+
+(defun time-to-list (s)
+  "generates a list of numbers from :-separetd time string"
+  (mapcar 'string-to-number (split-string s ":")))
+
+(defun multiply-lists (l mult acc)
+  "multiplies each element of the lists and returns the sum of multiplied tuples"
+  (cond
+   ((null l) acc)
+   (t (multiply-lists (cdr l) (cdr mult) (+ acc (* (car l) (car mult)))))))
+
+(defun make-seconds (s)
+  "computes seconds form dd:hh:mm:ss time string" 
+  (multiply-lists (revert (time-to-list s)) '(1 60 3600 86400) 0))
+#+END_SRC
+** Helpers
+#+BEGIN_SRC emacs-lisp
+;;(defun linker(l)
+;;  (interactive
+;;    (read-string "give the stiring"))
+;;    (insert l))
+
+(defun make-link (l)
+  (cond
+   ((< (length l) 3) (get-link l))
+   ((not (equal (substring l 0 3) "[[*")) (get-link l))
+   (t l)))
+   
+(defun make-link-append-front (a l)
+  (let ((to-link (concat a " " l)))
+    (cond
+     ((< (length l) 3)
+      (get-link to-link))
+     ((not (equal (substring l 0 3) "[[*")) 
+      (get-link to-link))
+     (t l))))
+
+(defun get-link (l)
+  (concat "[[*" l "][" l "]]"))
+
+(defun sum (a b)
+  (interactive
+    (list
+      (read-number "first num: ")
+      (read-number "second num: ")))
+   (insert (number-to-string (+ a b))))
+
+#+END_SRC
+
+** Funciton Bindings
+#+BEGIN_SRC emacs-lisp
+;;(global-set-key (kbd "C-c C-g") 'linker)
 #+END_SRC
 
 
@@ -150,7 +219,7 @@ TeX-source-correlate-start-server t)
 
 ;; evaluate latex code blocks without asking
 (defun my-org-confirm-babel-evaluate (lang body)
-  (not (string= lang "latex")))  ;don't ask for latex
+  (not (or (string= lang "emacs-lisp") (string= lang "latex"))))  ;don't ask for latex
 (setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
 
 ;; agenda toggle mode
@@ -159,6 +228,8 @@ TeX-source-correlate-start-server t)
 
 ;; global agenda to-do file
 (setq org-agenda-files (quote ("~/todo.org")))
+;;(setq org-agenda-files (list "~/windows_home/Documents/prom"))
+;;(setq org-agenda-files (quote ("/home/max/windows_home/Documents/prom/todo/todo.org")))
 ;; global target file for notes
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 
@@ -176,6 +247,7 @@ TeX-source-correlate-start-server t)
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/todo.org" "Tasks")
          "* TODO %?\n %i\n %a")))
+(org-reload)
 #+END_SRC
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
@@ -198,8 +270,8 @@ TeX-source-correlate-start-server t)
 ID and Secret are imported in the ~.emacs~ config file from the
 spotify secrets file
  #+BEGIN_SRC emacs-lisp
-   (define-key spotify-mode-map (kbd "C-c s") 'spotify-command-map)
-   (setq spotify-transport 'connect)
+   ;;(define-key spotify-mode-map (kbd "C-c s") 'spotify-command-map)
+   ;;(setq spotify-transport 'connect)
    #+END_SRC
 
 
