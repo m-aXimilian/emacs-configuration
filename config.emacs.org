@@ -4,13 +4,10 @@
 
 * package sources and inits
 ** archives
-- Spotify :: [[https://github.com/danielfm/spotify.el][github - danielfm]]
 #+BEGIN_SRC emacs-lisp
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/") 
                          ("melpa" . "https://melpa.org/packages/")
 			 ("melpayas" . "http://melpa.milkbox.net/packages/")))
-;; from https://github.com/danielfm/spotify.el
-;;(add-to-list 'load-path "~/.emacs.d/spotify.el")
 #+END_SRC
 
 ** settings and inits
@@ -45,11 +42,29 @@
 (require 'ox-beamer)
 (require 'ox-twbs)
 (require 'parse-time)
-;(require 'spotify)
 #+END_SRC
 
 
 * User functions
+** Sample Documentation
+#+BEGIN_SRC emacs-lisp
+(defun new-sample (arg)
+  (interactive "sample name: ")
+  (let ((sample (concat "mku" arg)))
+    (let ((insertion
+	   (concat "* " (upcase sample) "\n"
+		   "Questions to answer:\n\n"
+		   "** Fabrication\n"
+		   "#+name: " sample "-fab\n"
+		   "| no | description | result | comment |\n"
+		   "|----+-------------+--------+---------|\n"
+		   "|    |             |        |         |\n"
+		   "#+TBLFM: $1='(make-link-append-front \"" (downcase sample) "-fab\" $1)\n\n"
+
+		   "** Results \n"
+		   )))
+      (insert insertion))))
+#+END_SRC
 ** time-string conversions
 #+BEGIN_SRC emacs-lisp
 (defun round-to (n d)
@@ -215,11 +230,13 @@ TeX-source-correlate-start-server t)
 ;; needed for code block evaluation
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((latex .t)))
+ '((latex .t)
+ (gnuplot .t)
+ (python .t)))
 
-;; evaluate latex code blocks without asking
+;; evaluate code blocks without asking
 (defun my-org-confirm-babel-evaluate (lang body)
-  (not (or (string= lang "emacs-lisp") (string= lang "latex"))))  ;don't ask for latex
+  (not (or (string= lang "emacs-lisp") (string= lang "latex") (string= lang "elisp") (string= lang "gnuplot")))) 
 (setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
 
 ;; agenda toggle mode
@@ -261,7 +278,8 @@ TeX-source-correlate-start-server t)
 #+END_SRC
 ** global enables
 #+BEGIN_SRC emacs-lisp
-(menu-bar-mode t)
+(menu-bar-mode 1)
+(tool-bar-mode -1)
 (yas-global-mode 1)
 (global-auto-complete-mode t)
 #+END_SRC
