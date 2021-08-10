@@ -49,6 +49,7 @@
 ** Sample Documentation
 #+BEGIN_SRC emacs-lisp
 (defun new-sample (arg)
+;; insert a new org-mode chapter for a sample at the current cursor position
   (interactive "sample name: ")
   (let ((sample (concat "mku" arg)))
     (let ((insertion
@@ -64,6 +65,16 @@
 		   "** Results \n"
 		   )))
       (insert insertion))))
+
+(defun sputter-step ()
+;; insert a new org-mode table for a sputter step at the current cursor position
+(interactive)
+(let ((insertion
+(concat
+"| element | power(W) | matching network(%:%) | MAN/AUT | dc voltage(V) | Ar flow(sccm) | base pressure(mbar) | sputter pressure(µbar) | Temperature(°C) |\n"
+"|---------+----------+-----------------------+---------+---------------+---------------+---------------------+------------------------+-----------------|\n"
+"|         |          |                       |         |               |               |                     |                        |                 |\n")))
+(insert insertion)))
 #+END_SRC
 ** time-string conversions
 #+BEGIN_SRC emacs-lisp
