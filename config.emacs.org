@@ -126,14 +126,6 @@
 
 (defun get-link (l)
   (concat "[[*" l "][" l "]]"))
-
-(defun sum (a b)
-  (interactive
-    (list
-      (read-number "first num: ")
-      (read-number "second num: ")))
-   (insert (number-to-string (+ a b))))
-
 #+END_SRC
 
 ** Funciton Bindings
