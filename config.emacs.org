@@ -42,6 +42,7 @@
 (require 'ox-beamer)
 (require 'ox-twbs)
 (require 'parse-time)
+(require 'org-ref)
 #+END_SRC
 
 
