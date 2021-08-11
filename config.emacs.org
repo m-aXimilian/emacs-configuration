@@ -69,12 +69,49 @@
   (defun sputter-step ()
     ;; insert a new org-mode table for a sputter step at the current cursor position
     (interactive)
+    (let ((tab-id (replace-regexp-in-string " " "-" (org-get-heading) t t)))
+      (let ((insertion
+             (concat
+              "#+name: " tab-id "\n"
+              "| element | power(W) | matching network(%:%) | MAN/AUT | dc voltage(V) | Ar flow(sccm) | base pressure(mbar) | sputter pressure(µbar) | Temperature(°C) |\n"
+              "|---------+----------+-----------------------+---------+---------------+---------------+---------------------+------------------------+-----------------|\n"
+              "|         |          |                       |         |               |               |                     |                        |                 |\n")))
+        (insert insertion))))
+
+  (defun resist-step ()
+    ;; insert a new org-mode list template for resist coating step
+    (interactive)
     (let ((insertion
            (concat
-            "| element | power(W) | matching network(%:%) | MAN/AUT | dc voltage(V) | Ar flow(sccm) | base pressure(mbar) | sputter pressure(µbar) | Temperature(°C) |\n"
-            "|---------+----------+-----------------------+---------+---------------+---------------+---------------------+------------------------+-----------------|\n"
-            "|         |          |                       |         |               |               |                     |                        |                 |\n")))
+            "- prebake=~200°C, 1h~\n"
+            "- resist=~AZECI3027 4000rpm 60s~\n"
+            "- softbake=~100°C, 150s~\n"
+            "- litho\n"
+            "  - focus=~-0.394~\n"
+            "  - filling defocus=~abs(focus) + 0.01~\n"
+            "  - modulation=~5%,20%~\n"
+            "  - filter=~1.0~\n"
+            "  - speed=~0.5mm/s, 2.0mm/s~\n"
+            "- post exposure bake=~none~\n"
+            "- developement=~AZ726MIF 60s~\n"
+            "- comments\n"
+            )))
       (insert insertion)))
+
+  (defun plasma-etch-step ()
+    (interactive)
+    (let ((tab-id (replace-regexp-in-string " " "-" (org-get-heading) t t)))
+      (let ((insertion
+             (concat
+              "#+name: " tab-id "\n"
+              "| desired plasma time | ignition time | Ton/s (Tcycle=1min) | Toff/s | total time/min |\n"
+              "|---------------------+---------------+---------------------+--------+----------------|\n"
+              "|                     |               |                     |        |                |\n"
+              "#+TBLFM: @2$1=14*30::@2$4=60 - @2$3::@2$5='(let ((base (/ (string-to-number @2$1) (string-to-number @2$3)))) (+ base (round (/ (* base (string-to-number @2$2)) 20))))"
+              )))
+        (insert insertion))))
+
+
 #+END_SRC
 ** time-string conversions
 #+BEGIN_SRC emacs-lisp
