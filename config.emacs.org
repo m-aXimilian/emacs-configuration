@@ -49,7 +49,7 @@
 ** Sample Documentation
 #+BEGIN_SRC emacs-lisp
   (defun new-sample (arg)
-    ;; insert a new org-mode chapter for a sample at the current cursor position
+    "insert a new org-mode chapter for a sample at the current cursor position"
     (interactive "sample name: ")
     (let ((sample (concat "mku" arg)))
       (let ((insertion
@@ -67,7 +67,7 @@
         (insert insertion))))
 
   (defun sputter-step ()
-    ;; insert a new org-mode table for a sputter step at the current cursor position
+    "insert a new org-mode table for a sputter step at the current cursor position"
     (interactive)
     (let ((tab-id (replace-regexp-in-string " " "-" (org-get-heading) t t)))
       (let ((insertion
@@ -79,7 +79,7 @@
         (insert insertion))))
 
   (defun resist-step ()
-    ;; insert a new org-mode list template for resist coating step
+    "insert a new org-mode list template for resist coating step"
     (interactive)
     (let ((insertion
            (concat
@@ -99,6 +99,8 @@
       (insert insertion)))
 
   (defun plasma-etch-step ()
+    "insert a new org-mode table for documenting a plasma-dry-etch step
+  at the current cursor position"
     (interactive)
     (let ((tab-id (replace-regexp-in-string " " "-" (org-get-heading) t t)))
       (let ((insertion
