@@ -83,17 +83,17 @@
     (interactive)
     (let ((insertion
            (concat
-            "- prebake=~200°C, 1h~\n"
-            "- resist=~AZECI3027 4000rpm 60s~\n"
-            "- softbake=~100°C, 150s~\n"
+            "- prebake=200°C, 1h\n"
+            "- resist=AZECI3027 4000rpm 60s\n"
+            "- softbake=100°C, 150s\n"
             "- litho\n"
-            "  - focus=~-0.394~\n"
-            "  - filling defocus=~abs(focus) + 0.01~\n"
-            "  - modulation=~5%,20%~\n"
-            "  - filter=~1.0~\n"
-            "  - speed=~0.5mm/s, 2.0mm/s~\n"
-            "- post exposure bake=~none~\n"
-            "- developement=~AZ726MIF 60s~\n"
+            "  - focus=-0.394\n"
+            "  - filling defocus=abs(focus) + 0.01\n"
+            "  - modulation=5%,20%\n"
+            "  - filter=1.0\n"
+            "  - speed=0.5mm/s, 2.0mm/s\n"
+            "- post exposure bake=none\n"
+            "- developement=AZ726MIF 60s\n"
             "- comments\n"
             )))
       (insert insertion)))
