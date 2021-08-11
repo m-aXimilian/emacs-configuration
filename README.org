@@ -1,0 +1,4 @@
+<<<<<<< Updated upstream
+=======
+#+Title: Emacs config file
+>>>>>>> Stashed changes
