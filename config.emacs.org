@@ -118,29 +118,40 @@
 #+END_SRC
 ** time-string conversions
 #+BEGIN_SRC emacs-lisp
-(defun round-to (n d)
-  "round the number n to d specified decimals"
-  (/ (fround (* (expt 10 d) n)) (expt 10 d)))
+  (defun round-to (n d)
+    "round the number n to d specified decimals"
+    (/ (fround (* (expt 10 d) n)) (expt 10 d)))
   
-(defun revert (l)
-  "reverts a list"
-  (cond
-   ((null l) '())
-   (t (append (revert (cdr l)) (list (car l))))))
+  (defun revert (l)
+    "reverts a list"
+    (cond
+     ((null l) '())
+     (t (append (revert (cdr l)) (list (car l))))))
 
-(defun time-to-list (s)
-  "generates a list of numbers from :-separetd time string"
-  (mapcar 'string-to-number (split-string s ":")))
+  (defun time-to-list (s)
+    "generates a list of numbers from :-separetd time string"
+    (mapcar 'string-to-number (split-string s ":")))
 
-(defun multiply-lists (l mult acc)
-  "multiplies each element of the lists and returns the sum of multiplied tuples"
-  (cond
-   ((null l) acc)
-   (t (multiply-lists (cdr l) (cdr mult) (+ acc (* (car l) (car mult)))))))
+  (defun multiply-lists (l mult acc)
+    "multiplies each element of the lists and returns the sum of multiplied tuples"
+    (cond
+     ((null l) acc)
+     (t (multiply-lists (cdr l) (cdr mult) (+ acc (* (car l) (car mult)))))))
 
-(defun make-seconds (s)
-  "computes seconds form dd:hh:mm:ss time string" 
-  (multiply-lists (revert (time-to-list s)) '(1 60 3600 86400) 0))
+  (defun make-seconds (s)
+    "computes seconds form dd:hh:mm:ss time string" 
+    (multiply-lists (revert (time-to-list s)) '(1 60 3600 86400) 0))
+
+  (defun seconds-to-time (s)
+    "generate time in hh:mm format from seconds"
+    (let ((r (mod s 3600)))
+      (cons (/ (- s r) 3600) (/ r 60))))
+
+  (defun seconds-to-time-precise (s)
+    "generate time in hh:mm:ss format from seconds"
+    (let ((hr (mod s 3600)))
+      (let ((mr (mod hr 60)))
+        (cons (cons (/ (- s hr) 3600) (/ (- hr mr) 60)) mr))))
 #+END_SRC
 ** Helpers
 #+BEGIN_SRC emacs-lisp
