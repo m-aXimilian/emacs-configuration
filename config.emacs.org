@@ -41,167 +41,8 @@
 (require 'ox-latex)
 (require 'ox-beamer)
 (require 'ox-twbs)
-(require 'parse-time)
+;(require 'parse-time)
 (require 'org-ref)
-#+END_SRC
-
-
-* User functions
-** Sample Documentation
-#+BEGIN_SRC emacs-lisp
-  (defun new-sample (arg)
-    "insert a new org-mode chapter for a sample at the current cursor position"
-    (interactive "sample name: ")
-    (let ((sample (concat "mku" arg)))
-      (let ((insertion
-             (concat "* " (upcase sample) "\n"
-                     "Questions to answer:\n\n"
-                     "** Fabrication\n"
-                     "#+name: " sample "-fab\n"
-                     "| no | description | result | comment |\n"
-                     "|----+-------------+--------+---------|\n"
-                     "|    |             |        |         |\n"
-                     "#+TBLFM: $1='(make-link-append-front \"" (downcase sample) "-fab\" $1)\n\n"
-
-                     "** Results \n"
-                     )))
-        (insert insertion))))
-
-  (defun sputter-step ()
-    "insert a new org-mode table for a sputter step at the current cursor position"
-    (interactive)
-    (let ((tab-id (replace-regexp-in-string " " "-" (org-get-heading) t t)))
-      (let ((insertion
-             (concat
-              "#+name: " tab-id "\n"
-              "| element | power(W) | matching network(%:%) | MAN/AUT | dc voltage(V) | Ar flow(sccm) | base pressure(mbar) | sputter pressure(µbar) | Temperature(°C) |\n"
-              "|---------+----------+-----------------------+---------+---------------+---------------+---------------------+------------------------+-----------------|\n"
-              "|         |          |                       |         |               |               |                     |                        |                 |\n")))
-        (insert insertion))))
-
-  (defun resist-step ()
-    "insert a new org-mode list template for resist coating step"
-    (interactive)
-    (let ((insertion
-           (concat
-            "- prebake=200°C, 1h\n"
-            "- resist=AZECI3027 4000rpm 60s\n"
-            "- softbake=100°C, 150s\n"
-            "- litho\n"
-            "  - focus=-0.394\n"
-            "  - filling defocus=abs(focus) + 0.01\n"
-            "  - modulation=5%,20%\n"
-            "  - filter=1.0\n"
-            "  - speed=0.5mm/s, 2.0mm/s\n"
-            "- post exposure bake=none\n"
-            "- developement=AZ726MIF 60s\n"
-            "- comments\n"
-            )))
-      (insert insertion)))
-
-  (defun plasma-etch-step ()
-    "insert a new org-mode table for documenting a plasma-dry-etch step
-  at the current cursor position"
-    (interactive)
-    (let ((tab-id (replace-regexp-in-string " " "-" (org-get-heading) t t)))
-      (let ((insertion
-             (concat
-              "#+name: " tab-id "\n"
-              "| desired plasma time | ignition time | Ton/s (Tcycle=1min) | Toff/s | total time/min |\n"
-              "|---------------------+---------------+---------------------+--------+----------------|\n"
-              "|                     |               |                     |        |                |\n"
-              "#+TBLFM: @2$1=14*30::@2$4=60 - @2$3::@2$5='(let ((base (/ (string-to-number @2$1) (string-to-number @2$3)))) (+ base (round (/ (* base (string-to-number @2$2)) 20))))"
-              )))
-        (insert insertion))))
-
-
-#+END_SRC
-** time-string conversions
-#+BEGIN_SRC emacs-lisp
-  (defun round-to (n d)
-    "round the number n to d specified decimals"
-    (/ (fround (* (expt 10 d) n)) (expt 10 d)))
-
-  (defun revert (l)
-    "reverts a list"
-    (cond
-     ((null l) '())
-     (t (append (revert (cdr l)) (list (car l))))))
-
-  (defun time-to-list (s)
-    "generates a list of numbers from :-separetd time string"
-    (mapcar 'string-to-number (split-string s ":")))
-
-  (defun multiply-lists (l mult acc)
-    "multiplies each element of the lists and returns the sum of multiplied tuples"
-    (cond
-     ((null l) acc)
-     (t (multiply-lists (cdr l) (cdr mult) (+ acc (* (car l) (car mult)))))))
-
-  (defun make-seconds (s)
-    "computes seconds form dd:hh:mm:ss time string" 
-    (multiply-lists (revert (time-to-list s)) '(1 60 3600 86400) 0))
-
-  (defun seconds-to-time (s)
-    "generate time in hh:mm format from seconds"
-    (let ((r (mod s 3600)))
-      (cons (/ (- s r) 3600) (/ r 60))))
-
-  (defun seconds-to-time-precise (s)
-    "generate time in hh:mm:ss format from seconds"
-    (let ((hr (mod s 3600)))
-      (let ((mr (mod hr 60)))
-        (concat
-         (number-to-string (/ (- s hr) 3600))
-         ":"
-         (number-to-string (/ (- hr mr) 60))
-         ":"
-         (number-to-string mr)))))
-
-
-  (defun minutes-to-time (s)
-   "comma-separated minute-value to time mm:ss"
-    (let ((f (floor s)))
-      (concat
-       (number-to-string f)
-       ":"
-       (number-to-string (round (* (- s f) 60))))))
-#+END_SRC
-** Helpers
-#+BEGIN_SRC emacs-lisp
-  (defun make-link (l)
-    (cond
-     ((< (length l) 3) (get-link l))
-     ((not (equal (substring l 0 3) "[[*")) (get-link l))
-     (t l)))
-
-  (defun make-link-append-front (a l)
-    (let ((to-link (concat a " " l)))
-      (cond
-       ((< (length l) 3)
-        (get-link to-link))
-       ((not (equal (substring l 0 3) "[[*")) 
-        (get-link to-link))
-       (t l))))
-
-  (defun get-link (l)
-    (concat "[[*" l "][" l "]]"))
-
-  (defun a-to-nm (a)
-    "convert Å to nm"
-    (/ a 10.0))
-
-
-  (defun nm-to-a (nm)
-    "convert nm to Å"
-    (* nm 10.0))
-#+END_SRC
-
-** Funciton Bindings
-#+BEGIN_SRC emacs-lisp
-  (fset 'to-num 'string-to-number)
-
-  ;;(global-set-key (kbd "C-c C-g") 'linker)
 #+END_SRC
 
 
@@ -210,10 +51,9 @@
 #+BEGIN_SRC emacs-lisp
 (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+#+END_SRC 
 
-#+END_SRC
-
-
+      
 * Default settings
 
 ** global
@@ -358,13 +198,160 @@ TeX-source-correlate-start-server t)
 (global-auto-complete-mode t)
 #+END_SRC
 
-** spotify
-ID and Secret are imported in the ~.emacs~ config file from the
-spotify secrets file
- #+BEGIN_SRC emacs-lisp
-   ;;(define-key spotify-mode-map (kbd "C-c s") 'spotify-command-map)
-   ;;(setq spotify-transport 'connect)
-   #+END_SRC
+
+
+
+* User functions
+** Sample Documentation
+#+BEGIN_SRC emacs-lisp
+  (defun new-sample (arg)
+    "insert a new org-mode chapter for a sample at the current cursor position"
+    (interactive "sample name: ")
+    (let ((sample (concat "mku" arg)))
+      (let ((insertion
+             (concat "* " (upcase sample) "\n"
+                     "Questions to answer:\n\n"
+                     "** Fabrication\n"
+                     "#+name: " sample "-fab\n"
+                     "| no | description | result | comment |\n"
+                     "|----+-------------+--------+---------|\n"
+                     "|    |             |        |         |\n"
+                     "#+TBLFM: $1='(make-link-append-front \"" (downcase sample) "-fab\" $1)\n\n"
+
+                     "** Results \n"
+                     )))
+        (insert insertion))))
+
+  (defun sputter-step ()
+    "insert a new org-mode table for a sputter step at the current cursor position"
+    (interactive)
+    (let ((tab-id (replace-regexp-in-string " " "-" (org-get-heading) t t)))
+      (let ((insertion
+             (concat
+              "#+name: " tab-id "\n"
+              "| element | power(W) | matching network(%:%) | MAN/AUT | dc voltage(V) | Ar flow(sccm) | base pressure(mbar) | sputter pressure(µbar) | Temperature(°C) |\n"
+              "|---------+----------+-----------------------+---------+---------------+---------------+---------------------+------------------------+-----------------|\n"
+              "|         |          |                       |         |               |               |                     |                        |                 |\n")))
+        (insert insertion))))
+
+  (defun resist-step ()
+    "insert a new org-mode list template for resist coating step"
+    (interactive)
+    (let ((insertion
+           (concat
+            "- prebake=200°C, 1h\n"
+            "- resist=AZECI3027 4000rpm 60s\n"
+            "- softbake=100°C, 150s\n"
+            "- litho\n"
+            "  - focus=-0.394\n"
+            "  - filling defocus=abs(focus) + 0.01\n"
+            "  - modulation=5%,20%\n"
+            "  - filter=1.0\n"
+            "  - speed=0.5mm/s, 2.0mm/s\n"
+            "- post exposure bake=none\n"
+            "- developement=AZ726MIF 60s\n"
+            "- comments\n"
+            )))
+      (insert insertion)))
+
+  (defun plasma-etch-step ()
+    "insert a new org-mode table for documenting a plasma-dry-etch step
+  at the current cursor position"
+    (interactive)
+    (let ((tab-id (replace-regexp-in-string " " "-" (org-get-heading) t t)))
+      (let ((insertion
+             (concat
+              "#+name: " tab-id "\n"
+              "| desired plasma time | ignition time | Ton/s (Tcycle=1min) | Toff/s | total time/min |\n"
+              "|---------------------+---------------+---------------------+--------+----------------|\n"
+              "|                     |               |                     |        |                |\n"
+              "#+TBLFM: @2$1=14*30::@2$4=60 - @2$3::@2$5='(let ((base (/ (string-to-number @2$1) (string-to-number @2$3)))) (+ base (round (/ (* base (string-to-number @2$2)) 20))))"
+              )))
+        (insert insertion))))
+#+END_SRC
+
+** time-string conversions
+#+BEGIN_SRC emacs-lisp
+  (defun round-to (n d)
+    "round the number n to d specified decimals"
+    (/ (fround (* (expt 10 d) n)) (expt 10 d)))
+  
+  (defun revert (l)
+    "reverts a list"
+    (cond
+     ((null l) '())
+     (t (append (revert (cdr l)) (list (car l))))))
+  
+  (defun time-to-list (s)
+    "generates a list of numbers from :-separetd time string"
+    (mapcar 'string-to-number (split-string s ":")))
+  
+  (defun multiply-lists (l mult acc)
+    "multiplies each element of the lists and returns the sum of multiplied tuples"
+    (cond
+     ((null l) acc)
+     (t (multiply-lists (cdr l) (cdr mult) (+ acc (* (car l) (car mult)))))))
+  
+  (defun make-seconds (s)
+    "computes seconds form dd:hh:mm:ss time string" 
+    (multiply-lists (revert (time-to-list s)) '(1 60 3600 86400) 0))
+  
+  (defun seconds-to-time-precise (s)
+    "generate time in hh:mm:ss format from seconds"
+    (let ((hr (mod s 3600)))
+      (let ((mr (mod hr 60)))
+        (concat
+         (number-to-string (/ (- s hr) 3600))
+         ":"
+         (number-to-string (/ (- hr mr) 60))
+         ":"
+         (number-to-string mr)))))
+  
+  
+  (defun minutes-to-time (s)
+    "comma-separated minute-value to time mm:ss"
+    (let ((f (floor s)))
+      (concat
+       (number-to-string f)
+       ":"
+       (number-to-string (round (* (- s f) 60))))))
+  
+#+END_SRC
+** Helpers
+#+BEGIN_SRC emacs-lisp
+  (defun make-link (l)
+    (cond
+     ((< (length l) 3) (get-link l))
+     ((not (equal (substring l 0 3) "[[*")) (get-link l))
+     (t l)))
+
+  (defun make-link-append-front (a l)
+    (let ((to-link (concat a " " l)))
+      (cond
+       ((< (length l) 3)
+        (get-link to-link))
+       ((not (equal (substring l 0 3) "[[*")) 
+        (get-link to-link))
+       (t l))))
+
+  (defun get-link (l)
+    (concat "[[*" l "][" l "]]"))
+
+  (defun a-to-nm (a)
+    "convert Å to nm"
+    (/ a 10.0))
+
+
+  (defun nm-to-a (nm)
+    "convert nm to Å"
+    (* nm 10.0))
+#+END_SRC
+
+** Funciton Bindings
+#+BEGIN_SRC emacs-lisp
+(fset 'to-num 'string-to-number)
+ ;;(global-set-key (kbd "C-c C-g") 'linker)
+#+END_SRC
 
 
 * custom-set-variables
@@ -389,4 +376,3 @@ spotify secrets file
  ;; If there is more than one, they won't work right.
  )
 #+END_SRC
-
