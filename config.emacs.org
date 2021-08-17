@@ -3,6 +3,37 @@
 #+startup: indent
 
 * package sources and inits
+** install and require lists
+#+BEGIN_SRC emacs-lisp
+  (setq install-list '(
+                       dirtree
+                       pdf-tools
+                       popup
+                       yasnippet
+                       auto-complete
+                       ac-math
+                       org
+                       org-bullets
+                       org-ref
+                       gnuplot
+                       gnuplot-mode))
+
+  (setq require-list '(
+                       dirtree
+                       pdf-tools
+                       popup
+                       yasnippet
+                       auto-complete-config
+                       ac-math
+                       org-bullets
+                       org-ref
+                       ox
+                       ox-publish
+                       ox-latex
+                       ox-beamer
+                       ox-twbs
+                       ))
+#+END_SRC
 ** archives
 - Spotify :: [[https://github.com/danielfm/spotify.el][github - danielfm]]
 #+BEGIN_SRC emacs-lisp
@@ -18,6 +49,8 @@
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (require 'package)
 (package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
 #+END_SRC
 
 ** appearance
@@ -43,8 +76,15 @@
 
 
 * packages
+** install from install-list
+#+BEGIN_SRC emacs-lisp
+  (dolist (package install-list)
+    (unless (package-installed-p package)
+      (package-install package)))
+#+END_SRC
 ** require list
 #+BEGIN_SRC emacs-lisp
+<<<<<<< Updated upstream
 (require 'dirtree)
 (require 'pdf-tools)
 (require 'popup)
@@ -57,6 +97,10 @@
 (require 'ox-beamer)
 (require 'ox-twbs)
 (require 'spotify)
+=======
+  (dolist (package require-list)
+    (require package))
+>>>>>>> Stashed changes
 #+END_SRC
 
 
