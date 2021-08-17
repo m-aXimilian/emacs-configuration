@@ -197,9 +197,10 @@ TeX-source-correlate-start-server t)
 (yas-global-mode 1)
 (global-auto-complete-mode t)
 #+END_SRC
-
-
-
+** ace-window
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-o") 'ace-window)
+#+END_SRC
 
 * User functions
 ** Sample Documentation
@@ -217,11 +218,11 @@ TeX-source-correlate-start-server t)
                      "|----+-------------+--------+---------|\n"
                      "|    |             |        |         |\n"
                      "#+TBLFM: $1='(make-link-append-front \"" (downcase sample) "-fab\" $1)\n\n"
-
+  
                      "** Results \n"
                      )))
         (insert insertion))))
-
+  
   (defun sputter-step ()
     "insert a new org-mode table for a sputter step at the current cursor position"
     (interactive)
@@ -229,11 +230,11 @@ TeX-source-correlate-start-server t)
       (let ((insertion
              (concat
               "#+name: " tab-id "\n"
-              "| element | power(W) | matching network(%:%) | MAN/AUT | dc voltage(V) | Ar flow(sccm) | base pressure(mbar) | sputter pressure(µbar) | Temperature(°C) |\n"
-              "|---------+----------+-----------------------+---------+---------------+---------------+---------------------+------------------------+-----------------|\n"
-              "|         |          |                       |         |               |               |                     |                        |                 |\n")))
+              "| element | power(W) | matching network(%:%) | MAN/AUT | dc voltage(V) | Ar flow(sccm) | base pressure(mbar) | sputter pressure(µbar) | Temperature(°C) | time/min |\n"
+              "|---------+----------+-----------------------+---------+---------------+---------------+---------------------+------------------------+-----------------+----------|\n"
+              "|         |          |                       |         |               |               |                     |                        |                 |          |\n")))
         (insert insertion))))
-
+  
   (defun resist-step ()
     "insert a new org-mode list template for resist coating step"
     (interactive)
@@ -253,7 +254,7 @@ TeX-source-correlate-start-server t)
             "- comments\n"
             )))
       (insert insertion)))
-
+  
   (defun plasma-etch-step ()
     "insert a new org-mode table for documenting a plasma-dry-etch step
   at the current cursor position"
@@ -268,6 +269,16 @@ TeX-source-correlate-start-server t)
               "#+TBLFM: @2$1=14*30::@2$4=60 - @2$3::@2$5='(let ((base (/ (string-to-number @2$1) (string-to-number @2$3)))) (+ base (round (/ (* base (string-to-number @2$2)) 20))))"
               )))
         (insert insertion))))
+  
+  (defun lift-off-step ()
+    "org-mode list basis for a lift-off-step"
+    (interactive)
+    (let ((insertion (concat
+                      "- solvent=\n"
+                      "- ultrasonic level=\n"
+                      "- temperature=°C\n"
+                      "- time=min\n")))
+      (insert insertion)))
 #+END_SRC
 
 ** time-string conversions
