@@ -38,7 +38,7 @@
 #+BEGIN_SRC emacs-lisp
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/") 
                          ("melpa" . "https://melpa.org/packages/")
-			 ("melpayas" . "http://melpa.milkbox.net/packages/")))
+			     ("melpayas" . "http://melpa.milkbox.net/packages/")))
 #+END_SRC
 
 ** settings and inits
@@ -81,10 +81,8 @@
 #+END_SRC
 ** require list
 #+BEGIN_SRC emacs-lisp
-
   (dolist (package require-list)
-    (require package))
-
+    (require package)
 #+END_SRC
 
 
