@@ -35,13 +35,10 @@
                        ))
 #+END_SRC
 ** archives
-- Spotify :: [[https://github.com/danielfm/spotify.el][github - danielfm]]
 #+BEGIN_SRC emacs-lisp
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/") 
                          ("melpa" . "https://melpa.org/packages/")
 			     ("melpayas" . "http://melpa.milkbox.net/packages/")))
-;; from https://github.com/danielfm/spotify.el
-(add-to-list 'load-path "~/.emacs.d/spotify.el")
 #+END_SRC
 
 ** settings and inits
@@ -84,23 +81,8 @@
 #+END_SRC
 ** require list
 #+BEGIN_SRC emacs-lisp
-<<<<<<< Updated upstream
-(require 'dirtree)
-(require 'pdf-tools)
-(require 'popup)
-(require 'yasnippet)
-(require 'auto-complete-config)
-(require 'ac-math)
-(require 'org-bullets)
-(require 'ox-publish)
-(require 'ox-latex)
-(require 'ox-beamer)
-(require 'ox-twbs)
-(require 'spotify)
-=======
   (dolist (package require-list)
     (require package))
->>>>>>> Stashed changes
 #+END_SRC
 
 
