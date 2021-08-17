@@ -82,7 +82,11 @@
 ** require list
 #+BEGIN_SRC emacs-lisp
   (dolist (package require-list)
+<<<<<<< HEAD
     (require package)
+=======
+    (require package))
+>>>>>>> 6b160627aa9c56bb4f16d72d1b7332cbc145d559
 #+END_SRC
 
 
