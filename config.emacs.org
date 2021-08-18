@@ -10,8 +10,7 @@
                        pdf-tools
                        popup
                        yasnippet
-                       auto-complete
-                       ac-math
+                       company
                        org
                        org-bullets
                        org-ref
@@ -24,8 +23,6 @@
                        pdf-tools
                        popup
                        yasnippet
-                       auto-complete-config
-                       ac-math
                        org-bullets
                        org-ref
                        ox
@@ -103,6 +100,17 @@
 (setq ring-bell-function 'ignore)
 
 #+END_SRC
+** global enables
+#+BEGIN_SRC emacs-lisp
+(menu-bar-mode 1)
+(tool-bar-mode -1)
+(yas-global-mode 1)
+(electric-pair-mode 1)
+#+END_SRC
+** company
+#+begin_src emacs-lisp
+(add-hook 'after-init-hook 'global-company-mode)
+#+end_src
 ** latex
 #+BEGIN_SRC emacs-lisp
 (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
@@ -118,13 +126,6 @@
 ;; for export purposes
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
-#+END_SRC
-
-** auto-complete
-#+BEGIN_SRC emacs-lisp
-(add-to-list 'ac-modes 'latex-mode) ; beware of using 'LaTeX-mode instead
-(ac-set-trigger-key "TAB")
-(ac-set-trigger-key "<tab>")
 #+END_SRC
 
 ** dired
@@ -227,13 +228,6 @@
     (yas-activate-extra-mode 'latex-mode))
 
   (add-hook 'org-mode-hook #'my-org-latex-yas)
-#+END_SRC
-** global enables
-#+BEGIN_SRC emacs-lisp
-(menu-bar-mode 1)
-(tool-bar-mode -1)
-(yas-global-mode 1)
-(global-auto-complete-mode t)
 #+END_SRC
 ** ace-window
 #+BEGIN_SRC emacs-lisp
