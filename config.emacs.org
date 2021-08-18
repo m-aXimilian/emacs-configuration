@@ -16,7 +16,8 @@
                        org-bullets
                        org-ref
                        gnuplot
-                       gnuplot-mode))
+                       gnuplot-mode
+                       material-theme))
 
   (setq require-list '(
                        dirtree
@@ -102,14 +103,6 @@
 (setq ring-bell-function 'ignore)
 
 #+END_SRC
-** pdf-tools
-#+BEGIN_SRC 
-(pdf-tools-install)
-(setq pdf-annot-activate-created-annotations t)
-(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-TeX-source-correlate-start-server t)
-#+END_SRC
- 
 ** latex
 #+BEGIN_SRC emacs-lisp
 (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
@@ -126,6 +119,7 @@ TeX-source-correlate-start-server t)
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
 #+END_SRC
+
 ** auto-complete
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'ac-modes 'latex-mode) ; beware of using 'LaTeX-mode instead
@@ -139,96 +133,100 @@ TeX-source-correlate-start-server t)
 	  (lambda ()
 	    (dired-hide-details-mode)))
 #+END_SRC
+
 ** org-mode
 #+BEGIN_SRC emacs-lisp
-;; pretty bullets
-(add-hook 'org-mode-hook
-	  (lambda ()
-	    (org-bullets-mode t)
-	    (auto-complete-mode t)))
+  ;; pretty bullets
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (org-bullets-mode t)
+              (auto-complete-mode t)))
 
-;; auto-line breaks
-(add-hook 'org-mode-hook
-	  (lambda ()
-	    (auto-fill-mode t)))
+  ;; auto-line breaks
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (auto-fill-mode t)))
 
-;; allow alphabetical numeration
-(setq org-list-allow-alphabetical t)
+  ;; allow alphabetical numeration
+  (setq org-list-allow-alphabetical t)
 
-;; publishing settings
+  ;; publishing settings
 
-(setq org-publish-project-alist
-      '(
-	("org-notes"
-	 :base-directory "~/org/"
-	 :base-extension "org"
-	 :publishing-directory "~/public_html/"
-	 :recursive t
-	 :publishing-function org-twbs-publish-to-html
-	 :with-sub-superscript nil
-	 :headline-levels 4
-	 :auto-preamble t
-	 )
+  (setq org-publish-project-alist
+        '(
+          ("org-notes"
+           :base-directory "~/org/"
+           :base-extension "org"
+           :publishing-directory "~/public_html/"
+           :recursive t
+           :publishing-function org-twbs-publish-to-html
+           :with-sub-superscript nil
+           :headline-levels 4
+           :auto-preamble t
+           )
 
-	("org-static"
-	 :base-directory "~/org/"
-	 :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-	 :publishing-directory "~/public_html/"
-	 :recursive t
-	 :publishing-function org-publish-attachment
-	 )
+          ("org-static"
+           :base-directory "~/org/"
+           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+           :publishing-directory "~/public_html/"
+           :recursive t
+           :publishing-function org-publish-attachment
+           )
 
-	("org" :components ("org-notes" "org-static"))))
+          ("org" :components ("org-notes" "org-static"))))
 
-;; babel for latex
-;; needed for code block evaluation
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((latex .t)
- (gnuplot .t)
- (python .t)))
+  ;; needed for code block evaluation
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((latex .t)
+     (gnuplot .t)
+     (python .t)))
 
-;; evaluate code blocks without asking
-(defun my-org-confirm-babel-evaluate (lang body)
-  (not (or (string= lang "emacs-lisp") (string= lang "latex") (string= lang "elisp") (string= lang "gnuplot")))) 
-(setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
+  ;; evaluate code blocks without asking
+  (defun my-org-confirm-babel-evaluate (lang body)
+    (not (or
+          (string= lang "emacs-lisp")
+          (string= lang "latex")
+          (string= lang "elisp")
+          (string= lang "gnuplot"))))
 
-;; agenda toggle mode
-(global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c l") 'org-store-link)
+  (setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
 
-;; global agenda to-do file
-(setq org-agenda-files (quote ("~/todo.org")))
-;;(setq org-agenda-files (list "~/windows_home/Documents/prom"))
-;;(setq org-agenda-files (quote ("/home/max/windows_home/Documents/prom/todo/todo.org")))
-;; global target file for notes
-(setq org-default-notes-file (concat org-directory "/notes.org"))
+  ;; agenda toggle mode
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c l") 'org-store-link)
 
-;;set priority range from A to C with default A
-(setq org-highest-priority ?A)
-(setq org-lowest-priority ?C)
-(setq org-default-priority ?A)
+  ;; global agenda to-do file
+  (setq org-agenda-files (quote ("~/todo.org")))
 
-;; set priority color
-(setq org-priority-faces '((?A . (:foreground "FF6670" :weight bold))
-			   (?B . (:foreground "F8FF42"))
-			   (?C . (:foreground "60FFFF"))))
+  ;; global target file for notes
+  (setq org-default-notes-file (concat org-directory "~/notes.org"))
 
-(define-key global-map (kbd "C-c c") 'org-capture)
-(setq org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/todo.org" "Tasks")
-         "* TODO %?\n %i\n %a")))
-(org-reload)
+  ;;set priority range from A to C with default A
+  (setq org-highest-priority ?A)
+  (setq org-lowest-priority ?C)
+  (setq org-default-priority ?A)
+
+  ;; set priority color
+  (setq org-priority-faces '((?A . (:foreground "FF6670" :weight bold))
+                             (?B . (:foreground "F8FF42"))
+                             (?C . (:foreground "60FFFF"))))
+
+  (define-key global-map (kbd "C-c c") 'org-capture)
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file+headline "~/todo.org" "Tasks")
+           "* TODO %?\n %i\n %a")))
+  (org-reload)
 #+END_SRC
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
-;; require latex snippets in org mode
-(defun my-org-latex-yas ()
-  "Activate org and LaTeX yas expansion in org-mode buffers."
-  (yas-minor-mode)
-  (yas-activate-extra-mode 'latex-mode))
+  ;; require latex snippets in org mode
+  (defun my-org-latex-yas ()
+    "Activate org and LaTeX yas expansion in org-mode buffers."
+    (yas-minor-mode)
+    (yas-activate-extra-mode 'latex-mode))
 
-(add-hook 'org-mode-hook #'my-org-latex-yas)
+  (add-hook 'org-mode-hook #'my-org-latex-yas)
 #+END_SRC
 ** global enables
 #+BEGIN_SRC emacs-lisp
@@ -241,6 +239,7 @@ TeX-source-correlate-start-server t)
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-o") 'ace-window)
 #+END_SRC
+
 
 * User functions
 ** Sample Documentation
@@ -405,25 +404,3 @@ TeX-source-correlate-start-server t)
 #+END_SRC
 
 
-* custom-set-variables
-#+BEGIN_SRC emacs-lisp
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
- '(custom-enabled-themes (quote (manoj-dark)))
- '(package-selected-packages
-   (quote
-    (pdf-tools markdown-mode+ markdown-mode htmlize dirtree-prosjekt org-bullets dirtree yasnippet-snippets ox-twbs auto-complete-auctex auto-complete auctex))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-#+END_SRC
