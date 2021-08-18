@@ -189,7 +189,8 @@
           (string= lang "emacs-lisp")
           (string= lang "latex")
           (string= lang "elisp")
-          (string= lang "gnuplot"))))
+          (string= lang "gnuplot")
+          (string= lang "python"))))
 
   (setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
 
