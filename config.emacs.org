@@ -11,6 +11,7 @@
                        popup
                        yasnippet
                        company
+                       company-jedi
                        org
                        org-bullets
                        org-ref
@@ -109,7 +110,10 @@
 #+END_SRC
 ** company
 #+begin_src emacs-lisp
-(add-hook 'after-init-hook 'global-company-mode)
+  (add-hook 'after-init-hook 'global-company-mode)
+  (defun my/python-mode-hook ()
+    (add-to-list 'company-backends 'company-jedi))
+  (add-hook 'python-mode-hook 'my/python-mode-hook)
 #+end_src
 ** latex
 #+BEGIN_SRC emacs-lisp
@@ -234,6 +238,10 @@
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-o") 'ace-window)
 #+END_SRC
+** key-bindings
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-n") 'switch-to-buffer)
+#+END_SRC
 
 
 * User functions
@@ -241,7 +249,7 @@
 #+BEGIN_SRC emacs-lisp
   (defun new-sample (arg)
     "insert a new org-mode chapter for a sample at the current cursor position"
-    (interactive "sample name: ")
+    (interactive "sample name: MKU")
     (let ((sample (concat "mku" arg)))
       (let ((insertion
              (concat "* " (upcase sample) "\n"
@@ -395,7 +403,6 @@
 ** Funciton Bindings
 #+BEGIN_SRC emacs-lisp
 (fset 'to-num 'string-to-number)
- ;;(global-set-key (kbd "C-c C-g") 'linker)
 #+END_SRC
 
 
