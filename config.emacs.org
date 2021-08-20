@@ -17,7 +17,8 @@
                        org-ref
                        gnuplot
                        gnuplot-mode
-                       material-theme))
+                       material-theme
+                       magit))
 
   (setq require-list '(
                        dirtree
@@ -144,8 +145,7 @@
   ;; pretty bullets
   (add-hook 'org-mode-hook
             (lambda ()
-              (org-bullets-mode t)
-              (auto-complete-mode t)))
+              (org-bullets-mode t)))
 
   ;; auto-line breaks
   (add-hook 'org-mode-hook
