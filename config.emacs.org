@@ -146,17 +146,17 @@
   (add-hook 'org-mode-hook
             (lambda ()
               (org-bullets-mode t)))
-
+  
   ;; auto-line breaks
   (add-hook 'org-mode-hook
             (lambda ()
               (auto-fill-mode t)))
-
+  
   ;; allow alphabetical numeration
   (setq org-list-allow-alphabetical t)
-
+  
   ;; publishing settings
-
+  
   (setq org-publish-project-alist
         '(
           ("org-notes"
@@ -169,7 +169,7 @@
            :headline-levels 4
            :auto-preamble t
            )
-
+  
           ("org-static"
            :base-directory "~/org/"
            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
@@ -177,16 +177,16 @@
            :recursive t
            :publishing-function org-publish-attachment
            )
-
+  
           ("org" :components ("org-notes" "org-static"))))
-
+  
   ;; needed for code block evaluation
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((latex .t)
      (gnuplot .t)
      (python .t)))
-
+  
   ;; evaluate code blocks without asking
   (defun my-org-confirm-babel-evaluate (lang body)
     (not (or
@@ -195,34 +195,45 @@
           (string= lang "elisp")
           (string= lang "gnuplot")
           (string= lang "python"))))
-
+  
   (setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
-
+  
   ;; agenda toggle mode
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c l") 'org-store-link)
-
+  
   ;; global agenda to-do file
   (setq org-agenda-files (quote ("~/todo.org")))
-
+  
   ;; global target file for notes
   (setq org-default-notes-file (concat org-directory "~/notes.org"))
-
+  
   ;;set priority range from A to C with default A
   (setq org-highest-priority ?A)
   (setq org-lowest-priority ?C)
   (setq org-default-priority ?A)
-
+  
   ;; set priority color
   (setq org-priority-faces '((?A . (:foreground "FF6670" :weight bold))
                              (?B . (:foreground "F8FF42"))
                              (?C . (:foreground "60FFFF"))))
-
+  
   (define-key global-map (kbd "C-c c") 'org-capture)
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline "~/todo.org" "Tasks")
            "* TODO %?\n %i\n %a")))
+  
+  (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+  
   (org-reload)
+#+END_SRC
+** org-ref
+#+BEGIN_SRC emacs-lisp
+  (setq reftex-default-bibliography '("~/bib/Promotion.bib"))
+  
+  (setq org-ref-bibliography-notes "~/bib/notes.org"
+        org-ref-default-bibliography '("~/bib/Promotion.bib")
+        org-ref-pdf-directory "~/bib/bibtex-pdfs")
 #+END_SRC
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
