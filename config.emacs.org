@@ -15,6 +15,7 @@
                        org
                        org-bullets
                        org-ref
+                       ob-async
                        gnuplot
                        gnuplot-mode
                        material-theme
@@ -32,6 +33,7 @@
                        ox-latex
                        ox-beamer
                        ox-twbs
+                       ob-async
                        ))
 #+END_SRC
 ** archives
