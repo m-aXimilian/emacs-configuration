@@ -6,6 +6,7 @@
 ** install and require lists
 #+BEGIN_SRC emacs-lisp
   (setq install-list '(
+                       ace-window
                        dirtree
                        pdf-tools
                        popup
@@ -13,6 +14,7 @@
                        company
                        company-jedi
                        org
+                       ox-twbs
                        org-bullets
                        org-ref
                        ob-async
