@@ -21,7 +21,8 @@
                        gnuplot
                        gnuplot-mode
                        material-theme
-                       magit))
+                       magit
+                       htmlize))
 
   (setq require-list '(
                        dirtree
@@ -112,6 +113,7 @@
 (tool-bar-mode -1)
 (yas-global-mode 1)
 (electric-pair-mode 1)
+(show-paren-mode 1)
 #+END_SRC
 ** company
 #+begin_src emacs-lisp
