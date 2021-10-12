@@ -325,7 +325,7 @@
               "| desired plasma time | ignition time | Ton/s (Tcycle=1min) | Toff/s | total time/min |\n"
               "|---------------------+---------------+---------------------+--------+----------------|\n"
               "|                     |               |                     |        |                |\n"
-              "#+TBLFM: @2$1=14*30::@2$4=60 - @2$3::@2$5='(let ((base (/ (string-to-number @2$1) (string-to-number @2$3)))) (+ base (round (/ (* base (string-to-number @2$2)) 20))))"
+              "#+TBLFM: @2$4=60 - @2$3::@2$5='(let ((base (/ (string-to-number @2$1) (string-to-number @2$3)))) (+ base (round (/ (* base (string-to-number @2$2)) 20))))"
               )))
         (insert insertion))))
   
