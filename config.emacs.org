@@ -391,6 +391,12 @@
           (rps (/ rpm 60.0)))
       (* u rps)))
 
+  (defun ms-to-rpm (r ms)
+    "get rpm from disk radius and speed in m/s"
+    (let ((u (* 2 pi r)))
+      (let ((rps (/ ms u)))
+        (* rps 60.0))))
+
 
   (defun round-to (n d)
     "round the number n to d specified decimals"
