@@ -385,16 +385,23 @@
 #+END_SRC
 ** Helpers
 #+BEGIN_SRC emacs-lisp
+  (defun rpm-to-ms (r rpm)
+    "get speed in m/s from disk radius and rpm"
+    (let ((u (* 2 pi r))
+          (rps (/ rpm 60.0)))
+      (* u rps)))
+
+
   (defun round-to (n d)
     "round the number n to d specified decimals"
     (/ (fround (* (expt 10 d) n)) (expt 10 d)))
-  
+
   (defun make-link (l)
     (cond
      ((< (length l) 3) (get-link l))
      ((not (equal (substring l 0 3) "[[*")) (get-link l))
      (t l)))
-  
+
   (defun make-link-append-front (a l)
     (let ((to-link (concat a " " l)))
       (cond
@@ -403,15 +410,15 @@
        ((not (equal (substring l 0 3) "[[*")) 
         (get-link to-link))
        (t l))))
-  
+
   (defun get-link (l)
     (concat "[[*" l "][" l "]]"))
-  
+
   (defun a-to-nm (a)
     "convert Å to nm"
     (/ a 10.0))
-  
-  
+
+
   (defun nm-to-a (nm)
     "convert nm to Å"
     (* nm 10.0))
