@@ -22,12 +22,16 @@
                        gnuplot-mode
                        material-theme
                        magit
+<<<<<<< HEAD
                        flycheck
                        irony
                        company-irony
                        flycheck-irony
                        irony-eldoc
                        ))
+=======
+                       htmlize))
+>>>>>>> 027e3992a43609bcfaa61553c46b08d339b1c985
 
   (setq require-list '(
                        dirtree
@@ -123,7 +127,11 @@
 (tool-bar-mode -1)
 (yas-global-mode 1)
 (electric-pair-mode 1)
+<<<<<<< HEAD
 (global-flycheck-mode 1)
+=======
+(show-paren-mode 1)
+>>>>>>> 027e3992a43609bcfaa61553c46b08d339b1c985
 #+END_SRC
 ** company
 #+begin_src emacs-lisp
@@ -353,7 +361,7 @@
               "| desired plasma time | ignition time | Ton/s (Tcycle=1min) | Toff/s | total time/min |\n"
               "|---------------------+---------------+---------------------+--------+----------------|\n"
               "|                     |               |                     |        |                |\n"
-              "#+TBLFM: @2$1=14*30::@2$4=60 - @2$3::@2$5='(let ((base (/ (string-to-number @2$1) (string-to-number @2$3)))) (+ base (round (/ (* base (string-to-number @2$2)) 20))))"
+              "#+TBLFM: @2$4=60 - @2$3::@2$5='(let ((base (/ (string-to-number @2$1) (string-to-number @2$3)))) (+ base (round (/ (* base (string-to-number @2$2)) 20))))"
               )))
         (insert insertion))))
   
@@ -413,16 +421,29 @@
 #+END_SRC
 ** Helpers
 #+BEGIN_SRC emacs-lisp
+  (defun rpm-to-ms (r rpm)
+    "get speed in m/s from disk radius and rpm"
+    (let ((u (* 2 pi r))
+          (rps (/ rpm 60.0)))
+      (* u rps)))
+
+  (defun ms-to-rpm (r ms)
+    "get rpm from disk radius and speed in m/s"
+    (let ((u (* 2 pi r)))
+      (let ((rps (/ ms u)))
+        (* rps 60.0))))
+
+
   (defun round-to (n d)
     "round the number n to d specified decimals"
     (/ (fround (* (expt 10 d) n)) (expt 10 d)))
-  
+
   (defun make-link (l)
     (cond
      ((< (length l) 3) (get-link l))
      ((not (equal (substring l 0 3) "[[*")) (get-link l))
      (t l)))
-  
+
   (defun make-link-append-front (a l)
     (let ((to-link (concat a " " l)))
       (cond
@@ -431,15 +452,15 @@
        ((not (equal (substring l 0 3) "[[*")) 
         (get-link to-link))
        (t l))))
-  
+
   (defun get-link (l)
     (concat "[[*" l "][" l "]]"))
-  
+
   (defun a-to-nm (a)
     "convert Å to nm"
     (/ a 10.0))
-  
-  
+
+
   (defun nm-to-a (nm)
     "convert nm to Å"
     (* nm 10.0))
