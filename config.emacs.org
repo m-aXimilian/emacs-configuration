@@ -21,7 +21,13 @@
                        gnuplot
                        gnuplot-mode
                        material-theme
-                       magit))
+                       magit
+                       flycheck
+                       irony
+                       company-irony
+                       flycheck-irony
+                       irony-eldoc
+                       ))
 
   (setq require-list '(
                        dirtree
@@ -36,6 +42,11 @@
                        ox-beamer
                        ox-twbs
                        ob-async
+                       flycheck
+                       irony
+                       company-irony
+                       flycheck-irony
+                       eldoc
                        ))
 #+END_SRC
 ** archives
@@ -112,6 +123,7 @@
 (tool-bar-mode -1)
 (yas-global-mode 1)
 (electric-pair-mode 1)
+(global-flycheck-mode 1)
 #+END_SRC
 ** company
 #+begin_src emacs-lisp
@@ -119,6 +131,24 @@
   (defun my/python-mode-hook ()
     (add-to-list 'company-backends 'company-jedi))
   (add-hook 'python-mode-hook 'my/python-mode-hook)
+
+  (eval-after-load 'company '(add-to-list 'company-backends 'company-irony))
+#+end_src
+** irony
+#+begin_src emacs-lisp
+  (unless (irony--find-server-executable) (call-interactively #'irony-install-server))
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+
+  (setq-default irony-cdb-compilation-databases '(irony-cdb-libclang
+                                                  irony-cdb-clang-complete))
+
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+  (add-hook 'irony-mode-hook #'irony-eldoc)
+#+end_src
+** flycheck
+#+begin_src emacs-lisp
+  (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 #+end_src
 ** latex
 #+BEGIN_SRC emacs-lisp
