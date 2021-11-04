@@ -22,16 +22,13 @@
                        gnuplot-mode
                        material-theme
                        magit
-<<<<<<< HEAD
                        flycheck
                        irony
                        company-irony
                        flycheck-irony
                        irony-eldoc
                        ))
-=======
-                       htmlize))
->>>>>>> 027e3992a43609bcfaa61553c46b08d339b1c985
+
 
   (setq require-list '(
                        dirtree
@@ -127,11 +124,11 @@
 (tool-bar-mode -1)
 (yas-global-mode 1)
 (electric-pair-mode 1)
-<<<<<<< HEAD
+
 (global-flycheck-mode 1)
-=======
+
 (show-paren-mode 1)
->>>>>>> 027e3992a43609bcfaa61553c46b08d339b1c985
+
 #+END_SRC
 ** company
 #+begin_src emacs-lisp
@@ -143,6 +140,9 @@
   (eval-after-load 'company '(add-to-list 'company-backends 'company-irony))
 #+end_src
 ** irony
+*** Prerequisites
+- libclang (~apt-get install libclang-dev~)
+- clang (~apt-get install clang~)
 #+begin_src emacs-lisp
   (unless (irony--find-server-executable) (call-interactively #'irony-install-server))
   (add-hook 'c++-mode-hook 'irony-mode)
