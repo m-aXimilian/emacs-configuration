@@ -421,6 +421,14 @@
 #+END_SRC
 ** Helpers
 #+BEGIN_SRC emacs-lisp
+  (defun psi-to-kgcm2 (psi)
+    "pressure in psi to kg/cm²"
+    (* 0.070307 psi))
+
+  (defun psi-to-gcm2 (psi)
+    "pressure in psi to g/cm²"
+    (* (psi-to-kgcm2 psi) 1000))
+
   (defun rpm-to-ms (r rpm)
     "get speed in m/s from disk radius and rpm"
     (let ((u (* 2 pi r))
