@@ -298,11 +298,16 @@
 
 
 * User functions
+*Attention* when using interactive: the first character in the string
+ for the interactive function determines the type of the value
+ assigned to the argument provided. Multiple arguments in the
+ top-level function must be seperated by "\n" characters.
 ** Sample Documentation
+
 #+BEGIN_SRC emacs-lisp
   (defun new-sample (arg)
     "insert a new org-mode chapter for a sample at the current cursor position"
-    (interactive "sample name: MKU")
+    (interactive "ssample name: MKU")
     (let ((sample (concat "mku" arg)))
       (let ((insertion
              (concat "* " (upcase sample) "\n"
@@ -474,9 +479,25 @@
     (* nm 10.0))
 #+END_SRC
 
+** Shortcuts
+#+BEGIN_SRC emacs-lisp
+  (defun inline-src-elisp (ex re)
+    "With arguments EX for :exports and RE for :results generate base for src_elisp."
+
+    (interactive "s:exports:\ns:results:")
+    (let ((insertion (concat "src_elisp[:exports "
+                       ex
+                       " :results "
+                       re
+                       "]{}")))
+      (insert insertion))
+    (backward-char))
+#+END_SRC
+
 ** Funciton Bindings
 #+BEGIN_SRC emacs-lisp
-(fset 'to-num 'string-to-number)
+  (fset 'to-num 'string-to-number)
+  (global-set-key (kbd "M-s M-e") 'inline-src-elisp)
 #+END_SRC
 
 
