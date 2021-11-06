@@ -27,6 +27,13 @@
                        company-irony
                        flycheck-irony
                        irony-eldoc
+                       slime
+                       slime-company
+                       all-the-icons
+                       all-the-icons-ibuffer
+                       projectile
+                       ibuffer-projectile
+                       ibuffer-sidebar
                        ))
 
 
@@ -48,6 +55,13 @@
                        company-irony
                        flycheck-irony
                        eldoc
+                       slime
+                       slime-company
+                       all-the-icons
+                       all-the-icons-ibuffer
+                       projectile
+                       ibuffer-projectile
+                       ibuffer-sidebar
                        ))
 #+END_SRC
 ** archives
@@ -113,11 +127,18 @@
 * Default settings
 
 ** global
+
 #+BEGIN_SRC emacs-lisp
-;; turn off #?!&/!!-bell
-(setq ring-bell-function 'ignore)
+  ;; turn off #?!&/!!-bell
+  (setq ring-bell-function 'ignore)
+  (setq column-number-mode t)
 
 #+END_SRC
+*** Appearance 
+#+begin_src emacs-lisp
+  (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
+  (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
+#+end_src
 ** global enables
 #+BEGIN_SRC emacs-lisp
 (menu-bar-mode 1)
@@ -154,6 +175,21 @@
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   (add-hook 'irony-mode-hook #'irony-eldoc)
 #+end_src
+** ibuffer
+#+begin_src emacs-lisp
+  (add-hook 'ibuffer-hook
+      (lambda ()
+        (ibuffer-projectile-set-filter-groups)
+        (unless (eq ibuffer-sorting-mode 'alphabetic)
+          (ibuffer-do-sort-by-alphabetic))))
+#+end_src
+** icons
+#+begin_src emacs-lisp
+  (unless (find-font (font-spec :name "all-the-icons"))
+    (all-the-icons-install-fonts t))
+  (setq all-the-icons-scale-factor 1)
+  (all-the-icons-ibuffer-mode 1)
+#+end_src
 ** flycheck
 #+begin_src emacs-lisp
   (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
@@ -177,9 +213,10 @@
 
 ** dired
 #+BEGIN_SRC emacs-lisp
-(add-hook 'dired-mode-hook
-	  (lambda ()
-	    (dired-hide-details-mode)))
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (dired-hide-details-mode)))
+
 #+END_SRC
 
 ** org-mode
@@ -295,6 +332,19 @@
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-n") 'switch-to-buffer)
 #+END_SRC
+** slime
+#+begin_src emacs-lisp
+  ;;(setq inferior-lisp-program "/opt/sbcl/bin/sbcl")
+
+  ;;(slime-setup '(slime-fancy slime-quicklisp slime-asdf))
+  (setq inferior-lisp-program "sbcl" ; Steel Bank Common Lisp
+        slime-contribs '(slime-fancy))
+#+end_src
+** projectile
+#+begin_src emacs-lisp
+  (setq projectile-indexing-method 'hybrid)
+  (projectile-global-mode)
+#+end_src
 
 
 * User functions
