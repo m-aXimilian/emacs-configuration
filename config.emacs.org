@@ -8,6 +8,7 @@
   (setq install-list '(
                        ace-window
                        dirtree
+                       neotree
                        pdf-tools
                        popup
                        yasnippet
@@ -39,6 +40,7 @@
 
   (setq require-list '(
                        dirtree
+                       neotree
                        pdf-tools
                        popup
                        yasnippet
@@ -345,7 +347,10 @@
   (setq projectile-indexing-method 'hybrid)
   (projectile-global-mode)
 #+end_src
-
+** neotree
+#+begin_src emacs-lisp
+  (setq neo-theme 'icons)
+#+end_src
 
 * User functions
 *Attention* when using interactive: the first character in the string
