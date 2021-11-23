@@ -35,6 +35,7 @@
                        projectile
                        ibuffer-projectile
                        ibuffer-sidebar
+                       load-relative
                        ))
 
 
@@ -64,6 +65,7 @@
                        projectile
                        ibuffer-projectile
                        ibuffer-sidebar
+                       load-relative
                        ))
 #+END_SRC
 ** archives
@@ -351,6 +353,7 @@
 #+begin_src emacs-lisp
   (setq neo-theme 'icons)
 #+end_src
+
 
 * User functions
 *Attention* when using interactive: the first character in the string
