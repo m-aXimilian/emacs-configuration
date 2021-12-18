@@ -36,6 +36,7 @@
                        ibuffer-projectile
                        ibuffer-sidebar
                        load-relative
+                       elpy
                        ))
 
 
@@ -66,6 +67,7 @@
                        ibuffer-projectile
                        ibuffer-sidebar
                        load-relative
+                       elpy
                        ))
 #+END_SRC
 ** archives
@@ -136,6 +138,7 @@
   ;; turn off #?!&/!!-bell
   (setq ring-bell-function 'ignore)
   (setq column-number-mode t)
+  (global-auto-revert-mode 1)
 
 #+END_SRC
 *** Appearance 
@@ -168,6 +171,8 @@
 *** Prerequisites
 - libclang (~apt-get install libclang-dev~)
 - clang (~apt-get install clang~)
+read
+[[https://martinsosic.com/development/emacs/2017/12/09/emacs-cpp-ide.html][emacs c++ editor]]
 #+begin_src emacs-lisp
   (unless (irony--find-server-executable) (call-interactively #'irony-install-server))
   (add-hook 'c++-mode-hook 'irony-mode)
@@ -352,6 +357,16 @@
 ** neotree
 #+begin_src emacs-lisp
   (setq neo-theme 'icons)
+  (setq neo-window-fixed-size nil)
+#+end_src
+** python
+#+begin_src emacs-lisp
+
+  (elpy-enable)
+  (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
+    (setq elpy-rpc-python-command "python3")
+
+
 #+end_src
 
 
