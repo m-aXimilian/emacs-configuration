@@ -19,6 +19,7 @@
                        org-bullets
                        org-ref
                        ob-async
+                       org-contrib ;; non gnu
                        gnuplot
                        gnuplot-mode
                        material-theme
@@ -48,11 +49,13 @@
                        yasnippet
                        org-bullets
                        org-ref
+                       org-contrib
                        ox
                        ox-publish
                        ox-latex
                        ox-beamer
                        ox-twbs
+                       ox-extra ;; from org-contrib
                        ob-async
                        flycheck
                        irony
@@ -72,9 +75,10 @@
 #+END_SRC
 ** archives
 #+BEGIN_SRC emacs-lisp
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/") 
-                         ("melpa" . "https://melpa.org/packages/")
-			     ("melpayas" . "http://melpa.milkbox.net/packages/")))
+  (setq package-archives '(("nongnu" . "https://elpa.nongnu.org/nongnu/")
+                           ("gnu" . "https://elpa.gnu.org/packages/") 
+                           ("melpa" . "https://melpa.org/packages/")
+                           ("melpayas" . "http://melpa.milkbox.net/packages/")))
 #+END_SRC
 
 ** settings and inits
@@ -205,19 +209,25 @@ read
 #+end_src
 ** latex
 #+BEGIN_SRC emacs-lisp
-(add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
-#'TeX-revert-document-buffer)
-(add-to-list 'org-latex-classes
-             '("beamer"
-               "\\documentclass\[presentation\]\{beamer\}"
-               ("\\section\{%s\}" . "\\section*\{%s\}")
-               ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
-               ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+  (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
+  #'TeX-revert-document-buffer)
+  (add-to-list 'org-latex-classes
+               '("beamer"
+                 "\\documentclass\[presentation\]\{beamer\}"
+                 ("\\section\{%s\}" . "\\section*\{%s\}")
+                 ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
+                 ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 
 
-;; for export purposes
-(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  ;; for export purposes
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
+#+END_SRC
+
+Remove the headline while exporting the content in the respective
+subtree using the *ignore* tag.
+#+BEGIN_SRC  emacs-lisp
+  (ox-extras-activate '(ignore-headlines))
 #+END_SRC
 
 ** dired
