@@ -1,4 +1,24 @@
-<<<<<<< Updated upstream
-=======
+#+startup: indent
 #+Title: Emacs config file
->>>>>>> Stashed changes
+#+subtitle: Basic tweaks for vanilla emacs
+
+* Usage
+- Clone the repository
+- Put the path to the [[file:config.emacs.org]] in the /init.el/ file. All
+  missing packages will be downloaded automatically upon initial start. 
+
+** Example with symbolic link
+With [[file:config.emacs.org]] under ~/home/<user>/emacs~ and /init.el/
+under ~/home/<user>/.emacs.d~
+- create a symbolic link to the config file
+  #+begin_src shell
+    ln -s /home/<user>/emacs/config.emacs.org /home/<user>/.emacs.d/config.emacs.org
+  #+end_src
+- make /init.el/ aware of the config-file
+  #+begin_src shell
+    (org-babel-load-file "~/.emacs.d/config.emacs.org")
+  #+end_src
+- upon start emacs will ask ``Symbolic link to Git-controlled source
+  file; follow link? (yes or no)'' \rightarrow answer ``yes''
+
+
