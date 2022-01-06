@@ -38,6 +38,7 @@
                        ibuffer-sidebar
                        load-relative
                        elpy
+                       rainbow-delimiters
                        ))
 
 
@@ -377,6 +378,11 @@ subtree using the *ignore* tag.
     (setq elpy-rpc-python-command "python3")
 
 
+#+end_src
+
+** raibow delimiters
+#+begin_src emacs-lisp
+  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
 #+end_src
 
 
