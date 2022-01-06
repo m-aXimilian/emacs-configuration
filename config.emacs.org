@@ -104,6 +104,18 @@
 #+BEGIN_SRC emacs-lisp
 (toggle-scroll-bar -1)
 #+END_SRC
+
+*** Opacity
+Set with ~alpha~ (``This parameter specifies the opacity of the frame,
+on graphical displays that support variable opacity. It should be an
+integer between 0 and 100, where 0 means completely transparent and
+100 means completely opaque. It can also have a nil value, which tells
+Emacs not to set the frame opacity (leaving it to the window
+manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and-Color-Parameters.html][Font and Color Parameters]]) 
+#+begin_src emacs-lisp
+  (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
+  (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
+#+end_src
 ** encoding and keyboard
 #+BEGIN_SRC emacs-lisp
 (prefer-coding-system 'utf-8)
@@ -146,11 +158,8 @@
   (global-auto-revert-mode 1)
 
 #+END_SRC
-*** Appearance 
-#+begin_src emacs-lisp
-  (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
-  (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
-#+end_src
+
+
 ** global enables
 #+BEGIN_SRC emacs-lisp
 (menu-bar-mode 1)
