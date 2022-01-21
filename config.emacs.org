@@ -154,15 +154,20 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 #+BEGIN_SRC emacs-lisp
   ;; turn off #?!&/!!-bell
   (setq ring-bell-function 'ignore)
+  ;; show row AND col in the status line
   (setq column-number-mode t)
+  ;; always auto-revert
   (global-auto-revert-mode 1)
+  ;;
+  (global-linum-mode 1)
+  ;; disable menu bar
+  (menu-bar-mode -1)
 
 #+END_SRC
 
 
 ** global enables
 #+BEGIN_SRC emacs-lisp
-(menu-bar-mode 1)
 (tool-bar-mode -1)
 (yas-global-mode 1)
 (electric-pair-mode 1)
