@@ -365,6 +365,7 @@ subtree using the *ignore* tag.
 ** key-bindings
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-n") 'switch-to-buffer)
+  (global-set-key (kbd "C-c p p") 'projectile-switch-project)
 #+END_SRC
 ** slime
 #+begin_src emacs-lisp
@@ -380,10 +381,23 @@ subtree using the *ignore* tag.
   (projectile-global-mode)
 #+end_src
 ** neotree
+See [[https://www.emacswiki.org/emacs/NeoTree][NeoTree Docs]]
+Use icons for file and let the widht be altered.
 #+begin_src emacs-lisp
   (setq neo-theme 'icons)
   (setq neo-window-fixed-size nil)
 #+end_src
+
+Jump to the current file node when neotree is opened.
+#+begin_src emacs-lisp
+  (setq neo-smart-open t)
+#+end_src
+
+Change neotree when switching projectile project (~projectile-switch-project~)
+#+begin_src emacs-lisp
+  (setq projectile-switch-project-action 'neotree-projectile-action)
+#+end_src
+
 ** python
 #+begin_src emacs-lisp
 
@@ -414,18 +428,21 @@ subtree using the *ignore* tag.
     (let ((sample (concat "mku" arg)))
       (let ((insertion
              (concat "* " (upcase sample) "\n"
-                     "Questions to answer:\n\n"
+                     "Questions to answer:\n"
+                     "- \n\n"
+                     "Comments:\n"
+                     "- \n\n"
                      "** Fabrication\n"
                      "#+name: " sample "-fab\n"
                      "| no | description | result | comment |\n"
                      "|----+-------------+--------+---------|\n"
                      "|    |             |        |         |\n"
                      "#+TBLFM: $1='(make-link-append-front \"" (downcase sample) "-fab\" $1)\n\n"
-  
+
                      "** Results \n"
                      )))
         (insert insertion))))
-  
+
   (defun sputter-step ()
     "insert a new org-mode table for a sputter step at the current cursor position"
     (interactive)
@@ -437,7 +454,7 @@ subtree using the *ignore* tag.
               "|---------+----------+-----------------------+---------+---------------+---------------+---------------------+------------------------+-----------------+----------|\n"
               "|         |          |                       |         |               |               |                     |                        |                 |          |\n")))
         (insert insertion))))
-  
+
   (defun resist-step ()
     "insert a new org-mode list template for resist coating step"
     (interactive)
@@ -457,7 +474,7 @@ subtree using the *ignore* tag.
             "- comments\n"
             )))
       (insert insertion)))
-  
+
   (defun plasma-etch-step ()
     "insert a new org-mode table for documenting a plasma-dry-etch step
   at the current cursor position"
@@ -472,7 +489,7 @@ subtree using the *ignore* tag.
               "#+TBLFM: @2$4=60 - @2$3::@2$5='(let ((base (/ (string-to-number @2$1) (string-to-number @2$3)))) (+ base (round (/ (* base (string-to-number @2$2)) 20))))"
               )))
         (insert insertion))))
-  
+
   (defun lift-off-step ()
     "org-mode list basis for a lift-off-step"
     (interactive)
