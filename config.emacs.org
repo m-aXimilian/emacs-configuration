@@ -433,10 +433,10 @@ Change neotree when switching projectile project (~projectile-switch-project~)
                      "Comments:\n"
                      "- \n\n"
                      "** Fabrication\n"
-                     "#+name: " sample "-fab\n"
-                     "| no | description | result | comment |\n"
-                     "|----+-------------+--------+---------|\n"
-                     "|    |             |        |         |\n"
+                     "#+name: " (downcase sample) "-fab\n"
+                     "| no | description | result | comment | date |\n"
+                     "|----+-------------+--------+---------+------|\n"
+                     "|    |             |        |         |      |\n"
                      "#+TBLFM: $1='(make-link-append-front \"" (downcase sample) "-fab\" $1)\n\n"
 
                      "** Results \n"
@@ -499,6 +499,39 @@ Change neotree when switching projectile project (~projectile-switch-project~)
                       "- temperature=°C\n"
                       "- time=min\n")))
       (insert insertion)))
+
+  (defun gatan-step ()
+    "Insert a template for a Gatan deposition step"
+    (interactive)
+    (let ((insertion
+           (concat
+            "- device=0001 Gatan ion-beam coater / ion etcher HES\n"
+            "- base pressure= mbar\n"
+            "- sputter pressure= mbar\n"
+            "- rotation= rpm\n"
+            "- rocking= °\n"
+            "- rates\n"
+            "  - Ti (keV) :: Å/s\n"
+            "- currents\n"
+            "  - keV :: µA/ µA\n"
+            "- comment")))
+      (insert insertion))
+    )
+
+  (defun evaporator-step ()
+    "Insert a template for a Gatan deposition step"
+    (interactive)
+    (let ((insertion
+           (concat
+            "- device=00067 Aufdampfanlage LEYBOLD HES\n"
+            "- base pressure= mbar\n"
+            "- sputter pressure= mbar\n"
+            "- rates\n"
+            "  - Ti :: Å/s\n"
+            "- XTAL= %\n"
+            "- comment")))
+      (insert insertion))
+  )
 #+END_SRC
 
 ** time-string conversions
