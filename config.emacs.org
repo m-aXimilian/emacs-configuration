@@ -161,7 +161,7 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
   ;;
   (global-linum-mode 1)
   ;; disable menu bar
-  (menu-bar-mode -1)
+  ;; (menu-bar-mode -1)
 
 #+END_SRC
 
