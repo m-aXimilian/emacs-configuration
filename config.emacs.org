@@ -358,6 +358,11 @@ subtree using the *ignore* tag.
 
   (add-hook 'org-mode-hook #'my-org-latex-yas)
 #+END_SRC
+
+global mode
+#+begin_src emacs-lisp
+  (yas-global-mode 1)
+#+end_src
 ** ace-window
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-o") 'ace-window)
