@@ -532,6 +532,23 @@ Change neotree when switching projectile project (~projectile-switch-project~)
             "- comment")))
       (insert insertion))
   )
+
+
+
+  (defun bonder-step ()
+    "Insert a new 'org-mode' table for a wire-bonder step at the current cursor position."
+    (interactive)
+    (let ((tab-id (replace-regexp-in-string " " "-" (org-get-heading) t t)))
+      (let ((insertion
+             (concat
+              "#+name: " tab-id "\n"
+              "|           | sample | bondpad |\n"
+              "|-----------+--------+---------|\n"
+              "| time(ms)  |        |         |\n"
+              "| US-power  |        |         |\n"
+              "| force(mN) |        |         |\n"
+  )))
+        (insert insertion))))
 #+END_SRC
 
 ** time-string conversions
@@ -652,5 +669,6 @@ Change neotree when switching projectile project (~projectile-switch-project~)
   (fset 'to-num 'string-to-number)
   (global-set-key (kbd "M-s M-e") 'inline-src-elisp)
 #+END_SRC
+
 
 
