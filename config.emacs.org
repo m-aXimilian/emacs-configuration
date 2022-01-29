@@ -72,6 +72,7 @@
                        ibuffer-sidebar
                        load-relative
                        elpy
+                       cc-mode
                        ))
 #+END_SRC
 ** archives
@@ -165,7 +166,6 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 
 #+END_SRC
 
-
 ** global enables
 #+BEGIN_SRC emacs-lisp
 (tool-bar-mode -1)
@@ -221,6 +221,11 @@ read
 ** flycheck
 #+begin_src emacs-lisp
   (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+#+end_src
+** C/C++
+#+begin_src elisp
+  (define-key c-mode-base-map (kbd "<f5>") 'compile)
+  (define-key c-mode-base-map (kbd "<f6>") 'recompile)
 #+end_src
 ** latex
 #+BEGIN_SRC emacs-lisp
