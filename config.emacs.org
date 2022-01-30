@@ -39,6 +39,8 @@
                        load-relative
                        elpy
                        rainbow-delimiters
+                       rtags
+                       cmake-ide
                        ))
 
 
@@ -58,6 +60,7 @@
                        ox-twbs
                        ox-extra ;; from org-contrib
                        ob-async
+                       company
                        flycheck
                        irony
                        company-irony
@@ -202,6 +205,60 @@ read
 
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   (add-hook 'irony-mode-hook #'irony-eldoc)
+#+end_src
+** rtags
+Copied from:
+- [[https://github.com/Andersbakken/rtags]]
+- [[https://github.com/atilaneves/cmake-ide]]
+- [[http://www.mycpu.org/emacs-rtags-helm/]]
+
+If the rtags build is not working:
+1. make sure LLVM is installed
+2. llvm-config is available in ~PATH~
+
+The path to the llvm can be specified in the build command like:
+#+begin_src sh
+  git clone --recursive https://github.com/Andersbakken/rtags.git
+  cd rtags
+  cmake -DLIBCLANG_LLVM_CONFIG_EXECUTABLE=/path/to/llvm-config -DCMAKE_EXPORT_COMPILE_COMMANDS=1 .
+  make
+#+end_src
+-> desribed in [[https://github.com/Andersbakken/rtags/issues/494]]
+
+#+begin_src elisp
+  ;; ensure that we use only rtags checking
+  ;; https://github.com/Andersbakken/rtags#optional-1
+  (defun setup-flycheck-rtags ()
+    (interactive)
+    (flycheck-select-checker 'rtags)
+    ;; RTags creates more accurate overlays.
+    (setq-local flycheck-highlighting-mode nil)
+    (setq-local flycheck-check-syntax-automatically nil))
+
+  ;; only run this if rtags is installed
+  (when (require 'rtags nil :noerror)
+    (define-key c-mode-base-map (kbd "M-.")
+      (function rtags-find-symbol-at-point))
+    (define-key c-mode-base-map (kbd "M-,")
+      (function rtags-find-references-at-point))
+    ;; install standard rtags keybindings. Do M-. on the symbol below to
+    ;; jump to definition and see the keybindings.
+    (rtags-enable-standard-keybindings)
+    ;; company completion setup
+    (setq rtags-autostart-diagnostics t
+          rtags-path "~/rtags/bin")
+    (rtags-diagnostics)
+    (setq rtags-completions-enabled t)
+    (push 'company-rtags company-backends)
+    (global-company-mode)
+    (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
+    ;; use rtags flycheck mode -- clang warnings shown inline
+    (require 'flycheck-rtags)
+    (cmake-ide-setup)
+    (add-hook 'c-mode-hook 'rtags-start-process-unless-running)
+    (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
+    ;; c-mode-common-hook is also called by c++-mode
+    (add-hook 'c-mode-common-hook #'setup-flycheck-rtags))
 #+end_src
 ** ibuffer
 #+begin_src emacs-lisp
