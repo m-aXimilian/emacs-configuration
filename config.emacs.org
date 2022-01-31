@@ -41,6 +41,7 @@
                        rainbow-delimiters
                        rtags
                        cmake-ide
+                       yaml-mode
                        ))
 
 
@@ -76,6 +77,7 @@
                        load-relative
                        elpy
                        cc-mode
+                       yaml-mode
                        ))
 #+END_SRC
 ** archives
@@ -424,6 +426,11 @@ subtree using the *ignore* tag.
 global mode
 #+begin_src emacs-lisp
   (yas-global-mode 1)
+#+end_src
+** yaml
+See [[https://melpa.org/#/yaml-mode]]
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 #+end_src
 ** ace-window
 #+BEGIN_SRC emacs-lisp
