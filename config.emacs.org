@@ -457,6 +457,7 @@ See [[https://melpa.org/#/yaml-mode]]
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-n") 'switch-to-buffer)
   (global-set-key (kbd "C-c p p") 'projectile-switch-project)
+  (global-set-key (kbd "C-c i") 'ibuffer)
 #+END_SRC
 ** slime
 #+begin_src emacs-lisp
