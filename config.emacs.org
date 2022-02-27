@@ -23,6 +23,7 @@
                        gnuplot
                        gnuplot-mode
                        material-theme
+                       markdown-mode
                        magit
                        flycheck
                        irony
@@ -43,6 +44,8 @@
                        cmake-ide
                        yaml-mode
                        visual-fill-column
+                       use-package
+                       dockerfile-mode
                        ))
 
 
@@ -80,6 +83,8 @@
                        cc-mode
                        yaml-mode
                        visual-fill-column
+                       use-package
+                       dockerfile-mode
                        ))
 #+END_SRC
 ** archives
@@ -332,14 +337,16 @@ subtree using the *ignore* tag.
             (lambda ()
               (visual-fill-column-mode)))
 
-  ;; disable linum in o'rg-mode
+  ;; disable linum in org-mode
   (add-hook 'org-mode-hook
             (lambda ()
               (linum-mode -1)))
 
   (setq-default visual-fill-column-center-text t)
 
-
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (visual-line-mode)))
 
   ;; auto-line breaks
   ;; (add-hook 'org-mode-hook
@@ -503,6 +510,25 @@ Change neotree when switching projectile project (~projectile-switch-project~)
 ** raibow delimiters
 #+begin_src emacs-lisp
   (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+#+end_src
+
+** makdown
+From:
+- [[https://jblevins.org/projects/markdown-mode/]]
+
+#+begin_src elisp
+  (use-package markdown-mode
+    :ensure t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
+#+end_src
+
+** docker
+#+begin_src elisp
+  (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
 #+end_src
 
 
