@@ -27,6 +27,7 @@
                        magit
                        flycheck
                        irony
+                       ivy
                        company-irony
                        flycheck-irony
                        irony-eldoc
@@ -476,6 +477,16 @@ See [[https://melpa.org/#/yaml-mode]]
   ;;(slime-setup '(slime-fancy slime-quicklisp slime-asdf))
   (setq inferior-lisp-program "sbcl" ; Steel Bank Common Lisp
         slime-contribs '(slime-fancy))
+#+end_src
+** sr-speedbar
+#+begin_src elisp
+  ;; (use-package sr-speedbar
+  ;;   :ensure t
+  ;;   :init
+  ;;   (setq sr-speedbar-right-side nil))
+
+  (add-hook 'speedbar-mode-hook (lambda ()
+                                  (linum-mode -1)))
 #+end_src
 ** projectile
 #+begin_src emacs-lisp
