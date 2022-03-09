@@ -46,6 +46,7 @@
                        visual-fill-column
                        use-package
                        dockerfile-mode
+                       sr-speedbar
                        ))
 
 
@@ -85,6 +86,7 @@
                        visual-fill-column
                        use-package
                        dockerfile-mode
+                       sr-speedbar
                        ))
 #+END_SRC
 ** archives
@@ -180,13 +182,14 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 
 ** global enables
 #+BEGIN_SRC emacs-lisp
-(tool-bar-mode -1)
-(yas-global-mode 1)
-(electric-pair-mode 1)
+  (tool-bar-mode -1)
+  (yas-global-mode 1)
+  (electric-pair-mode 1)
 
-(global-flycheck-mode 1)
+  (global-flycheck-mode 1)
 
-(show-paren-mode 1)
+  (show-paren-mode 1)
+  (ivy-mode 1)
 
 #+END_SRC
 ** company
