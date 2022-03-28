@@ -6,6 +6,7 @@
 ** install and require lists
 #+BEGIN_SRC emacs-lisp
   (setq install-list '(
+                       bibtex-completion
                        ace-window
                        dirtree
                        neotree
@@ -28,6 +29,7 @@
                        flycheck
                        irony
                        ivy
+                       ivy-bibtex
                        company-irony
                        flycheck-irony
                        irony-eldoc
@@ -52,6 +54,7 @@
 
 
   (setq require-list '(
+                       bibtex
                        dirtree
                        neotree
                        pdf-tools
@@ -59,6 +62,7 @@
                        yasnippet
                        org-bullets
                        org-ref
+                       org-ref-ivy
                        org-contrib
                        ox
                        ox-publish
@@ -155,14 +159,6 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 #+END_SRC
 
 
-* ToDo setup
-** keywords and tags
-#+BEGIN_SRC emacs-lisp
-(setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
-#+END_SRC 
-
-      
 * Default settings
 
 ** global
@@ -335,6 +331,9 @@ subtree using the *ignore* tag.
 
 ** org-mode
 #+BEGIN_SRC emacs-lisp
+  ;; loaddefs
+  (require 'org-loaddefs)
+
   ;; pretty bullets
   (add-hook 'org-mode-hook
             (lambda ()
@@ -438,13 +437,26 @@ subtree using the *ignore* tag.
   (org-reload)
 #+END_SRC
 ** org-ref
+Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Change the value of *bib-dir* to a valid directory.
+Bloat it using multiple bib-files if necessary.
+
 #+BEGIN_SRC emacs-lisp
-  (setq reftex-default-bibliography '("~/bib/Promotion.bib"))
-  
-  (setq org-ref-bibliography-notes "~/bib/notes.org"
-        org-ref-default-bibliography '("~/bib/Promotion.bib")
-        org-ref-pdf-directory "~/bib/bibtex-pdfs")
+  (setq *bib-dir* "/home/max/windows_d/prom/research/bib")
+
+  (if (file-directory-p *bib-dir*)
+      (progn
+        (setq bibtex-completion-bibliography (list (expand-file-name (concat *bib-dir* "/Promotion.bib"))))
+        (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
+              org-ref-insert-cite-function 'org-ref-cite-insert-ivy
+              org-ref-insert-label-function 'org-ref-insert-label-link
+              org-ref-insert-ref-function 'org-ref-insert-ref-link
+              org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
+        (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
+        (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body)
+        )
+    )
 #+END_SRC
+
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
   ;; require latex snippets in org mode
@@ -811,3 +823,11 @@ From:
 
 
 
+* ToDo setup
+** keywords and tags
+#+BEGIN_SRC emacs-lisp
+(setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+#+END_SRC 
+
+      
