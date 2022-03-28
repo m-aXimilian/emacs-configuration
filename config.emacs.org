@@ -441,7 +441,8 @@ Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-re
 Bloat it using multiple bib-files if necessary.
 
 #+BEGIN_SRC emacs-lisp
-  (setq *bib-dir* "/home/max/windows_d/prom/research/bib")
+  (defvar *bib-dir* "/home/max/windows_d/prom/research/bib"
+    "Directory to a *.bib-file for usage with org-ref.")
 
   (if (file-directory-p *bib-dir*)
       (progn
