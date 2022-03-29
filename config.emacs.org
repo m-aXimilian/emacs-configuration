@@ -3,6 +3,8 @@
 #+startup: indent
 
 * package sources and inits
+Try ~package-refresh-contents~ as a quickfix when a package is not found.
+
 ** install and require lists
 #+BEGIN_SRC emacs-lisp
   (setq install-list '(
