@@ -488,18 +488,6 @@ See [[https://melpa.org/#/yaml-mode]]
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-o") 'ace-window)
 #+END_SRC
-** key-bindings
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-n") 'switch-to-buffer)
-  (global-set-key (kbd "C-c p p") 'projectile-switch-project)
-  (global-set-key (kbd "C-c i") 'ibuffer)
-#+END_SRC
-
-Latex related
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-p") 'latex-math-preview-expression)
-#+END_SRC
-
 ** slime
 #+begin_src emacs-lisp
   ;;(setq inferior-lisp-program "/opt/sbcl/bin/sbcl")
@@ -575,6 +563,42 @@ From:
 ** docker
 #+begin_src elisp
   (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+#+end_src
+
+** recentf
+From [[https://www.youtube.com/watch?v=51eSeqcaikM]]
+History of recent files
+#+begin_src elisp
+  (recentf-mode 1)
+#+end_src
+
+** savehist
+Minibuffer history
+#+begin_src elisp
+  (setq history-length 10)
+  (savehist-mode 1)
+#+end_src
+** saveplace
+Jump back to where the cursor was before closing a file or emacs.
+Adds lag when opening a file.
+#+begin_src elisp
+  (save-place-mode 1)
+#+end_src
+** key-bindings
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-n") 'switch-to-buffer)
+  (global-set-key (kbd "C-c p p") 'projectile-switch-project)
+  (global-set-key (kbd "C-c i") 'ibuffer)
+#+END_SRC
+
+Latex related
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-p") 'latex-math-preview-expression)
+#+END_SRC
+
+Recentf bind to openfiles
+#+begin_src elisp
+  (global-set-key (kbd "C-c o") 'recentf-open-files)
 #+end_src
 
 
@@ -841,6 +865,9 @@ From:
 #+BEGIN_SRC emacs-lisp
 (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
-#+END_SRC 
+#+END_SRC
 
-      
+
+
+
+
