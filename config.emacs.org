@@ -441,8 +441,7 @@ subtree using the *ignore* tag.
   (org-reload)
 #+END_SRC
 ** org-ref
-Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Change the value of *bib-dir* to a valid directory.
-Bloat it using multiple bib-files if necessary.
+Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
 
 #+BEGIN_SRC emacs-lisp
   ;; Define a list of bib-files 
@@ -455,7 +454,7 @@ Bloat it using multiple bib-files if necessary.
         (push file bibtex-completion-bibliography)))
 
   ;; enable org-ref functions and keybindings when there is at least one bib-file present
-  (if (not (eq bibtex-completion-bibliography nil))
+  (if bibtex-completion-bibliography
       (progn
         (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
               org-ref-insert-cite-function 'org-ref-cite-insert-ivy
