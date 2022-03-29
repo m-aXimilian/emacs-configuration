@@ -50,6 +50,7 @@
                        use-package
                        dockerfile-mode
                        sr-speedbar
+                       latex-math-preview
                        ))
 
 
@@ -313,6 +314,7 @@ The path to the llvm can be specified in the build command like:
   ;; for export purposes
   (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
+
 #+END_SRC
 
 Remove the headline while exporting the content in the respective
@@ -488,6 +490,12 @@ See [[https://melpa.org/#/yaml-mode]]
   (global-set-key (kbd "C-c p p") 'projectile-switch-project)
   (global-set-key (kbd "C-c i") 'ibuffer)
 #+END_SRC
+
+Latex related
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-p") 'latex-math-preview-expression)
+#+END_SRC
+
 ** slime
 #+begin_src emacs-lisp
   ;;(setq inferior-lisp-program "/opt/sbcl/bin/sbcl")
