@@ -443,21 +443,25 @@ Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-re
 Bloat it using multiple bib-files if necessary.
 
 #+BEGIN_SRC emacs-lisp
-  (defvar *bib-dir* "/home/max/windows_d/prom/research/bib"
-    "Directory to a *.bib-file for usage with org-ref.")
+  ;; Define a list of bib-files 
+  (defvar *bib-files* (list "/home/max/windows_d/prom/research/bib/Promotion.bib" "/home/max/prom/research/bib/Promotion.bib")
+    "List of *.bib-files for usage with org-ref.")
 
-  (if (file-directory-p *bib-dir*)
+  ;; Add bib-files to the bibtex-completion list if they can be found
+  (dolist (file *bib-files*)
+    (if (file-exists-p file)
+        (push file bibtex-completion-bibliography)))
+
+  ;; enable org-ref functions and keybindings when there is at least one bib-file present
+  (if (not (eq bibtex-completion-bibliography nil))
       (progn
-        (setq bibtex-completion-bibliography (list (expand-file-name (concat *bib-dir* "/Promotion.bib"))))
         (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
               org-ref-insert-cite-function 'org-ref-cite-insert-ivy
               org-ref-insert-label-function 'org-ref-insert-label-link
               org-ref-insert-ref-function 'org-ref-insert-ref-link
               org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
         (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
-        (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body)
-        )
-    )
+        (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body)))
 #+END_SRC
 
 ** yasnippet
