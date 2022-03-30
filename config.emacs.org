@@ -2,7 +2,7 @@
 #+TITLE: emacs configuration
 #+startup: indent
 
-* package sources and inits
+* Package Sources and Inits
 Try ~package-refresh-contents~ as a quickfix when a package is not found.
 
 ** install and require lists
@@ -150,7 +150,7 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 #+END_SRC
 
 
-* packages
+* Packages Installation and Require
 ** install from install-list
 #+BEGIN_SRC emacs-lisp
   (dolist (package install-list)
@@ -164,7 +164,7 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 #+END_SRC
 
 
-* Default settings
+* Globals Settings
 
 ** global
 
@@ -194,6 +194,26 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
   (ivy-mode 1)
 
 #+END_SRC
+
+** key-bindings
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-n") 'switch-to-buffer)
+  (global-set-key (kbd "C-c p p") 'projectile-switch-project)
+  (global-set-key (kbd "C-c i") 'ibuffer)
+#+END_SRC
+
+Latex related
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-p") 'latex-math-preview-expression)
+#+END_SRC
+
+Recentf bind to openfiles
+#+begin_src elisp
+  (global-set-key (kbd "C-c o") 'recentf-open-files)
+#+end_src
+
+
+* Mode and Backend settings
 ** company
 #+begin_src emacs-lisp
   (add-hook 'after-init-hook 'global-company-mode)
@@ -298,34 +318,6 @@ The path to the llvm can be specified in the build command like:
 #+begin_src emacs-lisp
   (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 #+end_src
-** C/C++
-#+begin_src elisp
-  (define-key c-mode-base-map (kbd "<f5>") 'compile)
-  (define-key c-mode-base-map (kbd "<f6>") 'recompile)
-#+end_src
-** latex
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
-  #'TeX-revert-document-buffer)
-  (add-to-list 'org-latex-classes
-               '("beamer"
-                 "\\documentclass\[presentation\]\{beamer\}"
-                 ("\\section\{%s\}" . "\\section*\{%s\}")
-                 ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
-                 ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
-
-
-  ;; for export purposes
-  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-
-
-#+END_SRC
-
-Remove the headline while exporting the content in the respective
-subtree using the *ignore* tag.
-#+BEGIN_SRC  emacs-lisp
-  (ox-extras-activate '(ignore-headlines))
-#+END_SRC
 
 ** dired
 #+BEGIN_SRC emacs-lisp
@@ -482,24 +474,10 @@ global mode
 #+begin_src emacs-lisp
   (yas-global-mode 1)
 #+end_src
-** yaml
-See [[https://melpa.org/#/yaml-mode]]
-#+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-#+end_src
 ** ace-window
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-o") 'ace-window)
 #+END_SRC
-** slime
-#+begin_src emacs-lisp
-
-  (require 'slime-autoloads)
-
-  (setq inferior-lisp-program "sbcl" ; Steel Bank Common Lisp
-        slime-contribs '(slime-fancy slime-scratch slime-editing-commands slime-quicklisp))
-
-#+end_src
 ** sr-speedbar
 #+begin_src elisp
   (use-package sr-speedbar
@@ -534,6 +512,80 @@ Change neotree when switching projectile project (~projectile-switch-project~)
   (setq projectile-switch-project-action 'neotree-projectile-action)
 #+end_src
 
+** raibow delimiters
+#+begin_src emacs-lisp
+  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+#+end_src
+
+** recentf
+From [[https://www.youtube.com/watch?v=51eSeqcaikM]]
+History of recent files
+#+begin_src elisp
+  (recentf-mode 1)
+#+end_src
+
+** savehist
+Minibuffer history
+#+begin_src elisp
+  (setq history-length 10)
+  (savehist-mode 1)
+#+end_src
+** saveplace
+Jump back to where the cursor was before closing a file or emacs.
+Adds lag when opening a file.
+#+begin_src elisp
+  (save-place-mode 1)
+#+end_src
+
+
+* Languages
+** C/C++
+#+begin_src elisp
+  (define-key c-mode-base-map (kbd "<f5>") 'compile)
+  (define-key c-mode-base-map (kbd "<f6>") 'recompile)
+#+end_src
+
+** latex
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
+  #'TeX-revert-document-buffer)
+  (add-to-list 'org-latex-classes
+               '("beamer"
+                 "\\documentclass\[presentation\]\{beamer\}"
+                 ("\\section\{%s\}" . "\\section*\{%s\}")
+                 ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
+                 ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+
+
+  ;; for export purposes
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+
+
+#+END_SRC
+
+Remove the headline while exporting the content in the respective
+subtree using the *ignore* tag.
+#+BEGIN_SRC  emacs-lisp
+  (ox-extras-activate '(ignore-headlines))
+#+END_SRC
+
+** yaml
+See [[https://melpa.org/#/yaml-mode]]
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+#+end_src
+
+** slime
+#+begin_src emacs-lisp
+
+  (require 'slime-autoloads)
+
+  (setq inferior-lisp-program "sbcl" ; Steel Bank Common Lisp
+        slime-contribs '(slime-fancy slime-scratch slime-editing-commands slime-quicklisp))
+
+#+end_src
+
 ** python
 #+begin_src emacs-lisp
 
@@ -542,12 +594,6 @@ Change neotree when switching projectile project (~projectile-switch-project~)
     (setq elpy-rpc-python-command "python3")
 
 
-#+end_src
-
-** raibow delimiters
-#+begin_src emacs-lisp
-  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 #+end_src
 
 ** makdown
@@ -570,6 +616,7 @@ From:
 #+end_src
 
 ** vue
+See documentation on [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode-website]]
 With ~vue-mode~ and ~lsp-mode~ installed.
 Needs a lsp-backend (e.g. ~M-x lsp-install-server ts-ls~ for JavaScript and TypeScript).
 #+begin_src elisp
@@ -584,42 +631,6 @@ Same as [[vue][*vue]] -> needs ~lsp-mode~
   (use-package js2-mode
     :mode "\\.js\\'"
     :hook (js2-mode . lsp-deferred))
-#+end_src
-
-** recentf
-From [[https://www.youtube.com/watch?v=51eSeqcaikM]]
-History of recent files
-#+begin_src elisp
-  (recentf-mode 1)
-#+end_src
-
-** savehist
-Minibuffer history
-#+begin_src elisp
-  (setq history-length 10)
-  (savehist-mode 1)
-#+end_src
-** saveplace
-Jump back to where the cursor was before closing a file or emacs.
-Adds lag when opening a file.
-#+begin_src elisp
-  (save-place-mode 1)
-#+end_src
-** key-bindings
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-n") 'switch-to-buffer)
-  (global-set-key (kbd "C-c p p") 'projectile-switch-project)
-  (global-set-key (kbd "C-c i") 'ibuffer)
-#+END_SRC
-
-Latex related
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-p") 'latex-math-preview-expression)
-#+END_SRC
-
-Recentf bind to openfiles
-#+begin_src elisp
-  (global-set-key (kbd "C-c o") 'recentf-open-files)
 #+end_src
 
 
