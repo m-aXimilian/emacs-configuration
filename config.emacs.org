@@ -55,6 +55,9 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        latex-math-preview
                        vue-mode
                        js2-mode
+                       json-mode
+                       json-reformat
+                       all-the-icons-dired
                        ))
 
 
@@ -97,14 +100,15 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        use-package
                        dockerfile-mode
                        sr-speedbar
+                       json-mode
+                       json-reformat
                        ))
 #+END_SRC
 ** archives
 #+BEGIN_SRC emacs-lisp
   (setq package-archives '(("nongnu" . "https://elpa.nongnu.org/nongnu/")
                            ("gnu" . "https://elpa.gnu.org/packages/") 
-                           ("melpa" . "https://melpa.org/packages/")
-                           ("melpayas" . "http://melpa.milkbox.net/packages/")))
+                           ("melpa" . "https://melpa.org/packages/")))
 #+END_SRC
 
 ** settings and inits
@@ -329,7 +333,7 @@ The path to the llvm can be specified in the build command like:
   (add-hook 'dired-mode-hook
             (lambda ()
               (dired-hide-details-mode)))
-
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 #+END_SRC
 
 ** org-mode
@@ -397,7 +401,8 @@ The path to the llvm can be specified in the build command like:
    'org-babel-load-languages
    '((latex .t)
      (gnuplot .t)
-     (python .t)))
+     (python .t)
+     (C .t)))
 
   ;; evaluate code blocks without asking
   (defun my-org-confirm-babel-evaluate (lang body)
@@ -406,9 +411,14 @@ The path to the llvm can be specified in the build command like:
           (string= lang "latex")
           (string= lang "elisp")
           (string= lang "gnuplot")
-          (string= lang "python"))))
+          (string= lang "python")
+          (string= lang "dot")
+          (string= lang "C++"))))
 
   (setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
+
+  ;; open source block edit in the same window
+  (setq org-src-window-setup "current-window")
 
   ;; agenda toggle mode
   (global-set-key (kbd "C-c a") 'org-agenda)
@@ -625,9 +635,14 @@ See documentation on [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode-website]]
 With ~vue-mode~ and ~lsp-mode~ installed.
 Needs a lsp-backend (e.g. ~M-x lsp-install-server ts-ls~ for JavaScript and TypeScript).
 #+begin_src elisp
+  (use-package lsp-mode
+    :commands lsp)
+
   (use-package vue-mode
     :mode "\\.vue\\'"
     :hook (vue-mode . lsp-deferred))
+
+  (setq js-indent-level 2)
 #+end_src
 
 ** javascript
