@@ -254,6 +254,14 @@ read [[https://martinsosic.com/development/emacs/2017/12/09/emacs-cpp-ide.html][
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   (add-hook 'irony-mode-hook #'irony-eldoc)
 #+end_src
+** ivy
+from [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html]]
+#+begin_src elisp
+  (use-package ivy :demand
+    :config
+    (setq ivy-use-virtual-buffers t
+          ivy-count-format "%d/%d "))
+#+end_src
 ** rtags
 Copied from:
 - [[https://github.com/Andersbakken/rtags]]
