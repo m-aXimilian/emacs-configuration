@@ -467,7 +467,7 @@ Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-re
 
   ;; Add bib-files to the bibtex-completion list if they can be found
   (dolist (file *bib-files*)
-    (if (file-exists-p file)
+    (if (and (file-exists-p file) (not (member file bibtex-completion-bibliography)))
         (push file bibtex-completion-bibliography)))
 
   ;; enable org-ref functions and keybindings when there is at least one bib-file present
