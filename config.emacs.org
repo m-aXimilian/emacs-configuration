@@ -58,11 +58,8 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        json-mode
                        json-reformat
                        all-the-icons-dired
-<<<<<<< Updated upstream
                        highlight-symbol
-=======
                        origami
->>>>>>> Stashed changes
                        ))
 
 
@@ -107,11 +104,8 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        sr-speedbar
                        json-mode
                        json-reformat
-<<<<<<< Updated upstream
                        highlight-symbol
-=======
                        origami
->>>>>>> Stashed changes
                        ))
 #+END_SRC
 ** archives
@@ -570,19 +564,18 @@ Adds lag when opening a file.
 #+begin_src elisp
   (save-place-mode 1)
 #+end_src
-<<<<<<< Updated upstream
+
 ** highlight symbol
 #+begin_src elisp
   (global-set-key [(control f3)] 'highlight-symbol)
   (global-set-key [f3] 'highlight-symbol-next)
   (global-set-key [(shift f3)] 'highlight-symbol-prev)
   (global-set-key [(meta f3)] 'highlight-symbol-query-replace)
-=======
+
 ** origami
 Show/hide text regions.
 #+begin_src elisp
   (define-key origami-mode-map (kbd "C-c C-z") 'origami-recursively-toggle-node)
->>>>>>> Stashed changes
 #+end_src
 
 * Languages
