@@ -58,7 +58,11 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        json-mode
                        json-reformat
                        all-the-icons-dired
+<<<<<<< Updated upstream
                        highlight-symbol
+=======
+                       origami
+>>>>>>> Stashed changes
                        ))
 
 
@@ -103,7 +107,11 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        sr-speedbar
                        json-mode
                        json-reformat
+<<<<<<< Updated upstream
                        highlight-symbol
+=======
+                       origami
+>>>>>>> Stashed changes
                        ))
 #+END_SRC
 ** archives
@@ -144,8 +152,8 @@ integer between 0 and 100, where 0 means completely transparent and
 Emacs not to set the frame opacity (leaving it to the window
 manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and-Color-Parameters.html][Font and Color Parameters]]) 
 #+begin_src emacs-lisp
-  (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
-  (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
+  (set-frame-parameter (selected-frame) 'alpha '(85 . 85))
+  (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
 #+end_src
 
 *** fullscreen on startup
@@ -562,12 +570,19 @@ Adds lag when opening a file.
 #+begin_src elisp
   (save-place-mode 1)
 #+end_src
+<<<<<<< Updated upstream
 ** highlight symbol
 #+begin_src elisp
   (global-set-key [(control f3)] 'highlight-symbol)
   (global-set-key [f3] 'highlight-symbol-next)
   (global-set-key [(shift f3)] 'highlight-symbol-prev)
   (global-set-key [(meta f3)] 'highlight-symbol-query-replace)
+=======
+** origami
+Show/hide text regions.
+#+begin_src elisp
+  (define-key origami-mode-map (kbd "C-c C-z") 'origami-recursively-toggle-node)
+>>>>>>> Stashed changes
 #+end_src
 
 * Languages
@@ -575,6 +590,8 @@ Adds lag when opening a file.
 #+begin_src elisp
   (define-key c-mode-base-map (kbd "<f5>") 'compile)
   (define-key c-mode-base-map (kbd "<f6>") 'recompile)
+  (add-hook 'c-mode-hook 'origami-mode)
+  (add-hook 'c++-mode-hook 'origami-mode)
 #+end_src
 
 ** latex
@@ -623,7 +640,7 @@ See [[https://melpa.org/#/yaml-mode]]
   (elpy-enable)
   (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
     (setq elpy-rpc-python-command "python3")
-
+  (add-hook 'python-mode-hook 'origami-mode)
 
 #+end_src
 
