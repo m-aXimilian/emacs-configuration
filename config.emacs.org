@@ -146,7 +146,7 @@ integer between 0 and 100, where 0 means completely transparent and
 Emacs not to set the frame opacity (leaving it to the window
 manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and-Color-Parameters.html][Font and Color Parameters]]) 
 #+begin_src emacs-lisp
-  (set-frame-parameter (selected-frame) 'alpha '(85 . 85))
+  (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
   (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
 #+end_src
 
