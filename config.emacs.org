@@ -1,6 +1,6 @@
 #+EXPORT_FILE_NAME: emacs_config
 #+TITLE: emacs configuration
-#+startup: indent
+#+startup: indent fold
 
 * Package Sources and Inits
 Try ~package-refresh-contents~ as a quickfix when a package is not found.
@@ -66,6 +66,7 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        cider
                        ido-completing-read+
                        tagedit
+                       vundo
                        ))
 
 
@@ -152,7 +153,7 @@ integer between 0 and 100, where 0 means completely transparent and
 Emacs not to set the frame opacity (leaving it to the window
 manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and-Color-Parameters.html][Font and Color Parameters]]) 
 #+begin_src emacs-lisp
-  (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
+  (set-frame-parameter (selected-frame) 'alpha '(98 . 94))
   (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
 #+end_src
 
