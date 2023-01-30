@@ -154,7 +154,7 @@ Emacs not to set the frame opacity (leaving it to the window
 manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and-Color-Parameters.html][Font and Color Parameters]]) 
 #+begin_src emacs-lisp
   (set-frame-parameter (selected-frame) 'alpha '(98 . 94))
-  (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
+  (add-to-list 'default-frame-alist '(alpha . (98 . 85)))
 #+end_src
 
 *** fullscreen on startup
@@ -537,9 +537,11 @@ global mode
 #+begin_src emacs-lisp
   (yas-global-mode 1)
 #+end_src
-** ace-window
+** ace-window & move window
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-o") 'ace-window)
+  (global-set-key (kbd "s-j") 'windmove-left)
+  (global-set-key (kbd "s-;") 'windmove-right)
 #+END_SRC
 ** sr-speedbar
 #+begin_src elisp
