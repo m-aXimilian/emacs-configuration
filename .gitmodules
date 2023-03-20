@@ -1,0 +1,3 @@
+[submodule "org-present"]
+	path = org-present
+	url = https://github.com/rlister/org-present.git
