@@ -617,6 +617,21 @@ Show/hide text regions.
   (define-key origami-mode-map (kbd "C-c C-z") 'origami-recursively-toggle-node)
 #+end_src
 
+** org-present
+#+begin_src elisp
+  (defun my/org-present-mode-hook ()
+    "Setup org-present-mode."
+    (org-display-inline-images))
+
+  (defun my/org-present-mode-hook-quit ()
+    "Revert settings from my/org-present-mode-hook when leaving org-present-mode."
+    (org-remove-inline-images))
+
+  (use-package org-present
+    :ensure t
+    :hook ((org-present-mode . my/org-present-mode-hook)
+           (org-present-mode-quit . my/org-present-mode-hook-quit)))
+#+end_src
 
 * Languages
 ** C/C++
