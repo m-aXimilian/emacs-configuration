@@ -78,17 +78,8 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        pdf-tools
                        popup
                        yasnippet
-                       org-bullets
                        org-ref
                        org-ref-ivy
-                       org-contrib
-                       ox
-                       ox-publish
-                       ox-latex
-                       ox-beamer
-                       ox-twbs
-                       ox-extra ;; from org-contrib
-                       ob-async
                        company
                        flycheck
                        irony
@@ -357,47 +348,37 @@ The path to the llvm can be specified in the build command like:
 #+END_SRC
 
 ** org-mode
-*** Misc
-Split into multiple chunks at some point
+
 #+BEGIN_SRC emacs-lisp
   ;; loaddefs
-  (require 'org-loaddefs)
+  ;; not sure why this was there in there
+  ;; (require 'org-loaddefs)
 
-  ;; pretty bullets
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (org-bullets-mode t)))
+  (defun my/org-init ()
+    "Only require the packages related to 'org-mode' when using org."
+    (let ((org-requirements '(org-bullets org-contrib ox ox-publish ox-latex
+                                          ox-beamer ox-twbs ox-extra ob-async)))
+      (dolist (req org-requirements)
+        (require req))))
 
-  ;; more appealing clolumns
-  (setq-default visual-fill-column-width 100)
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (visual-fill-column-mode)))
+  (defun my/org-visual-column-linum ()
+    "Appearance configurations for 'org-mode'."
+    (progn
+      (setq-default visual-fill-column-width 100)
+      (setq-default visual-fill-column-center-text t)
+      (setq org-list-allow-alphabetical t)
+      (visual-fill-column-mode)
+      (visual-line-mode)
+      (linum-mode -1)))
 
-  ;; disable linum in org-mode
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (linum-mode -1)))
+  (defun my/org-settings ()
+    "Consider this for more uncategorized settings like the src-window."
+    (setq org-src-window-setup "current-window"))
 
-  (setq-default visual-fill-column-center-text t)
-
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (visual-line-mode)))
-
-  ;; auto-line breaks
-  ;; (add-hook 'org-mode-hook
-  ;;           (lambda ()
-  ;;             (auto-fill-mode t)))
-
-  ;; allow alphabetical numeration
-  (setq org-list-allow-alphabetical t)
-
-  ;; publishing settings
-
-  (setq org-publish-project-alist
-        '(
-          ("org-notes"
+  (defun my/org-publishing ()
+    "Publishing specific settings."
+    (setq org-publish-project-alist
+        '(("org-notes"
            :base-directory "~/org/"
            :base-extension "org"
            :publishing-directory "~/public_html/"
@@ -407,7 +388,6 @@ Split into multiple chunks at some point
            :headline-levels 4
            :auto-preamble t
            )
-
           ("org-static"
            :base-directory "~/org/"
            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
@@ -415,40 +395,53 @@ Split into multiple chunks at some point
            :recursive t
            :publishing-function org-publish-attachment
            )
+          ("org" :components ("org-notes" "org-static")))))
 
-          ("org" :components ("org-notes" "org-static"))))
+  (defun my/org-babel-lang ()
+    "Which languages shall be loaded into babel."
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((latex .t)
+       (gnuplot .t)
+       (python .t)
+       (C .t))))
 
-  ;; needed for code block evaluation
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((latex .t)
-     (gnuplot .t)
-     (python .t)
-     (C .t)))
+  (defun my/eval-w/o-confirmation ()
+    "Languages in the list don't require confirmation to be executed."
+    (let ((confirmed-babel-langs (lambda (lang body)
+                                   (not (or
+                                         (string= lang "emacs-lisp")
+                                         (string= lang "latex")
+                                         (string= lang "elisp")
+                                         (string= lang "gnuplot")
+                                         (string= lang "python")
+                                         (string= lang "dot")
+                                         (string= lang "C++"))))))
+      (setq org-confirm-babel-evaluate confirmed-babel-langs)))
 
-  ;; evaluate code blocks without asking
-  (defun my-org-confirm-babel-evaluate (lang body)
-    (not (or
-          (string= lang "emacs-lisp")
-          (string= lang "latex")
-          (string= lang "elisp")
-          (string= lang "gnuplot")
-          (string= lang "python")
-          (string= lang "dot")
-          (string= lang "C++"))))
+  (use-package org
+    :init (my/org-init)
+    :mode (("\\.org$" . org-mode))  
+    :ensure 
+    :hook
+    (org-mode . org-bullets-mode)
+    (org-mode . my/org-visual-column-linum)
+    (org-mode . my/org-publishing)
+    (org-mode . my/org-babel-lang)
+    (org-mode . my/eval-w/o-confirmation)
+    (org-mode . my/org-settings))
+#+END_SRC
 
-  (setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
+Some global settings that cannot be added to ~org-mode~ as a hook.
 
-  ;; open source block edit in the same window
-  (setq org-src-window-setup "current-window")
-
+#+begin_src elisp
   ;; agenda toggle mode
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c l") 'org-store-link)
 
   ;; global agenda to-do file
   (setq org-agenda-files (quote ("~/todo.org")))
-
+  
   ;; global target file for notes
   (setq org-default-notes-file (concat org-directory "~/notes.org"))
 
@@ -470,9 +463,9 @@ Split into multiple chunks at some point
   (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
   (org-reload)
-#+END_SRC
+#+end_src
 
-*** Org-export
+
 Add additional html-export that embeds images into the generated html.
 Mostly copied from [[https://niklasfasching.de/posts/org-html-export-inline-images/]]
 #+begin_src elisp
@@ -524,7 +517,7 @@ Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-re
 #+END_SRC
 
 ** org-roam
-On windows [[https://www.msys2.org/][~MSYS~]] is the easiest way to get ~gcc~ which is needed to compile the database for org-roam.
+On windows [[https://www.msys2.org/][~MSYS~]] is the easiest way to get ~gcc~ which is needed to compile the database for [[https://www.orgroam.com/][org-roam]].
 
 This configuration makes use of an environment variable pointing to the root directory of org-roam, called ~ORGROAM~. Make sure to export this pointing to whatever directory should be used for it. If not using org-roam, setting ~ensure~ to ~nil~ in the following use-package sexp should do the trick.
 #+begin_src elisp
@@ -533,7 +526,7 @@ This configuration makes use of an environment variable pointing to the root dir
     (if (eq nil dir)
         (error "No environment variable 'ORGROAM' was found. Set one and start again.")
       (expand-file-name dir))))
-  
+
   (use-package org-roam
     :ensure t
     :custom
@@ -546,6 +539,15 @@ This configuration makes use of an environment variable pointing to the root dir
     :config
     (org-roam-db-autosync-mode)
     (setq org-roam-database-connector 'emacsql-sqlite))
+#+end_src
+
+*** org-roam-bibtex
+#+begin_src elisp
+  (use-package org-roam-bibtex
+    :ensure t
+    :after org-roam
+    :config
+    (require 'org-ref))
 #+end_src
 
 ** yasnippet
