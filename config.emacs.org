@@ -34,6 +34,7 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        ivy-bibtex
                        company-irony
                        flycheck-irony
+                       flycheck-rtags
                        irony-eldoc
                        slime
                        slime-company
