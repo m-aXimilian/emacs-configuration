@@ -522,6 +522,31 @@ Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-re
         (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body)))
 #+END_SRC
 
+** org-roam
+On windows [[https://www.msys2.org/][~MSYS~]] is the easiest way to get ~gcc~ which is needed to compile the database for org-roam.
+
+This configuration makes use of an environment variable pointing to the root directory of org-roam, called ~ORGROAM~. Make sure to export this pointing to whatever directory should be used for it. If not using org-roam, setting ~ensure~ to ~nil~ in the following use-package sexp should do the trick.
+#+begin_src elisp
+  (defun my/get-org-roam-dir ()
+  (let ((dir (getenv "ORGROAM")))
+    (if (eq nil dir)
+        (error "No environment variable 'ORGROAM' was found. Set one and start again.")
+      (expand-file-name dir))))
+  
+  (use-package org-roam
+    :ensure t
+    :custom
+    (setq org-roam-directory (my/get-org-roam-dir))
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n g" . org-roam-graph)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n c" . org-roam-capture))
+    :config
+    (org-roam-db-autosync-mode)
+    (setq org-roam-database-connector 'emacsql-sqlite))
+#+end_src
+
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
   ;; require latex snippets in org mode
