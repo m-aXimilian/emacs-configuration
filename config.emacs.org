@@ -404,7 +404,8 @@ The path to the llvm can be specified in the build command like:
      '((latex .t)
        (gnuplot .t)
        (python .t)
-       (C .t))))
+       (C .t)
+       (lisp .t))))
 
   (defun my/eval-w/o-confirmation ()
     "Languages in the list don't require confirmation to be executed."
@@ -413,6 +414,7 @@ The path to the llvm can be specified in the build command like:
                                          (string= lang "emacs-lisp")
                                          (string= lang "latex")
                                          (string= lang "elisp")
+                                         (string= lang "lisp")
                                          (string= lang "gnuplot")
                                          (string= lang "python")
                                          (string= lang "dot")
