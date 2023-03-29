@@ -187,11 +187,6 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
   (setq column-number-mode t)
   ;; always auto-revert
   (global-auto-revert-mode 1)
-  ;;
-  (global-linum-mode 1)
-  ;; disable menu bar
-  ;; (menu-bar-mode -1)
-
 #+END_SRC
 
 ** global enables
