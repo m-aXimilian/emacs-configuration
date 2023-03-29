@@ -694,6 +694,11 @@ subtree using the *ignore* tag.
 #+BEGIN_SRC  emacs-lisp
   (ox-extras-activate '(ignore-headlines))
 #+END_SRC
+** pdf
+#+begin_src elisp
+  (add-hook 'pdf-view-mode-hook '(lambda () (pdf-tools-enable-minor-modes)))
+  (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
+#+end_src
 
 ** yaml
 See [[https://melpa.org/#/yaml-mode]]
