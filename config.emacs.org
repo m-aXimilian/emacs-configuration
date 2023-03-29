@@ -295,29 +295,33 @@ The path to the llvm can be specified in the build command like:
     (setq-local flycheck-check-syntax-automatically nil))
 
   ;; only run this if rtags is installed
-  (when (require 'rtags nil :noerror)
-    (define-key c-mode-base-map (kbd "M-.")
-      (function rtags-find-symbol-at-point))
-    (define-key c-mode-base-map (kbd "M-,")
-      (function rtags-find-references-at-point))
-    ;; install standard rtags keybindings. Do M-. on the symbol below to
-    ;; jump to definition and see the keybindings.
-    (rtags-enable-standard-keybindings)
-    ;; company completion setup
-    (setq rtags-autostart-diagnostics t
-          rtags-path "~/rtags/bin")
-    (rtags-diagnostics)
-    (setq rtags-completions-enabled t)
-    (push 'company-rtags company-backends)
-    (global-company-mode)
-    (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
-    ;; use rtags flycheck mode -- clang warnings shown inline
-    (require 'flycheck-rtags)
-    (cmake-ide-setup)
-    (add-hook 'c-mode-hook 'rtags-start-process-unless-running)
-    (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
-    ;; c-mode-common-hook is also called by c++-mode
-    (add-hook 'c-mode-common-hook #'setup-flycheck-rtags))
+  (defun my/rtags-mode-hook ()
+    (when (require 'rtags nil :noerror)
+      (define-key c-mode-base-map (kbd "M-.")
+        (function rtags-find-symbol-at-point))
+      (define-key c-mode-base-map (kbd "M-,")
+        (function rtags-find-references-at-point))
+      ;; install standard rtags keybindings. Do M-. on the symbol below to
+      ;; jump to definition and see the keybindings.
+      (rtags-enable-standard-keybindings)
+      ;; company completion setup
+      (setq rtags-autostart-diagnostics t
+            rtags-path "~/rtags/bin")
+      (rtags-diagnostics)
+      (setq rtags-completions-enabled t)
+      (push 'company-rtags company-backends)
+      (global-company-mode)
+      (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
+      ;; use rtags flycheck mode -- clang warnings shown inline
+      (require 'flycheck-rtags)
+      (cmake-ide-setup)
+      (add-hook 'c-mode-hook 'rtags-start-process-unless-running)
+      (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
+      ;; c-mode-common-hook is also called by c++-mode
+      (add-hook 'c-mode-common-hook #'setup-flycheck-rtags)))
+
+  (add-hook 'c-mode-hook 'my/rtags-mode-hook)
+  (add-hook 'c++-mode-hook 'my/rtags-mode-hook)
 #+end_src
 ** ibuffer
 #+begin_src emacs-lisp
