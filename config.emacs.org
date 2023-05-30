@@ -492,6 +492,12 @@ Mostly copied from [[https://niklasfasching.de/posts/org-html-export-inline-imag
                                                (org-open-file (org-html-export-to-mhtml nil s v b))))))))
 #+end_src
 
+*** ispell
+#+begin_src elisp
+  (when (executable-find "hunspell")
+    (setq ispell-program-name "hunspell"))
+#+end_src
+
 ** org-ref
 Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
 
