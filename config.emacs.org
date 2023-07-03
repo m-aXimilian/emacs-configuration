@@ -631,13 +631,16 @@ Jump to the current file node when neotree is opened.
 
 Change neotree when switching projectile project (~projectile-switch-project~)
 #+begin_src emacs-lisp
-  (setq projectile-switch-project-action 'neotree-projectile-action)
+  ;; (setq projectile-switch-project-action 'neotree-projectile-action)
 #+end_src
 
 ** raibow delimiters
 #+begin_src emacs-lisp
-  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+    (add-hook 'lisp-mode-hook '(lambda ()
+                                  (rainbow-delimiters-mode)
+                                  (prettify-symbols-mode)
+                                  (linum-mode)))
+    (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 #+end_src
 
 ** recentf
