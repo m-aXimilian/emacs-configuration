@@ -220,7 +220,29 @@ Recentf bind to openfiles
 #+end_src
 
 
+* Custom Variables
+#+begin_src elisp
+  (defun variable-set-p (variable)
+    "Throw an error if VARIABLE is not defined."
+    (when (not (boundp variable))
+      (error (format "The variable '%s' is not defined. Set it in your 'init.el' or '.emacs' config file." variable))))
+#+end_src
+#+begin_src elisp
+  (variable-set-p 'my/omnisharp-server-location)
+#+end_src
+
+
 * Mode and Backend settings
+** eglot
+#+begin_src elisp
+  (use-package eglot
+    :config
+    (let ((omnisharp-server my/omnisharp-server-location))
+      (if (file-exists-p omnisharp-server)
+          (add-to-list 'eglot-server-programs
+                       `(csharp-mode . (,omnisharp-server "-lsp" "-stdio")))
+        (error "Omnisharp file not found!"))))
+#+end_src
 ** company
 #+begin_src emacs-lisp
   (add-hook 'after-init-hook 'global-company-mode)
