@@ -15,8 +15,6 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        pdf-tools
                        popup
                        yasnippet
-                       company
-                       company-jedi
                        org
                        ox-twbs
                        org-bullets
@@ -29,15 +27,7 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        markdown-mode
                        magit
                        flycheck
-                       irony
-                       ivy
-                       ivy-bibtex
-                       company-irony
-                       flycheck-irony
-                       flycheck-rtags
-                       irony-eldoc
-                       slime
-                       slime-company
+                       sly
                        all-the-icons
                        all-the-icons-ibuffer
                        projectile
@@ -46,7 +36,6 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        load-relative
                        elpy
                        rainbow-delimiters
-                       rtags
                        cmake-ide
                        yaml-mode
                        visual-fill-column
@@ -68,6 +57,7 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        ido-completing-read+
                        tagedit
                        vundo
+                       csharp-mode
                        ))
 
 
@@ -79,15 +69,9 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        popup
                        yasnippet
                        org-ref
-                       org-ref-ivy
                        company
                        flycheck
-                       irony
-                       company-irony
-                       flycheck-irony
                        eldoc
-                       slime
-                       slime-company
                        all-the-icons
                        all-the-icons-ibuffer
                        projectile
@@ -198,8 +182,6 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
   (global-flycheck-mode 1)
 
   (show-paren-mode 1)
-  (ivy-mode 1)
-
 #+END_SRC
 
 ** key-bindings
@@ -236,6 +218,7 @@ Recentf bind to openfiles
 ** eglot
 #+begin_src elisp
   (use-package eglot
+    :ensure t
     :config
     (let ((omnisharp-server my/omnisharp-server-location))
       (if (file-exists-p omnisharp-server)
@@ -243,102 +226,56 @@ Recentf bind to openfiles
                        `(csharp-mode . (,omnisharp-server "-lsp" "-stdio")))
         (error "Omnisharp file not found!"))))
 #+end_src
-** company
-#+begin_src emacs-lisp
-  (add-hook 'after-init-hook 'global-company-mode)
-  (defun my/python-mode-hook ()
-    (add-to-list 'company-backends 'company-jedi))
-  (add-hook 'python-mode-hook 'my/python-mode-hook)
-
-  (eval-after-load 'company '(add-to-list 'company-backends 'company-irony))
-#+end_src
-** irony
-*** Prerequisites
-- libclang (~apt-get install libclang-dev~)
-- clang (~apt-get install clang~)
-- llvm (~apt-get install llvm~)
-
-For issues like ~missing clang-config.cmake~ or ~missing llvm-config.cmake~ try to install
-- clang-devel and
-- llvm-devel
-
-read [[https://martinsosic.com/development/emacs/2017/12/09/emacs-cpp-ide.html][emacs c++ editor]]
-#+begin_src emacs-lisp
-  (unless (irony--find-server-executable) (call-interactively #'irony-install-server))
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-
-  (setq-default irony-cdb-compilation-databases '(irony-cdb-libclang
-                                                  irony-cdb-clang-complete))
-
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-  (add-hook 'irony-mode-hook #'irony-eldoc)
-#+end_src
-** ivy
-from [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html]]
+** corfu
 #+begin_src elisp
-  (use-package ivy :demand
-    :config
-    (setq ivy-use-virtual-buffers t
-          ivy-count-format "%d/%d "))
+  (use-package corfu
+    :ensure t
+    ;; Optional customizations
+    :custom
+    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto t)                 ;; Enable auto completion
+    (corfu-auto-prefix 2)
+    :init
+    (global-corfu-mode)
+    (corfu-history-mode))
+
+  (use-package corfu-terminal
+    :ensure t)
 #+end_src
-** rtags
-Copied from:
-- [[https://github.com/Andersbakken/rtags]]
-- [[https://github.com/atilaneves/cmake-ide]]
-- [[http://www.mycpu.org/emacs-rtags-helm/]]
-
-If the rtags build is not working:
-1. make sure LLVM is installed
-2. llvm-config is available in ~PATH~
-
-The path to the llvm can be specified in the build command like:
-#+begin_src sh
-  git clone --recursive https://github.com/Andersbakken/rtags.git
-  cd rtags
-  cmake -DLIBCLANG_LLVM_CONFIG_EXECUTABLE=/path/to/llvm-config -DCMAKE_EXPORT_COMPILE_COMMANDS=1 .
-  make
-#+end_src
--> desribed in [[https://github.com/Andersbakken/rtags/issues/494]]
-
+** vertico
 #+begin_src elisp
-  ;; ensure that we use only rtags checking
-  ;; https://github.com/Andersbakken/rtags#optional-1
-  (defun setup-flycheck-rtags ()
-    (interactive)
-    (flycheck-select-checker 'rtags)
-    ;; RTags creates more accurate overlays.
-    (setq-local flycheck-highlighting-mode nil)
-    (setq-local flycheck-check-syntax-automatically nil))
+  (use-package vertico
+    :ensure t
+    :init
+    (vertico-mode)
 
-  ;; only run this if rtags is installed
-  (defun my/rtags-mode-hook ()
-    (when (require 'rtags nil :noerror)
-      (define-key c-mode-base-map (kbd "M-.")
-        (function rtags-find-symbol-at-point))
-      (define-key c-mode-base-map (kbd "M-,")
-        (function rtags-find-references-at-point))
-      ;; install standard rtags keybindings. Do M-. on the symbol below to
-      ;; jump to definition and see the keybindings.
-      (rtags-enable-standard-keybindings)
-      ;; company completion setup
-      (setq rtags-autostart-diagnostics t
-            rtags-path "~/rtags/bin")
-      (rtags-diagnostics)
-      (setq rtags-completions-enabled t)
-      (push 'company-rtags company-backends)
-      (global-company-mode)
-      (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
-      ;; use rtags flycheck mode -- clang warnings shown inline
-      (require 'flycheck-rtags)
-      (cmake-ide-setup)
-      (add-hook 'c-mode-hook 'rtags-start-process-unless-running)
-      (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
-      ;; c-mode-common-hook is also called by c++-mode
-      (add-hook 'c-mode-common-hook #'setup-flycheck-rtags)))
+    ;; Different scroll margin
+    (setq vertico-scroll-margin 0)
 
-  (add-hook 'c-mode-hook 'my/rtags-mode-hook)
-  (add-hook 'c++-mode-hook 'my/rtags-mode-hook)
+    ;; Show more candidates
+    (setq vertico-count 20)
+
+    ;; Grow and shrink the Vertico minibuffer
+    (setq vertico-resize t)
+
+    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+    (setq vertico-cycle t))
+#+end_src
+** marginalia
+#+begin_src elisp
+  (use-package marginalia
+    :ensure t
+    :init
+    (marginalia-mode 1))
+#+end_src
+** orderless
+#+begin_src elisp
+  (use-package orderless
+  :ensure t
+  :init
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles . (partial-completion))))))
 #+end_src
 ** ibuffer
 #+begin_src emacs-lisp
@@ -357,7 +294,8 @@ The path to the llvm can be specified in the build command like:
 #+end_src
 ** flycheck
 #+begin_src emacs-lisp
-  (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+  (use-package flycheck
+    :ensure t)
 #+end_src
 
 ** dired
@@ -607,9 +545,6 @@ global mode
     :init
     (lambda ()
       (linum-mode -1)))
-
-  ;; (add-hook 'speedbar-mode-hook (lambda ()
-  ;;                                 (linum-mode -1)))
 #+end_src
 ** projectile
 #+begin_src emacs-lisp
@@ -701,7 +636,15 @@ Show/hide text regions.
   (add-hook 'c-mode-hook 'origami-mode)
   (add-hook 'c++-mode-hook 'origami-mode)
 #+end_src
-
+** common lisp
+Check if the ~inferior-lisp-program~ variable is set. If not, try to default it to ~sbcl~
+#+begin_src elisp
+  (when (not (boundp 'inferior-lisp-program))
+    (let ((sbcl (executable-find "sbcl")))
+      (if sbcl
+          (setq inferior-lisp-program sbcl)
+        (error "No lisp compiler identified. Try install sbcl and check if it is in PATH."))))
+#+end_src
 ** latex
 #+BEGIN_SRC emacs-lisp
   (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
@@ -735,16 +678,6 @@ subtree using the *ignore* tag.
 See [[https://melpa.org/#/yaml-mode]]
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-#+end_src
-
-** slime
-#+begin_src emacs-lisp
-
-  (require 'slime-autoloads)
-
-  (setq inferior-lisp-program "sbcl" ; Steel Bank Common Lisp
-        slime-contribs '(slime-fancy slime-scratch slime-editing-commands slime-quicklisp))
-
 #+end_src
 
 ** python
