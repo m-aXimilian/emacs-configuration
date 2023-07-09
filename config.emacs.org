@@ -489,15 +489,15 @@ On windows [[https://www.msys2.org/][~MSYS~]] is the easiest way to get ~gcc~ wh
 This configuration makes use of an environment variable pointing to the root directory of org-roam, called ~ORGROAM~. Make sure to export this pointing to whatever directory should be used for it. If not using org-roam, setting ~ensure~ to ~nil~ in the following use-package sexp should do the trick.
 #+begin_src elisp
   (defun my/get-org-roam-dir ()
-  (let ((dir (getenv "ORGROAM")))
-    (if (eq nil dir)
-        (error "No environment variable 'ORGROAM' was found. Set one and start again.")
-      (expand-file-name dir))))
+    (let ((dir (getenv "ORGROAM")))
+      (if (eq nil dir)
+          (error "No environment variable 'ORGROAM' was found. Set one and start again.")
+        (expand-file-name dir))))
 
   (use-package org-roam
     :ensure t
     :custom
-    (setq org-roam-directory (my/get-org-roam-dir))
+    (org-roam-directory (file-truename (my/get-org-roam-dir)))
     :bind (("C-c n l" . org-roam-buffer-toggle)
            ("C-c n f" . org-roam-node-find)
            ("C-c n g" . org-roam-graph)
@@ -627,6 +627,7 @@ Show/hide text regions.
     :hook ((org-present-mode . my/org-present-mode-hook)
            (org-present-mode-quit . my/org-present-mode-hook-quit)))
 #+end_src
+
 
 * Languages
 ** C/C++
