@@ -323,7 +323,7 @@ Recentf bind to openfiles
   (defun my/org-visual-column-linum ()
     "Appearance configurations for 'org-mode'."
     (progn
-      (setq-default visual-fill-column-width 100)
+      (setq-default visual-fill-column-width 120)
       (setq-default visual-fill-column-center-text t)
       (setq org-list-allow-alphabetical t)
       (visual-fill-column-mode)
