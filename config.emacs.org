@@ -211,6 +211,7 @@ Recentf bind to openfiles
 #+end_src
 #+begin_src elisp
   (variable-set-p 'my/omnisharp-server-location)
+  (variable-set-p 'my/plantuml-jar-path)
 #+end_src
 
 
@@ -360,11 +361,11 @@ Recentf bind to openfiles
     "Which languages shall be loaded into babel."
     (org-babel-do-load-languages
      'org-babel-load-languages
-     '((latex .t)
-       (gnuplot .t)
-       (python .t)
-       (C .t)
-       (lisp .t))))
+     '((latex . t)
+       (gnuplot . t)
+       (python . t)
+       (C . t)
+       (lisp . t))))
 
   (defun my/eval-w/o-confirmation ()
     "Languages in the list don't require confirmation to be executed."
@@ -626,6 +627,17 @@ Show/hide text regions.
     :ensure t
     :hook ((org-present-mode . my/org-present-mode-hook)
            (org-present-mode-quit . my/org-present-mode-hook-quit)))
+#+end_src
+
+** plantuml
+#+begin_src elisp
+  (use-package plantuml-mode
+    :ensure t
+    :config
+    (when (file-exists-p my/plantuml-jar-path)
+      (setq plantuml-jar-path my/plantuml-jar-path))
+    (setq plantuml-default-exec-mode 'jar)
+    (add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode)))
 #+end_src
 
 
