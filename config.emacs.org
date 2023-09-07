@@ -222,10 +222,13 @@ Recentf bind to openfiles
     :config
     (let ((omnisharp-server my/omnisharp-server-location))
       (if (file-exists-p omnisharp-server)
-          (add-to-list 'eglot-server-programs
-                       `(csharp-mode . (,omnisharp-server "-lsp" "-stdio")))
+          (progn
+            (add-to-list 'eglot-server-programs
+                         `(csharp-mode . (,omnisharp-server "-lsp" "-stdio")))
+            (setq eglot-connect-timeout 3000))
         (error "Omnisharp file not found!"))))
 #+end_src
+
 ** corfu
 #+begin_src elisp
   (use-package corfu
