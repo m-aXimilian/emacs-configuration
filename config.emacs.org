@@ -215,6 +215,7 @@ Recentf bind to openfiles
 #+begin_src elisp
   (variable-set-p 'my/omnisharp-server-location)
   (variable-set-p 'my/plantuml-jar-path)
+  (variable-set-p '*bib-files*)
 #+end_src
 
 
@@ -469,10 +470,6 @@ Mostly copied from [[https://niklasfasching.de/posts/org-html-export-inline-imag
 Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
 
 #+BEGIN_SRC emacs-lisp
-  ;; Define a list of bib-files 
-  (defcustom *bib-files* (list "/home/max/windows_d/prom/research/bib/Promotion.bib" "/home/max/prom/research/bib/Promotion.bib")
-    "List of *.bib-files for usage with org-ref.")
-
   ;; Add bib-files to the bibtex-completion list if they can be found
   (dolist (file *bib-files*)
     (if (and (file-exists-p file) (not (member file bibtex-completion-bibliography)))
