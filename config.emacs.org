@@ -514,9 +514,21 @@ This configuration makes use of an environment variable pointing to the root dir
 
 *** org-roam-bibtex
 #+begin_src elisp
+  ;; Do not call this outside of the `org-roam-bibtex' use-package section as it depends on this package.
+  ;; From the doc of `orb-open-attached-file': CITEKEY must be a list for compatibility with `bibtex-completion'
+  (defun my/orb-open-attached-file-wrapper ()
+    "Only works in org-roam files wiht a 'ROAM_REFS' section containig a citekey that `orb-get-node-citekey' can grab.
+  If there is no file attached, do so with `orb-note-actions'."
+    (interactive)
+    (orb-open-attached-file (list (orb-get-node-citekey))))
+#+end_src
+#+begin_src elisp
   (use-package org-roam-bibtex
     :ensure t
     :after org-roam
+    :bind (("C-c b a" . orb-note-actions)
+           ("C-c b i" . orb-insert-link)
+           ("C-c b o" . my/orb-open-attached-file-wrapper))
     :config
     (require 'org-ref))
 #+end_src
