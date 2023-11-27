@@ -479,15 +479,17 @@ Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-re
         (push file bibtex-completion-bibliography)))
 
   ;; enable org-ref functions and keybindings when there is at least one bib-file present
-  (if bibtex-completion-bibliography
-      (progn
-        (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
-              org-ref-insert-cite-function 'org-ref-cite-insert-ivy
-              org-ref-insert-label-function 'org-ref-insert-label-link
-              org-ref-insert-ref-function 'org-ref-insert-ref-link
-              org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
-        (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
-        (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body)))
+  (defun my/bibtex-completion-setting ()
+    "Call this whenever `bibtex-completion-bibliography' was set to a value."
+    (if bibtex-completion-bibliography
+        (progn
+          (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
+                org-ref-insert-cite-function 'org-ref-cite-insert-ivy
+                org-ref-insert-label-function 'org-ref-insert-label-link
+                org-ref-insert-ref-function 'org-ref-insert-ref-link
+                org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
+          (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
+          (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body))))
 #+END_SRC
 
 ** org-roam
