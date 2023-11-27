@@ -15,6 +15,8 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        pdf-tools
                        popup
                        yasnippet
+                       ivy
+                       ivy-bibtex
                        org
                        ox-twbs
                        org-bullets
@@ -69,6 +71,7 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        popup
                        yasnippet
                        org-ref
+                       org-ref-ivy
                        company
                        flycheck
                        eldoc
@@ -112,10 +115,12 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
 #+BEGIN_SRC emacs-lisp
 (setq inhibit-splash-screen t)
 #+END_SRC
+
 *** disable toolbar
 #+BEGIN_SRC emacs-lisp
 (tool-bar-mode -1)
 #+END_SRC
+
 *** disable scroll bar
 #+BEGIN_SRC emacs-lisp
 (toggle-scroll-bar -1)
@@ -137,6 +142,7 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 #+begin_src elisp
   (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 #+end_src
+
 ** encoding and keyboard
 #+BEGIN_SRC emacs-lisp
 (prefer-coding-system 'utf-8)
@@ -153,6 +159,7 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
     (unless (package-installed-p package)
       (package-install package)))
 #+END_SRC
+
 ** require list
 #+BEGIN_SRC emacs-lisp
   (dolist (package require-list)
@@ -163,7 +170,6 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 * Globals Settings
 
 ** global
-
 #+BEGIN_SRC emacs-lisp
   ;; turn off #?!&/!!-bell
   (setq ring-bell-function 'ignore)
@@ -209,8 +215,11 @@ Recentf bind to openfiles
     (when (not (boundp variable))
       (error (format "The variable '%s' is not defined. Set it in your 'init.el' or '.emacs' config file." variable))))
 #+end_src
+
 #+begin_src elisp
   (variable-set-p 'my/omnisharp-server-location)
+  (variable-set-p 'my/plantuml-jar-path)
+  (variable-set-p '*bib-files*)
 #+end_src
 
 
@@ -222,10 +231,13 @@ Recentf bind to openfiles
     :config
     (let ((omnisharp-server my/omnisharp-server-location))
       (if (file-exists-p omnisharp-server)
-          (add-to-list 'eglot-server-programs
-                       `(csharp-mode . (,omnisharp-server "-lsp" "-stdio")))
+          (progn
+            (add-to-list 'eglot-server-programs
+                         `(csharp-mode . (,omnisharp-server "-lsp" "-stdio")))
+            (setq eglot-connect-timeout 3000))
         (error "Omnisharp file not found!"))))
 #+end_src
+
 ** corfu
 #+begin_src elisp
   (use-package corfu
@@ -242,6 +254,7 @@ Recentf bind to openfiles
   (use-package corfu-terminal
     :ensure t)
 #+end_src
+
 ** vertico
 #+begin_src elisp
   (use-package vertico
@@ -261,6 +274,7 @@ Recentf bind to openfiles
     ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
     (setq vertico-cycle t))
 #+end_src
+
 ** marginalia
 #+begin_src elisp
   (use-package marginalia
@@ -268,6 +282,7 @@ Recentf bind to openfiles
     :init
     (marginalia-mode 1))
 #+end_src
+
 ** orderless
 #+begin_src elisp
   (use-package orderless
@@ -277,6 +292,7 @@ Recentf bind to openfiles
         completion-category-defaults nil
         completion-category-overrides '((file (styles . (partial-completion))))))
 #+end_src
+
 ** ibuffer
 #+begin_src emacs-lisp
   (add-hook 'ibuffer-hook
@@ -285,6 +301,7 @@ Recentf bind to openfiles
         (unless (eq ibuffer-sorting-mode 'alphabetic)
           (ibuffer-do-sort-by-alphabetic))))
 #+end_src
+
 ** icons
 #+begin_src emacs-lisp
   (unless (find-font (font-spec :name "all-the-icons"))
@@ -292,6 +309,7 @@ Recentf bind to openfiles
   (setq all-the-icons-scale-factor 1)
   (all-the-icons-ibuffer-mode 1)
 #+end_src
+
 ** flycheck
 #+begin_src emacs-lisp
   (use-package flycheck
@@ -307,12 +325,10 @@ Recentf bind to openfiles
 #+END_SRC
 
 ** org-mode
-
 #+BEGIN_SRC emacs-lisp
   ;; loaddefs
   ;; not sure why this was there in there
   ;; (require 'org-loaddefs)
-
   (defun my/org-init ()
     "Only require the packages related to 'org-mode' when using org."
     (let ((org-requirements '(org-bullets org-contrib ox ox-publish ox-latex
@@ -323,12 +339,12 @@ Recentf bind to openfiles
   (defun my/org-visual-column-linum ()
     "Appearance configurations for 'org-mode'."
     (progn
-      (setq-default visual-fill-column-width 100)
+      (setq-default visual-fill-column-width 120)
       (setq-default visual-fill-column-center-text t)
       (setq org-list-allow-alphabetical t)
       (visual-fill-column-mode)
       (visual-line-mode)
-      (linum-mode -1)))
+      (display-line-numbers-mode -1)))
 
   (defun my/org-settings ()
     "Consider this for more uncategorized settings like the src-window."
@@ -360,11 +376,11 @@ Recentf bind to openfiles
     "Which languages shall be loaded into babel."
     (org-babel-do-load-languages
      'org-babel-load-languages
-     '((latex .t)
-       (gnuplot .t)
-       (python .t)
-       (C .t)
-       (lisp .t))))
+     '((latex . t)
+       (gnuplot . t)
+       (python . t)
+       (C . t)
+       (lisp . t))))
 
   (defun my/eval-w/o-confirmation ()
     "Languages in the list don't require confirmation to be executed."
@@ -394,7 +410,6 @@ Recentf bind to openfiles
 #+END_SRC
 
 Some global settings that cannot be added to ~org-mode~ as a hook.
-
 #+begin_src elisp
   ;; agenda toggle mode
   (global-set-key (kbd "C-c a") 'org-agenda)
@@ -425,7 +440,6 @@ Some global settings that cannot be added to ~org-mode~ as a hook.
 
   (org-reload)
 #+end_src
-
 
 Add additional html-export that embeds images into the generated html.
 Mostly copied from [[https://niklasfasching.de/posts/org-html-export-inline-images/]]
@@ -460,27 +474,24 @@ Mostly copied from [[https://niklasfasching.de/posts/org-html-export-inline-imag
 
 ** org-ref
 Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
-
 #+BEGIN_SRC emacs-lisp
-  ;; Define a list of bib-files 
-  (defcustom *bib-files* (list "/home/max/windows_d/prom/research/bib/Promotion.bib" "/home/max/prom/research/bib/Promotion.bib")
-    "List of *.bib-files for usage with org-ref.")
-
   ;; Add bib-files to the bibtex-completion list if they can be found
   (dolist (file *bib-files*)
     (if (and (file-exists-p file) (not (member file bibtex-completion-bibliography)))
         (push file bibtex-completion-bibliography)))
 
   ;; enable org-ref functions and keybindings when there is at least one bib-file present
-  (if bibtex-completion-bibliography
-      (progn
-        (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
-              org-ref-insert-cite-function 'org-ref-cite-insert-ivy
-              org-ref-insert-label-function 'org-ref-insert-label-link
-              org-ref-insert-ref-function 'org-ref-insert-ref-link
-              org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
-        (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
-        (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body)))
+  (defun my/bibtex-completion-setting ()
+    "Call this whenever `bibtex-completion-bibliography' was set to a value."
+    (if bibtex-completion-bibliography
+        (progn
+          (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
+                org-ref-insert-cite-function 'org-ref-cite-insert-ivy
+                org-ref-insert-label-function 'org-ref-insert-label-link
+                org-ref-insert-ref-function 'org-ref-insert-ref-link
+                org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
+          (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
+          (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body))))
 #+END_SRC
 
 ** org-roam
@@ -489,15 +500,15 @@ On windows [[https://www.msys2.org/][~MSYS~]] is the easiest way to get ~gcc~ wh
 This configuration makes use of an environment variable pointing to the root directory of org-roam, called ~ORGROAM~. Make sure to export this pointing to whatever directory should be used for it. If not using org-roam, setting ~ensure~ to ~nil~ in the following use-package sexp should do the trick.
 #+begin_src elisp
   (defun my/get-org-roam-dir ()
-  (let ((dir (getenv "ORGROAM")))
-    (if (eq nil dir)
-        (error "No environment variable 'ORGROAM' was found. Set one and start again.")
-      (expand-file-name dir))))
+    (let ((dir (getenv "ORGROAM")))
+      (if (eq nil dir)
+          (error "No environment variable 'ORGROAM' was found. Set one and start again.")
+        (expand-file-name dir))))
 
   (use-package org-roam
     :ensure t
     :custom
-    (setq org-roam-directory (my/get-org-roam-dir))
+    (org-roam-directory (file-truename (my/get-org-roam-dir)))
     :bind (("C-c n l" . org-roam-buffer-toggle)
            ("C-c n f" . org-roam-node-find)
            ("C-c n g" . org-roam-graph)
@@ -510,9 +521,22 @@ This configuration makes use of an environment variable pointing to the root dir
 
 *** org-roam-bibtex
 #+begin_src elisp
+  ;; Do not call this outside of the `org-roam-bibtex' use-package section as it depends on this package.
+  ;; From the doc of `orb-open-attached-file': CITEKEY must be a list for compatibility with `bibtex-completion'
+  (defun my/orb-open-attached-file-wrapper ()
+    "Only works in org-roam files wiht a 'ROAM_REFS' section containig a citekey that `orb-get-node-citekey' can grab.
+  If there is no file attached, do so with `orb-note-actions'."
+    (interactive)
+    (orb-open-attached-file (list (orb-get-node-citekey))))
+#+end_src
+
+#+begin_src elisp
   (use-package org-roam-bibtex
     :ensure t
     :after org-roam
+    :bind (("C-c b a" . orb-note-actions)
+           ("C-c b i" . orb-insert-link)
+           ("C-c b o" . my/orb-open-attached-file-wrapper))
     :config
     (require 'org-ref))
 #+end_src
@@ -532,25 +556,29 @@ global mode
 #+begin_src emacs-lisp
   (yas-global-mode 1)
 #+end_src
+
 ** ace-window & move window
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-o") 'ace-window)
   (global-set-key (kbd "s-j") 'windmove-left)
   (global-set-key (kbd "s-;") 'windmove-right)
 #+END_SRC
+
 ** sr-speedbar
 #+begin_src elisp
   (use-package sr-speedbar
     :ensure t
     :init
     (lambda ()
-      (linum-mode -1)))
+      (display-line-numbers-mode -1)))
 #+end_src
+
 ** projectile
 #+begin_src emacs-lisp
   (setq projectile-indexing-method 'hybrid)
   (projectile-global-mode)
 #+end_src
+
 ** neotree
 See [[https://www.emacswiki.org/emacs/NeoTree][NeoTree Docs]]
 Use icons for file and let the widht be altered.
@@ -574,7 +602,7 @@ Change neotree when switching projectile project (~projectile-switch-project~)
     (add-hook 'lisp-mode-hook '(lambda ()
                                   (rainbow-delimiters-mode)
                                   (prettify-symbols-mode)
-                                  (linum-mode)))
+                                  (display-line-numbers-mode)))
     (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 #+end_src
 
@@ -591,6 +619,7 @@ Minibuffer history
   (setq history-length 10)
   (savehist-mode 1)
 #+end_src
+
 ** saveplace
 Jump back to where the cursor was before closing a file or emacs.
 Adds lag when opening a file.
@@ -628,6 +657,18 @@ Show/hide text regions.
            (org-present-mode-quit . my/org-present-mode-hook-quit)))
 #+end_src
 
+** plantuml
+#+begin_src elisp
+  (use-package plantuml-mode
+    :ensure t
+    :config
+    (when (file-exists-p my/plantuml-jar-path)
+      (setq plantuml-jar-path my/plantuml-jar-path))
+    (setq plantuml-default-exec-mode 'jar)
+    (add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode)))
+#+end_src
+
+
 * Languages
 ** C/C++
 #+begin_src elisp
@@ -636,6 +677,7 @@ Show/hide text regions.
   (add-hook 'c-mode-hook 'origami-mode)
   (add-hook 'c++-mode-hook 'origami-mode)
 #+end_src
+
 ** common lisp
 Check if the ~inferior-lisp-program~ variable is set. If not, try to default it to ~sbcl~
 #+begin_src elisp
@@ -645,6 +687,7 @@ Check if the ~inferior-lisp-program~ variable is set. If not, try to default it 
           (setq inferior-lisp-program sbcl)
         (error "No lisp compiler identified. Try install sbcl and check if it is in PATH."))))
 #+end_src
+
 ** latex
 #+BEGIN_SRC emacs-lisp
   (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
@@ -668,6 +711,7 @@ subtree using the *ignore* tag.
 #+BEGIN_SRC  emacs-lisp
   (ox-extras-activate '(ignore-headlines))
 #+END_SRC
+
 ** pdf
 #+begin_src elisp
   (add-hook 'pdf-view-mode-hook '(lambda () (pdf-tools-enable-minor-modes)))
@@ -682,12 +726,10 @@ See [[https://melpa.org/#/yaml-mode]]
 
 ** python
 #+begin_src emacs-lisp
-
   (elpy-enable)
   (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
     (setq elpy-rpc-python-command "python3")
   (add-hook 'python-mode-hook 'origami-mode)
-
 #+end_src
 
 ** makdown
@@ -779,9 +821,9 @@ Same as [[vue][*vue]] -> needs ~lsp-mode~
       (concat
        (number-to-string f)
        ":"
-       (number-to-string (round (* (- s f) 60))))))
-  
+       (number-to-string (round (* (- s f) 60))))))  
 #+END_SRC
+
 ** Helpers
 #+BEGIN_SRC emacs-lisp
   (defun psi-to-kgcm2 (psi)
@@ -857,7 +899,6 @@ Same as [[vue][*vue]] -> needs ~lsp-mode~
   (fset 'to-num 'string-to-number)
   (global-set-key (kbd "M-s M-e") 'inline-src-elisp)
 #+END_SRC
-
 
 
 * ToDo setup
