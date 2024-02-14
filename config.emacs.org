@@ -7,63 +7,7 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
 
 ** install and require lists
 #+BEGIN_SRC emacs-lisp
-  (setq install-list '(
-                       bibtex-completion
-                       ace-window
-                       dirtree
-                       neotree
-                       pdf-tools
-                       popup
-                       yasnippet
-                       ivy
-                       ivy-bibtex
-                       org
-                       ox-twbs
-                       org-bullets
-                       org-ref
-                       ob-async
-                       org-contrib ;; non gnu
-                       gnuplot
-                       gnuplot-mode
-                       material-theme
-                       markdown-mode
-                       magit
-                       flycheck
-                       sly
-                       all-the-icons
-                       all-the-icons-ibuffer
-                       projectile
-                       ibuffer-projectile
-                       ibuffer-sidebar
-                       load-relative
-                       elpy
-                       rainbow-delimiters
-                       cmake-ide
-                       yaml-mode
-                       visual-fill-column
-                       use-package
-                       dockerfile-mode
-                       sr-speedbar
-                       latex-math-preview
-                       vue-mode
-                       js2-mode
-                       json-mode
-                       json-reformat
-                       all-the-icons-dired
-                       highlight-symbol
-                       origami
-                       paredit
-                       clojure-mode
-                       clojure-mode-extra-font-locking
-                       cider
-                       ido-completing-read+
-                       tagedit
-                       vundo
-                       csharp-mode
-                       ))
-
-
-  (setq require-list '(
+    (setq require-list '(
                        bibtex
                        dirtree
                        neotree
@@ -153,13 +97,6 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 
 
 * Packages Installation and Require
-** install from install-list
-#+BEGIN_SRC emacs-lisp
-  (dolist (package install-list)
-    (unless (package-installed-p package)
-      (package-install package)))
-#+END_SRC
-
 ** require list
 #+BEGIN_SRC emacs-lisp
   (dolist (package require-list)
@@ -326,87 +263,88 @@ Recentf bind to openfiles
 
 ** org-mode
 #+BEGIN_SRC emacs-lisp
-  ;; loaddefs
-  ;; not sure why this was there in there
-  ;; (require 'org-loaddefs)
-  (defun my/org-init ()
-    "Only require the packages related to 'org-mode' when using org."
-    (let ((org-requirements '(org-bullets org-contrib ox ox-publish ox-latex
-                                          ox-beamer ox-twbs ox-extra ob-async)))
-      (dolist (req org-requirements)
-        (require req))))
+    ;; loaddefs
+    ;; not sure why this was there in there
+    ;; (require 'org-loaddefs)
+    (defun my/org-init ()
+      "Only require the packages related to 'org-mode' when using org."
+      (let ((org-requirements '(org-bullets org-contrib ox ox-publish ox-latex
+                                            ox-beamer ox-twbs ox-extra ob-async)))
+        (dolist (req org-requirements)
+          (require req))))
 
-  (defun my/org-visual-column-linum ()
-    "Appearance configurations for 'org-mode'."
-    (progn
-      (setq-default visual-fill-column-width 120)
-      (setq-default visual-fill-column-center-text t)
-      (setq org-list-allow-alphabetical t)
-      (visual-fill-column-mode)
-      (visual-line-mode)
-      (display-line-numbers-mode -1)))
+    (defun my/org-visual-column-linum ()
+      "Appearance configurations for 'org-mode'."
+      (progn
+        (setq-default visual-fill-column-width 120)
+        (setq-default visual-fill-column-center-text t)
+        (setq org-list-allow-alphabetical t)
+        (visual-fill-column-mode)
+        (visual-line-mode)
+        (display-line-numbers-mode -1)))
 
-  (defun my/org-settings ()
-    "Consider this for more uncategorized settings like the src-window."
-    (setq org-src-window-setup "current-window"))
+    (defun my/org-settings ()
+      "Consider this for more uncategorized settings like the src-window."
+      (setq org-src-window-setup "current-window"))
 
-  (defun my/org-publishing ()
-    "Publishing specific settings."
-    (setq org-publish-project-alist
-        '(("org-notes"
-           :base-directory "~/org/"
-           :base-extension "org"
-           :publishing-directory "~/public_html/"
-           :recursive t
-           :publishing-function org-twbs-publish-to-html
-           :with-sub-superscript nil
-           :headline-levels 4
-           :auto-preamble t
-           )
-          ("org-static"
-           :base-directory "~/org/"
-           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-           :publishing-directory "~/public_html/"
-           :recursive t
-           :publishing-function org-publish-attachment
-           )
-          ("org" :components ("org-notes" "org-static")))))
+    (defun my/org-publishing ()
+      "Publishing specific settings."
+      (setq org-publish-project-alist
+          '(("org-notes"
+             :base-directory "~/org/"
+             :base-extension "org"
+             :publishing-directory "~/public_html/"
+             :recursive t
+             :publishing-function org-twbs-publish-to-html
+             :with-sub-superscript nil
+             :headline-levels 4
+             :auto-preamble t
+             )
+            ("org-static"
+             :base-directory "~/org/"
+             :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+             :publishing-directory "~/public_html/"
+             :recursive t
+             :publishing-function org-publish-attachment
+             )
+            ("org" :components ("org-notes" "org-static")))))
 
-  (defun my/org-babel-lang ()
-    "Which languages shall be loaded into babel."
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((latex . t)
-       (gnuplot . t)
-       (python . t)
-       (C . t)
-       (lisp . t))))
+    (defun my/org-babel-lang ()
+      "Which languages shall be loaded into babel."
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((latex . t)
+         (gnuplot . t)
+         (python . t)
+         (C . t)
+         (lisp . t)
+         (restclient .t))))
 
-  (defun my/eval-w/o-confirmation ()
-    "Languages in the list don't require confirmation to be executed."
-    (let ((confirmed-babel-langs (lambda (lang body)
-                                   (not (or
-                                         (string= lang "emacs-lisp")
-                                         (string= lang "latex")
-                                         (string= lang "elisp")
-                                         (string= lang "lisp")
-                                         (string= lang "gnuplot")
-                                         (string= lang "python")
-                                         (string= lang "dot")
-                                         (string= lang "C++"))))))
-      (setq org-confirm-babel-evaluate confirmed-babel-langs)))
+    (defun my/eval-w/o-confirmation ()
+      "Languages in the list don't require confirmation to be executed."
+      (let ((confirmed-babel-langs (lambda (lang body)
+                                     (not (or
+                                           (string= lang "emacs-lisp")
+                                           (string= lang "latex")
+                                           (string= lang "elisp")
+                                           (string= lang "lisp")
+                                           (string= lang "gnuplot")
+                                           (string= lang "python")
+                                           (string= lang "dot")
+                                           (string= lang "C++"))))))
+        (setq org-confirm-babel-evaluate confirmed-babel-langs)))
 
-  (use-package org
-    :init (my/org-init)
-    :mode (("\\.org$" . org-mode))  
-    :ensure 
-    :hook
-    (org-mode . org-bullets-mode)
-    (org-mode . my/org-visual-column-linum)
-    (org-mode . my/org-publishing)
-    (org-mode . my/org-babel-lang)
-    (org-mode . my/eval-w/o-confirmation)
-    (org-mode . my/org-settings))
+    (use-package org
+      :init (my/org-init)
+      :mode (("\\.org$" . org-mode))  
+      :ensure 
+      :hook
+      (org-mode . org-bullets-mode)
+      (org-mode . my/org-visual-column-linum)
+      (org-mode . my/org-publishing)
+      (org-mode . my/org-babel-lang)
+      (org-mode . my/eval-w/o-confirmation)
+      (org-mode . my/org-settings))
 #+END_SRC
 
 Some global settings that cannot be added to ~org-mode~ as a hook.
@@ -676,6 +614,7 @@ Show/hide text regions.
   (define-key c-mode-base-map (kbd "<f6>") 'recompile)
   (add-hook 'c-mode-hook 'origami-mode)
   (add-hook 'c++-mode-hook 'origami-mode)
+  (add-hook 'c++-mode-hook 'display-line-numbers-mode)
 #+end_src
 
 ** common lisp
