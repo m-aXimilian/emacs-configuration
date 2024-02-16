@@ -2,7 +2,6 @@
 (source gnu)
 (source nongnu)
 
-
 (depends-on ace-window)
 (depends-on all-the-icons)
 (depends-on all-the-icons-dired)
