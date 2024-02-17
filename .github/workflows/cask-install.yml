@@ -48,7 +48,7 @@ jobs:
           echo $PATH
           cd ~/.emacs.d
           pwd && ls -lat
-          cask
+          cask install
 
       - name: Startup Emacs
         run: |
