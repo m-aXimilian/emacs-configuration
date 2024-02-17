@@ -33,6 +33,7 @@ jobs:
 
       - name: Copy to .emacs.d
         run: |
+          mkdir -p ~/.emacs.d
           cp config.emacs.org ~/.emacs.d
           cp Cask ~/.emacs.d
           ls -lat ~/.emacs.d 
