@@ -28,7 +28,8 @@ jobs:
         run: |
           sudo apt install emacs
           git clone https://github.com/cask/cask ~/.cask
-          echo 'PATH=$HOME/.cask/bin:$PATH' >> .bashrc
+          echo 'PATH=$HOME/.cask/bin:$PATH' >> ~/.bashrc
+          source ~/.bashrc
           echo $PATH
 
       - name: Copy to .emacs.d
