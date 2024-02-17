@@ -37,6 +37,7 @@ jobs:
           mkdir -p ~/.emacs.d
           cp config.emacs.org ~/.emacs.d
           cp Cask ~/.emacs.d
+          cp init.el ~/.emacs.d
           ls -lat ~/.emacs.d 
 
       - name: Install deps
@@ -46,3 +47,8 @@ jobs:
           cd ~/.emacs.d
           pwd && ls -lat
           cask
+
+      - name: Startup Emacs
+        run: |
+          script -c "emacs --batch -l ~/.emacs.d/init.el" startup.log
+          cat startup.log
