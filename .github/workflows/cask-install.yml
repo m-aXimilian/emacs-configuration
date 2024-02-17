@@ -52,5 +52,6 @@ jobs:
 
       - name: Startup Emacs
         run: |
+          export PATH="$HOME/.cask/bin:$PATH"
           script -c "emacs --batch -l ~/.emacs.d/init.el" startup.log
           cat startup.log
