@@ -39,4 +39,5 @@ jobs:
       - name: Install deps
         run: |
           cd ~/.emacs.d
+          pwd && ls -lat
           cask
