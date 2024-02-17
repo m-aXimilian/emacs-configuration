@@ -8,7 +8,7 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
 ** cask
 #+begin_src elisp
   (require 'cask "~/.cask/cask.el")
-  (cask-initialize)
+  ;; (cask-initialize)                       
 #+end_src
 ** install and require lists
 #+BEGIN_SRC emacs-lisp
