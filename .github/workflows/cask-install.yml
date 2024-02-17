@@ -31,7 +31,12 @@ jobs:
 
       - name: Copy to .emacs.d
         # run: cp {./emacs.config.org, ./Cask} ~/.emacs.d
-        run: pwd && ls -lat
+        run: |
+          pwd
+          ls -lat
+          cd ~
+          pwd
+          ls -lat
 
       - name: Install deps
         run: |
