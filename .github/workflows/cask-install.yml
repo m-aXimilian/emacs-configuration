@@ -26,7 +26,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Install dependencies
         run: |
-          apt install emacs
+          sudo apt install emacs
           curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
 
       - name: Copy to .emacs.d
