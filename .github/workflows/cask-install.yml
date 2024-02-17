@@ -41,6 +41,8 @@ jobs:
 
       - name: Install deps
         run: |
+          export PATH="$HOME/.cask/bin:$PATH"
+          echo $PATH
           cd ~/.emacs.d
           pwd && ls -lat
           cask
