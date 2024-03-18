@@ -669,6 +669,17 @@ Show/hide text regions.
 #+end_src
 
 
+** elfeed
+#+begin_src elisp
+  (use-package elfeed
+    :ensure t
+    :config
+    (setq url-queue-timeout 30)
+    (setq elfeed-feeds
+          '(("https://www.scientificamerican.com/platform/syndication/rss/" scientificamerican)
+            ("https://www.nature.com/nature.rss" nature)
+            ("https://onlinelibrary.wiley.com/feed/13652818/most-recent" microscopyjournal))))
+#+end_src
 * Languages
 ** C/C++
 #+begin_src elisp
@@ -676,6 +687,7 @@ Show/hide text regions.
   (define-key c-mode-base-map (kbd "<f6>") 'recompile)
   (add-hook 'c-mode-hook 'origami-mode)
   (add-hook 'c++-mode-hook 'origami-mode)
+  (add-hook 'c++-mode-hook 'display-line-numbers-mode)
 #+end_src
 
 ** common lisp
