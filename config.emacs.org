@@ -677,9 +677,14 @@ Show/hide text regions.
     (setq url-queue-timeout 30)
     (setq elfeed-feeds
           '(("https://www.scientificamerican.com/platform/syndication/rss/" scientificamerican)
-            ("https://www.nature.com/nature.rss" nature)
+            ;; ("https://www.nature.com/nature.rss" nature)
+            ("https://www.nature.com/natcomputsci.rss" naturecomputation)
+            ("https://www.nature.com/nphys.rss" naturephysics)
+            ("https://www.nature.com/nphoton.rss" naturephoton)
+            ("https://www.nature.com/nnano.rss" naturenano)
             ("https://onlinelibrary.wiley.com/feed/13652818/most-recent" microscopyjournal))))
 #+end_src
+
 * Languages
 ** C/C++
 #+begin_src elisp
