@@ -207,6 +207,11 @@ Recentf bind to openfiles
   (global-set-key (kbd "C-c o") 'recentf-open-files)
 #+end_src
 
+Convenience keybindings
+#+begin_src elisp
+  (global-set-key (kbd "C-c C-l") 'eww-follow-link)
+#+end_src
+
 
 * Custom Variables
 #+begin_src elisp
@@ -325,6 +330,11 @@ Recentf bind to openfiles
 #+END_SRC
 
 ** org-mode
+#+begin_src emacs-lisp
+  (setq org-babel-lisp-eval-fn 'sly-eval)
+#+end_src
+
+At some point this junk of stuff should be sparated into source blocks...
 #+BEGIN_SRC emacs-lisp
   ;; loaddefs
   ;; not sure why this was there in there
@@ -671,19 +681,22 @@ Show/hide text regions.
 
 ** elfeed
 #+begin_src elisp
-  (use-package elfeed
-    :ensure t
-    :config
-    (setq url-queue-timeout 30)
-    (setq elfeed-feeds
-          '(("https://www.scientificamerican.com/platform/syndication/rss/" scientificamerican)
-            ;; ("https://www.nature.com/nature.rss" nature)
-            ("https://www.nature.com/natcomputsci.rss" naturecomputation)
-            ("https://www.nature.com/nphys.rss" naturephysics)
-            ("https://www.nature.com/nphoton.rss" naturephoton)
-            ("https://www.nature.com/nnano.rss" naturenano)
-            ("https://onlinelibrary.wiley.com/feed/13652818/most-recent" microscopyjournal))))
+    (use-package elfeed
+      :ensure t
+      :config
+      (setq url-queue-timeout 30)
+      (setq elfeed-feeds
+            '(("https://www.scientificamerican.com/platform/syndication/rss/" scientificamerican)
+              ;; ("https://www.nature.com/nature.rss" nature)
+              ("https://www.nature.com/natcomputsci.rss" naturecomputation)
+              ("https://www.nature.com/nphys.rss" naturephysics)
+              ("https://www.nature.com/nphoton.rss" naturephoton)
+              ("https://www.nature.com/nnano.rss" naturenano)
+              ("https://onlinelibrary.wiley.com/feed/13652818/most-recent" microscopyjournal)
+              ("https://herbsutter.com/feed/" herbsutter)
+              ("https://sachachua.com/blog/category/emacs/feed/" emacsnews))))
 #+end_src
+
 
 * Languages
 ** C/C++
