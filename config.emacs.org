@@ -329,6 +329,28 @@ Convenience keybindings
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 #+END_SRC
 
+** org-ref
+Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
+#+BEGIN_SRC emacs-lisp
+  ;; Add bib-files to the bibtex-completion list if they can be found
+  (dolist (file *bib-files*)
+    (if (and (file-exists-p file) (not (member file bibtex-completion-bibliography)))
+        (push file bibtex-completion-bibliography)))
+
+  ;; enable org-ref functions and keybindings when there is at least one bib-file present
+  (defun my/bibtex-completion-setting ()
+    "Call this whenever `bibtex-completion-bibliography' was set to a value."
+    (if bibtex-completion-bibliography
+        (progn
+          (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
+                org-ref-insert-cite-function 'org-ref-cite-insert-ivy
+                org-ref-insert-label-function 'org-ref-insert-label-link
+                org-ref-insert-ref-function 'org-ref-insert-ref-link
+                org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
+          (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
+          (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body))))
+#+END_SRC
+
 ** org-mode
 #+begin_src emacs-lisp
   (setq org-babel-lisp-eval-fn 'sly-eval)
@@ -416,7 +438,8 @@ At some point this junk of stuff should be sparated into source blocks...
     (org-mode . my/org-publishing)
     (org-mode . my/org-babel-lang)
     (org-mode . my/eval-w/o-confirmation)
-    (org-mode . my/org-settings))
+    (org-mode . my/org-settings)
+    (org-mode . my/bibtex-completion-setting))
 #+END_SRC
 
 Some global settings that cannot be added to ~org-mode~ as a hook.
@@ -481,28 +504,6 @@ Mostly copied from [[https://niklasfasching.de/posts/org-html-export-inline-imag
   (when (executable-find "hunspell")
     (setq ispell-program-name "hunspell"))
 #+end_src
-
-** org-ref
-Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
-#+BEGIN_SRC emacs-lisp
-  ;; Add bib-files to the bibtex-completion list if they can be found
-  (dolist (file *bib-files*)
-    (if (and (file-exists-p file) (not (member file bibtex-completion-bibliography)))
-        (push file bibtex-completion-bibliography)))
-
-  ;; enable org-ref functions and keybindings when there is at least one bib-file present
-  (defun my/bibtex-completion-setting ()
-    "Call this whenever `bibtex-completion-bibliography' was set to a value."
-    (if bibtex-completion-bibliography
-        (progn
-          (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
-                org-ref-insert-cite-function 'org-ref-cite-insert-ivy
-                org-ref-insert-label-function 'org-ref-insert-label-link
-                org-ref-insert-ref-function 'org-ref-insert-ref-link
-                org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
-          (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
-          (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body))))
-#+END_SRC
 
 ** org-roam
 On windows [[https://www.msys2.org/][~MSYS~]] is the easiest way to get ~gcc~ which is needed to compile the database for [[https://www.orgroam.com/][org-roam]].
