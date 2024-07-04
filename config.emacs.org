@@ -552,6 +552,17 @@ This configuration makes use of an environment variable pointing to the root dir
     (require 'org-ref))
 #+end_src
 
+
+** org-ql
+For this configuration it makes sense to set the directory of /org-ql/ (~org-directory~) to the default /org-roam/ directory (~org-roam-directory~) as this is the standard query directory. Consequently, it should only be initialized _after_ org-roam.
+#+begin_src elisp
+  (use-package org-ql
+    :after org-roam
+    :ensure t
+    :custom
+    (org-directory (file-truename (my/get-org-roam-dir))))
+#+end_src
+
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
   ;; require latex snippets in org mode
