@@ -280,6 +280,14 @@ Convenience keybindings
     (setq vertico-cycle t))
 #+end_src
 
+*** vertico-posframe
+#+begin_src elisp
+  (use-package vertico-posframe
+    :after vertico
+    :ensure t
+    :config
+    (vertico-posframe-mode 1))
+#+end_src
 ** marginalia
 #+begin_src elisp
   (use-package marginalia
