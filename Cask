@@ -12,7 +12,6 @@
 (depends-on "clojure-mode-extra-font-locking")
 (depends-on "cmake-ide")
 (depends-on "csharp-mode")
-(depends-on "dirtree")
 (depends-on "dockerfile-mode")
 (depends-on "elpy")
 (depends-on "flycheck")

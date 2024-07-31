@@ -14,7 +14,6 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
 #+BEGIN_SRC emacs-lisp
     (setq require-list '(
                        bibtex
-                       dirtree
                        neotree
                        pdf-tools
                        popup
