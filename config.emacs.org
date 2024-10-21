@@ -224,6 +224,8 @@ Convenience keybindings
 #+begin_src elisp
   (variable-set-p 'my/omnisharp-server-location)
   (variable-set-p 'my/plantuml-jar-path)
+  (variable-set-p 'my/ditaa-jar-path)
+  (variable-set-p 'my/ditaa-eps-jar-path)
   (variable-set-p '*bib-files*)
 #+end_src
 
@@ -271,7 +273,7 @@ Convenience keybindings
     (setq vertico-scroll-margin 0)
 
     ;; Show more candidates
-    (setq vertico-count 20)
+    (setq vertico-count 35)
 
     ;; Grow and shrink the Vertico minibuffer
     (setq vertico-resize t)
@@ -393,24 +395,24 @@ At some point this junk of stuff should be sparated into source blocks...
   (defun my/org-publishing ()
     "Publishing specific settings."
     (setq org-publish-project-alist
-        '(("org-notes"
-           :base-directory "~/org/"
-           :base-extension "org"
-           :publishing-directory "~/public_html/"
-           :recursive t
-           :publishing-function org-twbs-publish-to-html
-           :with-sub-superscript nil
-           :headline-levels 4
-           :auto-preamble t
-           )
-          ("org-static"
-           :base-directory "~/org/"
-           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-           :publishing-directory "~/public_html/"
-           :recursive t
-           :publishing-function org-publish-attachment
-           )
-          ("org" :components ("org-notes" "org-static")))))
+          '(("org-notes"
+             :base-directory "~/org/"
+             :base-extension "org"
+             :publishing-directory "~/public_html/"
+             :recursive t
+             :publishing-function org-twbs-publish-to-html
+             :with-sub-superscript nil
+             :headline-levels 4
+             :auto-preamble t
+             )
+            ("org-static"
+             :base-directory "~/org/"
+             :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+             :publishing-directory "~/public_html/"
+             :recursive t
+             :publishing-function org-publish-attachment
+             )
+            ("org" :components ("org-notes" "org-static")))))
 
   (defun my/org-babel-lang ()
     "Which languages shall be loaded into babel."
@@ -420,7 +422,8 @@ At some point this junk of stuff should be sparated into source blocks...
        (gnuplot . t)
        (python . t)
        (C . t)
-       (lisp . t))))
+       (lisp . t)
+       (ditaa . t))))
 
   (defun my/eval-w/o-confirmation ()
     "Languages in the list don't require confirmation to be executed."
@@ -433,8 +436,10 @@ At some point this junk of stuff should be sparated into source blocks...
                                          (string= lang "gnuplot")
                                          (string= lang "python")
                                          (string= lang "dot")
-                                         (string= lang "C++"))))))
+                                         (string= lang "C++")
+                                         (string= lang "ditaa"))))))
       (setq org-confirm-babel-evaluate confirmed-babel-langs)))
+
 
   (use-package org
     :init (my/org-init)
@@ -693,11 +698,21 @@ Show/hide text regions.
     :ensure t
     :config
     (when (file-exists-p my/plantuml-jar-path)
-      (setq plantuml-jar-path my/plantuml-jar-path))
+      (setq plantuml-jar-path my/plantuml-jar-path)
+      (setq org-plantuml-jar-path my/plantuml-jar-path))
     (setq plantuml-default-exec-mode 'jar)
     (add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode)))
 #+end_src
 
+** ditaa
+Set the path to the ditaa executable.
+#+begin_src elisp
+  (when (file-exists-p my/ditaa-jar-path)
+    (setq org-ditaa-jar-path my/ditaa-jar-path))
+
+  (when (file-exists-p my/ditaa-eps-jar-path)
+    (setq org-ditaa-eps-jar-path my/ditaa-eps-jar-path))
+#+end_src
 
 ** elfeed
 #+begin_src elisp
