@@ -339,6 +339,14 @@ Convenience keybindings
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 #+END_SRC
 
+** org-modern
+This is just meant to fetch org-modern. The configuration is done in the ~:config~ section of [[*org-mode][org-mode]]
+#+begin_src elisp
+  (use-package org-modern
+    :ensure t)
+#+end_src
+
+
 ** org-ref
 Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
 #+BEGIN_SRC emacs-lisp
@@ -444,7 +452,7 @@ At some point this junk of stuff should be sparated into source blocks...
   (use-package org
     :init (my/org-init)
     :mode (("\\.org$" . org-mode))  
-    :ensure 
+    :ensure t
     :hook
     (org-mode . org-bullets-mode)
     (org-mode . my/org-visual-column-linum)
@@ -452,7 +460,9 @@ At some point this junk of stuff should be sparated into source blocks...
     (org-mode . my/org-babel-lang)
     (org-mode . my/eval-w/o-confirmation)
     (org-mode . my/org-settings)
-    (org-mode . my/bibtex-completion-setting))
+    (org-mode . my/bibtex-completion-setting)
+    :config
+    (global-org-modern-mode))
 #+END_SRC
 
 Some global settings that cannot be added to ~org-mode~ as a hook.
