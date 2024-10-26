@@ -470,9 +470,6 @@ Some global settings that cannot be added to ~org-mode~ as a hook.
   ;; agenda toggle mode
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c l") 'org-store-link)
-
-  ;; global agenda to-do file
-  (setq org-agenda-files (quote ("~/todo.org")))
   
   ;; global target file for notes
   (setq org-default-notes-file (concat org-directory "~/notes.org"))
