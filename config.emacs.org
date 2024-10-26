@@ -532,6 +532,9 @@ Mostly copied from [[https://niklasfasching.de/posts/org-html-export-inline-imag
 On windows [[https://www.msys2.org/][~MSYS~]] is the easiest way to get ~gcc~ which is needed to compile the database for [[https://www.orgroam.com/][org-roam]].
 
 This configuration makes use of an environment variable pointing to the root directory of org-roam, called ~ORGROAM~. Make sure to export this pointing to whatever directory should be used for it. If not using org-roam, setting ~ensure~ to ~nil~ in the following use-package sexp should do the trick.
+
+For some of the config here - especially the journaling part, see the excellent content on the [[https://systemcrafters.net/build-a-second-brain-in-emacs/keep-a-journal/][system crafters website]].
+For the respective domain specific part of this config, the ~org-roam-dailies-directory~ can be set to a custom value. Its default is ~"daily"~ . Daily files will end up here. It is relative to the ~org-roam-directory~, i.e., something like this will determine the location of the dailies: ~(expand-file-name org-roam-dailies-directory org-roam-directory)~
 #+begin_src elisp
   (defun my/get-org-roam-dir ()
     (let ((dir (getenv "ORGROAM")))
@@ -548,7 +551,10 @@ This configuration makes use of an environment variable pointing to the root dir
            ("C-c n g" . org-roam-graph)
            ("C-c n i" . org-roam-node-insert)
            ("C-c n c" . org-roam-capture))
+    :bind-keymap
+    ("C-c n d" . org-roam-dailies-map)
     :config
+    (require 'org-roam-dailies)
     (org-roam-db-autosync-mode)
     (setq org-roam-database-connector 'emacsql-sqlite))
 #+end_src
