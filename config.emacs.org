@@ -7,92 +7,7 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
 
 ** install and require lists
 #+BEGIN_SRC emacs-lisp
-  (setq install-list '(
-                       bibtex-completion
-                       ace-window
-                       dirtree
-                       neotree
-                       pdf-tools
-                       popup
-                       yasnippet
-                       ivy
-                       ivy-bibtex
-                       org
-                       ox-twbs
-                       org-bullets
-                       org-ref
-                       ob-async
-                       org-contrib ;; non gnu
-                       gnuplot
-                       gnuplot-mode
-                       material-theme
-                       markdown-mode
-                       magit
-                       flycheck
-                       sly
-                       all-the-icons
-                       all-the-icons-ibuffer
-                       projectile
-                       ibuffer-projectile
-                       ibuffer-sidebar
-                       load-relative
-                       elpy
-                       rainbow-delimiters
-                       cmake-ide
-                       yaml-mode
-                       visual-fill-column
-                       use-package
-                       dockerfile-mode
-                       sr-speedbar
-                       latex-math-preview
-                       vue-mode
-                       js2-mode
-                       json-mode
-                       json-reformat
-                       all-the-icons-dired
-                       highlight-symbol
-                       origami
-                       paredit
-                       clojure-mode
-                       clojure-mode-extra-font-locking
-                       cider
-                       ido-completing-read+
-                       tagedit
-                       vundo
-                       csharp-mode
-                       ))
-
-
-  (setq require-list '(
-                       bibtex
-                       dirtree
-                       neotree
-                       pdf-tools
-                       popup
-                       yasnippet
-                       org-ref
-                       org-ref-ivy
-                       company
-                       flycheck
-                       eldoc
-                       all-the-icons
-                       all-the-icons-ibuffer
-                       projectile
-                       ibuffer-projectile
-                       ibuffer-sidebar
-                       load-relative
-                       elpy
-                       cc-mode
-                       yaml-mode
-                       visual-fill-column
-                       use-package
-                       dockerfile-mode
-                       sr-speedbar
-                       json-mode
-                       json-reformat
-                       highlight-symbol
-                       origami
-                       ))
+  
 #+END_SRC
 ** archives
 #+BEGIN_SRC emacs-lisp
@@ -103,11 +18,11 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
 
 ** settings and inits
 #+BEGIN_SRC emacs-lisp
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-(require 'package)
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+  ;; (require 'package)
+  ;; (package-initialize)
+  ;; (unless package-archive-contents
+  ;;   (package-refresh-contents))
 #+END_SRC
 
 ** appearance
@@ -155,15 +70,15 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 * Packages Installation and Require
 ** install from install-list
 #+BEGIN_SRC emacs-lisp
-  (dolist (package install-list)
-    (unless (package-installed-p package)
-      (package-install package)))
+  ;; (dolist (package install-list)
+  ;;   (unless (package-installed-p package)
+  ;;     (package-install package)))
 #+END_SRC
 
 ** require list
 #+BEGIN_SRC emacs-lisp
-  (dolist (package require-list)
-    (require package))
+  ;; (dolist (package require-list)
+  ;;   (require package))
 #+END_SRC
 
 
@@ -182,10 +97,10 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 ** global enables
 #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1)
-  (yas-global-mode 1)
+  ;; (yas-global-mode 1)
   (electric-pair-mode 1)
 
-  (global-flycheck-mode 1)
+  ;; (global-flycheck-mode 1)
 
   (show-paren-mode 1)
 #+END_SRC
@@ -277,7 +192,7 @@ Convenience keybindings
 ** eglot
 #+begin_src elisp
   (use-package eglot
-    :ensure t
+    :straight t
     :config
     (if (buoso/file-exists-p 'buoso/omnisharp-server-location)
       (progn
@@ -290,7 +205,7 @@ Convenience keybindings
 ** corfu
 #+begin_src elisp
   (use-package corfu
-    :ensure t
+    :straight t
     ;; Optional customizations
     :custom
     (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
@@ -301,13 +216,13 @@ Convenience keybindings
     (corfu-history-mode))
 
   (use-package corfu-terminal
-    :ensure t)
+    :straight t)
 #+end_src
 
 ** vertico
 #+begin_src elisp
   (use-package vertico
-    :ensure t
+    :straight t
     :init
     (vertico-mode)
 
@@ -328,14 +243,14 @@ Convenience keybindings
 #+begin_src elisp
   (use-package vertico-posframe
     :after vertico
-    :ensure t
+    :straight t
     :config
     (vertico-posframe-mode 1))
 #+end_src
 ** marginalia
 #+begin_src elisp
   (use-package marginalia
-    :ensure t
+    :straight t
     :init
     (marginalia-mode 1))
 #+end_src
@@ -343,7 +258,7 @@ Convenience keybindings
 ** orderless
 #+begin_src elisp
   (use-package orderless
-  :ensure t
+  :straight t
   :init
   (setq completion-styles '(orderless basic)
         completion-category-defaults nil
@@ -364,13 +279,13 @@ Convenience keybindings
   (unless (find-font (font-spec :name "all-the-icons"))
     (all-the-icons-install-fonts t))
   (setq all-the-icons-scale-factor 1)
-  (all-the-icons-ibuffer-mode 1)
+  ;; (all-the-icons-ibuffer-mode 1)
 #+end_src
 
 ** flycheck
 #+begin_src emacs-lisp
   (use-package flycheck
-    :ensure t)
+    :straight t)
 #+end_src
 
 ** dired
@@ -392,23 +307,23 @@ This is just meant to fetch org-modern. The configuration is done in the ~:confi
 ** org-ref
 Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
 #+BEGIN_SRC emacs-lisp
-  ;; Add bib-files to the bibtex-completion list if they can be found
-  (dolist (file *bib-files*)
-    (if (and (file-exists-p file) (not (member file bibtex-completion-bibliography)))
-        (push file bibtex-completion-bibliography)))
+    ;; Add bib-files to the bibtex-completion list if they can be found
+    (dolist (file *bib-files*)
+      (if (and (file-exists-p file) (not (member file bibtex-completion-bibliography)))
+          (push file bibtex-completion-bibliography)))
 
-  ;; enable org-ref functions and keybindings when there is at least one bib-file present
-  (defun buoso/bibtex-completion-setting ()
-    "Call this whenever `bibtex-completion-bibliography' was set to a value."
-    (if bibtex-completion-bibliography
-        (progn
-          (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
-                org-ref-insert-cite-function 'org-ref-cite-insert-ivy
-                org-ref-insert-label-function 'org-ref-insert-label-link
-                org-ref-insert-ref-function 'org-ref-insert-ref-link
-                org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
-          (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
-          (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body))))
+    ;; enable org-ref functions and keybindings when there is at least one bib-file present
+    (defun buoso/bibtex-completion-setting ()
+      "Call this whenever `bibtex-completion-bibliography' was set to a value."
+      (if bibtex-completion-bibliography
+          (progn
+            (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
+                  org-ref-insert-cite-function 'org-ref-cite-insert-ivy
+                  org-ref-insert-label-function 'org-ref-insert-label-link
+                  org-ref-insert-ref-function 'org-ref-insert-ref-link
+                  org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
+            (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
+            (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body))))
 #+END_SRC
 
 ** org-mode
@@ -418,13 +333,16 @@ Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-re
 
 At some point this junk of stuff should be sparated into source blocks...
 #+BEGIN_SRC emacs-lisp
-  ;; loaddefs
-  ;; not sure why this was there in there
-  ;; (require 'org-loaddefs)
+    ;; loaddefs
+    ;; not sure why this was there in there
+    ;; (require 'org-loaddefs)
+  (use-package org-bullets
+    :straight t)
   (defun buoso/org-init ()
     "Only require the packages related to 'org-mode' when using org."
-    (let ((org-requirements '(org-bullets org-contrib ox ox-publish ox-latex
-                                          ox-beamer ox-twbs ox-extra ob-async)))
+    (let ((org-requirements '(org-bullets ;; org-contrib ox ox-publish ox-latex
+                              ;; ox-beamer ox-twbs ox-extra ob-async
+                              )))
       (dolist (req org-requirements)
         (require req))))
 
@@ -494,7 +412,7 @@ At some point this junk of stuff should be sparated into source blocks...
   (use-package org
     :init (buoso/org-init)
     :mode (("\\.org$" . org-mode))  
-    :ensure t
+    :straight t
     :hook
     (org-mode . org-bullets-mode)
     (org-mode . buoso/org-visual-column-linum)
@@ -502,9 +420,7 @@ At some point this junk of stuff should be sparated into source blocks...
     (org-mode . buoso/org-babel-lang)
     (org-mode . buoso/eval-w/o-confirmation)
     (org-mode . buoso/org-settings)
-    (org-mode . buoso/bibtex-completion-setting)
-    :config
-    (global-org-modern-mode))
+    (org-mode . buoso/bibtex-completion-setting))
 #+END_SRC
 
 Some global settings that cannot be added to ~org-mode~ as a hook.
@@ -567,6 +483,41 @@ Mostly copied from [[https://niklasfasching.de/posts/org-html-export-inline-imag
     (setq ispell-program-name "hunspell"))
 #+end_src
 
+** org-modern
+This is just meant to fetch org-modern. The configuration is done in the ~:config~ section of [[*org-mode][org-mode]]
+#+begin_src elisp
+  (use-package org-modern
+    :straight t
+    :config
+    (global-org-modern-mode))
+#+end_src
+
+
+** org-ref
+Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
+#+BEGIN_SRC emacs-lisp
+  ;; Add bib-files to the bibtex-completion list if they can be found
+  (use-package org-ref
+    :straight t)
+
+  (dolist (file *bib-files*)
+    (if (and (file-exists-p file) (not (member file bibtex-completion-bibliography)))
+        (push file bibtex-completion-bibliography)))
+
+  ;; enable org-ref functions and keybindings when there is at least one bib-file present
+  (defun my/bibtex-completion-setting ()
+    "Call this whenever `bibtex-completion-bibliography' was set to a value."
+    (if bibtex-completion-bibliography
+        (progn
+          (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
+                org-ref-insert-cite-function 'org-ref-cite-insert-ivy
+                org-ref-insert-label-function 'org-ref-insert-label-link
+                org-ref-insert-ref-function 'org-ref-insert-ref-link
+                org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
+          (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
+          (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body))))
+#+END_SRC
+
 ** org-roam
 On windows [[https://www.msys2.org/][~MSYS~]] is the easiest way to get ~gcc~ which is needed to compile the database for [[https://www.orgroam.com/][org-roam]].
 
@@ -582,7 +533,7 @@ For the respective domain specific part of this config, the ~org-roam-dailies-di
         (expand-file-name dir))))
 
   (use-package org-roam
-    :ensure t
+    :straight t
     :custom
     (org-roam-directory (file-truename (buoso/get-org-roam-dir)))
     :bind (("C-c n l" . org-roam-buffer-toggle)
@@ -611,7 +562,7 @@ For the respective domain specific part of this config, the ~org-roam-dailies-di
 
 #+begin_src elisp
   (use-package org-roam-bibtex
-    :ensure t
+    :straight t
     :after org-roam
     :bind (("C-c b a" . orb-note-actions)
            ("C-c b i" . orb-insert-link)
@@ -626,7 +577,7 @@ For this configuration it makes sense to set the directory of /org-ql/ (~org-dir
 #+begin_src elisp
   (use-package org-ql
     :after org-roam
-    :ensure t
+    :straight t
     :custom
     (org-directory (file-truename (buoso/get-org-roam-dir))))
 #+end_src
@@ -657,7 +608,7 @@ global mode
 ** sr-speedbar
 #+begin_src elisp
   (use-package sr-speedbar
-    :ensure t
+    :straight t
     :init
     (lambda ()
       (display-line-numbers-mode -1)))
@@ -742,7 +693,7 @@ Show/hide text regions.
     (org-remove-inline-images))
 
   (use-package org-present
-    :ensure t
+    :straight t
     :hook ((org-present-mode . buoso/org-present-mode-hook)
            (org-present-mode-quit . buoso/org-present-mode-hook-quit)))
 #+end_src
@@ -750,7 +701,7 @@ Show/hide text regions.
 ** plantuml
 #+begin_src elisp
   (use-package plantuml-mode
-    :ensure t
+    :straight t
     :config
     (when (buoso/file-exists-p 'buoso/plantuml-jar-path)
       (setq plantuml-jar-path buoso/plantuml-jar-path)
@@ -772,7 +723,7 @@ Set the path to the ditaa executable.
 ** elfeed
 #+begin_src elisp
     (use-package elfeed
-      :ensure t
+      :straight t
       :config
       (setq url-queue-timeout 30)
       (setq elfeed-feeds
@@ -858,7 +809,7 @@ From:
 
 #+begin_src elisp
   (use-package markdown-mode
-    :ensure t
+    :straight t
     :commands (markdown-mode gfm-mode)
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'" . markdown-mode)
