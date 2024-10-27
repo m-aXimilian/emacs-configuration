@@ -8,57 +8,16 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
 ** install and require lists
 #+BEGIN_SRC emacs-lisp
   (setq install-list '(
-                       bibtex-completion
-                       ace-window
-                       dirtree
-                       neotree
-                       pdf-tools
                        popup
-                       yasnippet
-                       ivy
                        ivy-bibtex
-                       org
-                       ox-twbs
-                       org-bullets
-                       org-ref
-                       ob-async
-                       org-contrib ;; non gnu
                        gnuplot
                        gnuplot-mode
                        material-theme
-                       markdown-mode
-                       magit
-                       flycheck
-                       sly
-                       all-the-icons
-                       all-the-icons-ibuffer
-                       projectile
-                       ibuffer-projectile
-                       ibuffer-sidebar
                        load-relative
-                       elpy
-                       rainbow-delimiters
-                       cmake-ide
-                       yaml-mode
-                       visual-fill-column
-                       use-package
-                       dockerfile-mode
-                       sr-speedbar
-                       latex-math-preview
-                       vue-mode
-                       js2-mode
-                       json-mode
-                       json-reformat
-                       all-the-icons-dired
                        highlight-symbol
-                       origami
                        paredit
-                       clojure-mode
-                       clojure-mode-extra-font-locking
-                       cider
                        ido-completing-read+
                        tagedit
-                       vundo
                        csharp-mode
                        ))
 
@@ -69,23 +28,19 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
                        neotree
                        pdf-tools
                        popup
-                       yasnippet
-                       org-ref
-                       org-ref-ivy
                        company
                        flycheck
                        eldoc
                        all-the-icons
                        all-the-icons-ibuffer
-                       projectile
-                       ibuffer-projectile
+                       ;; projectile
+                       ;; ibuffer-projectile
                        ibuffer-sidebar
                        load-relative
                        elpy
                        cc-mode
                        yaml-mode
                        visual-fill-column
-                       use-package
                        dockerfile-mode
                        sr-speedbar
                        json-mode
@@ -103,11 +58,12 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
 
 ** settings and inits
 #+BEGIN_SRC emacs-lisp
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-(require 'package)
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
+    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+    (require 'package)
+    (unless package-archive-contents
+      (package-refresh-contents))
+    (unless (package-installed-p 'use-package)
+      (package-install 'use-package))
 #+END_SRC
 
 ** appearance
@@ -143,27 +99,27 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
   (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 #+end_src
 
+*** modeline
+#+begin_src elisp
+  (use-package simple-modeline
+  :ensure t
+  :hook (after-init . simple-modeline-mode))
+#+end_src
+*** themes
+#+begin_src elisp
+  (use-package nimbus-theme
+    :ensure t)
+  (use-package slime-theme
+    :ensure t)
+  (use-package gandalf-theme
+    :ensure t)
+#+end_src
 ** encoding and keyboard
 #+BEGIN_SRC emacs-lisp
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
-#+END_SRC
-
-
-* Packages Installation and Require
-** install from install-list
-#+BEGIN_SRC emacs-lisp
-  (dolist (package install-list)
-    (unless (package-installed-p package)
-      (package-install package)))
-#+END_SRC
-
-** require list
-#+BEGIN_SRC emacs-lisp
-  (dolist (package require-list)
-    (require package))
 #+END_SRC
 
 
@@ -182,18 +138,13 @@ manager).'' [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-and
 ** global enables
 #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1)
-  (yas-global-mode 1)
   (electric-pair-mode 1)
-
-  (global-flycheck-mode 1)
-
   (show-paren-mode 1)
 #+END_SRC
 
 ** key-bindings
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-n") 'switch-to-buffer)
-  (global-set-key (kbd "C-c p p") 'projectile-switch-project)
   (global-set-key (kbd "C-c i") 'ibuffer)
 #+END_SRC
 
@@ -274,153 +225,26 @@ Convenience keybindings
 
 
 * Mode and Backend settings
-** eglot
-#+begin_src elisp
-  (use-package eglot
-    :ensure t
-    :config
-    (if (buoso/file-exists-p 'buoso/omnisharp-server-location)
-      (progn
-        (add-to-list 'eglot-server-programs
-                     `(csharp-mode . (,buoso/omnisharp-server-location "-lsp" "-stdio")))
-        (setq eglot-connect-timeout 3000))
-    (buoso/error "Omnisharp file not found!")))
-#+end_src
-
-** corfu
-#+begin_src elisp
-  (use-package corfu
-    :ensure t
-    ;; Optional customizations
-    :custom
-    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-    (corfu-auto t)                 ;; Enable auto completion
-    (corfu-auto-prefix 2)
-    :init
-    (global-corfu-mode)
-    (corfu-history-mode))
-
-  (use-package corfu-terminal
-    :ensure t)
-#+end_src
-
-** vertico
-#+begin_src elisp
-  (use-package vertico
-    :ensure t
-    :init
-    (vertico-mode)
-
-    ;; Different scroll margin
-    (setq vertico-scroll-margin 0)
-
-    ;; Show more candidates
-    (setq vertico-count 35)
-
-    ;; Grow and shrink the Vertico minibuffer
-    (setq vertico-resize t)
-
-    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-    (setq vertico-cycle t))
-#+end_src
-
-*** vertico-posframe
-#+begin_src elisp
-  (use-package vertico-posframe
-    :after vertico
-    :ensure t
-    :config
-    (vertico-posframe-mode 1))
-#+end_src
-** marginalia
-#+begin_src elisp
-  (use-package marginalia
-    :ensure t
-    :init
-    (marginalia-mode 1))
-#+end_src
-
-** orderless
-#+begin_src elisp
-  (use-package orderless
-  :ensure t
-  :init
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles . (partial-completion))))))
-#+end_src
-
-** ibuffer
-#+begin_src emacs-lisp
-  (add-hook 'ibuffer-hook
-      (lambda ()
-        (ibuffer-projectile-set-filter-groups)
-        (unless (eq ibuffer-sorting-mode 'alphabetic)
-          (ibuffer-do-sort-by-alphabetic))))
-#+end_src
-
-** icons
-#+begin_src emacs-lisp
-  (unless (find-font (font-spec :name "all-the-icons"))
-    (all-the-icons-install-fonts t))
-  (setq all-the-icons-scale-factor 1)
-  (all-the-icons-ibuffer-mode 1)
-#+end_src
-
-** flycheck
-#+begin_src emacs-lisp
-  (use-package flycheck
-    :ensure t)
-#+end_src
-
-** dired
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'dired-mode-hook
-            (lambda ()
-              (dired-hide-details-mode)))
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-#+END_SRC
-
-** org-modern
-This is just meant to fetch org-modern. The configuration is done in the ~:config~ section of [[*org-mode][org-mode]]
-#+begin_src elisp
-  (use-package org-modern
-    :ensure t)
-#+end_src
-
-
-** org-ref
-Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
-#+BEGIN_SRC emacs-lisp
-  ;; Add bib-files to the bibtex-completion list if they can be found
-  (dolist (file *bib-files*)
-    (if (and (file-exists-p file) (not (member file bibtex-completion-bibliography)))
-        (push file bibtex-completion-bibliography)))
-
-  ;; enable org-ref functions and keybindings when there is at least one bib-file present
-  (defun buoso/bibtex-completion-setting ()
-    "Call this whenever `bibtex-completion-bibliography' was set to a value."
-    (if bibtex-completion-bibliography
-        (progn
-          (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
-                org-ref-insert-cite-function 'org-ref-cite-insert-ivy
-                org-ref-insert-label-function 'org-ref-insert-label-link
-                org-ref-insert-ref-function 'org-ref-insert-ref-link
-                org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
-          (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
-          (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body))))
-#+END_SRC
-
 ** org-mode
-#+begin_src emacs-lisp
-  (setq org-babel-lisp-eval-fn 'sly-eval)
+Require some dependencies
+#+begin_src elisp
+  (use-package org-bullets
+    :ensure t)
+  (use-package org-ref
+    :ensure t)
+  (use-package ob-async
+    :ensure t)
+  (use-package org-contrib
+    :ensure t)
+  (use-package ox-twbs
+    :ensure t)
+  (use-package ob-async
+    :ensure t)
+  (use-package visual-fill-column
+    :ensure t)
 #+end_src
 
-At some point this junk of stuff should be sparated into source blocks...
 #+BEGIN_SRC emacs-lisp
-  ;; loaddefs
-  ;; not sure why this was there in there
-  ;; (require 'org-loaddefs)
   (defun buoso/org-init ()
     "Only require the packages related to 'org-mode' when using org."
     (let ((org-requirements '(org-bullets org-contrib ox ox-publish ox-latex
@@ -502,39 +326,22 @@ At some point this junk of stuff should be sparated into source blocks...
     (org-mode . buoso/org-babel-lang)
     (org-mode . buoso/eval-w/o-confirmation)
     (org-mode . buoso/org-settings)
-    (org-mode . buoso/bibtex-completion-setting)
     :config
-    (global-org-modern-mode))
+    (setq org-highest-priority ?A)
+    (setq org-lowest-priority ?C)
+    (setq org-default-priority ?A)
+    (setq org-priority-faces '((?A . (:foreground "FF6670" :weight bold))
+                               (?B . (:foreground "F8FF42"))
+                               (?C . (:foreground "60FFFF"))))
+    (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+    (setq org-babel-lisp-eval-fn 'sly-eval)
+    (setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+    :bind
+    (("C-c a" . 'org-agenda)
+     ("C-c l" . 'org-store-link)
+     ("C-c c" . 'org-capture)))
 #+END_SRC
-
-Some global settings that cannot be added to ~org-mode~ as a hook.
-#+begin_src elisp
-  ;; agenda toggle mode
-  (global-set-key (kbd "C-c a") 'org-agenda)
-  (global-set-key (kbd "C-c l") 'org-store-link)
-  
-  ;; global target file for notes
-  (setq org-default-notes-file (concat org-directory "~/notes.org"))
-
-  ;;set priority range from A to C with default A
-  (setq org-highest-priority ?A)
-  (setq org-lowest-priority ?C)
-  (setq org-default-priority ?A)
-
-  ;; set priority color
-  (setq org-priority-faces '((?A . (:foreground "FF6670" :weight bold))
-                             (?B . (:foreground "F8FF42"))
-                             (?C . (:foreground "60FFFF"))))
-
-  (define-key global-map (kbd "C-c c") 'org-capture)
-  (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "~/todo.org" "Tasks")
-           "* TODO %?\n %i\n %a")))
-
-  (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
-
-  (org-reload)
-#+end_src
 
 Add additional html-export that embeds images into the generated html.
 Mostly copied from [[https://niklasfasching.de/posts/org-html-export-inline-images/]]
@@ -561,11 +368,39 @@ Mostly copied from [[https://niklasfasching.de/posts/org-html-export-inline-imag
                                                (org-open-file (org-html-export-to-mhtml nil s v b))))))))
 #+end_src
 
-*** ispell
+** org-modern
+This is just meant to fetch org-modern. The configuration is done in the ~:config~ section of [[*org-mode][org-mode]]
 #+begin_src elisp
-  (when (executable-find "hunspell")
-    (setq ispell-program-name "hunspell"))
+  (use-package org-modern
+    :ensure t
+    :after org
+    :config
+    (global-org-modern-mode))
 #+end_src
+
+** org-ref
+Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
+#+BEGIN_SRC emacs-lisp
+  ;; Add bib-files to the bibtex-completion list if they can be found
+  (use-package org-ref
+    :ensure t
+    :after org
+    :config
+    (when (and (buoso/variable-set-p '*bib-files*)
+               (not (null *bib-files*)))
+      (dolist (file *bib-files*)
+        (if (and (file-exists-p file) (not (member file bibtex-completion-bibliography)))
+            (push file bibtex-completion-bibliography))))
+    (if bibtex-completion-bibliography
+        (progn
+          (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
+                org-ref-insert-cite-function 'org-ref-cite-insert-ivy
+                org-ref-insert-label-function 'org-ref-insert-label-link
+                org-ref-insert-ref-function 'org-ref-insert-ref-link
+                org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
+          (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
+          (define-key org-mode-map (kbd "s-[") 'org-ref-insert-link-hydra/body))))
+#+END_SRC
 
 ** org-roam
 On windows [[https://www.msys2.org/][~MSYS~]] is the easiest way to get ~gcc~ which is needed to compile the database for [[https://www.orgroam.com/][org-roam]].
@@ -620,7 +455,6 @@ For the respective domain specific part of this config, the ~org-roam-dailies-di
     (require 'org-ref))
 #+end_src
 
-
 ** org-ql
 For this configuration it makes sense to set the directory of /org-ql/ (~org-directory~) to the default /org-roam/ directory (~org-roam-directory~) as this is the standard query directory. Consequently, it should only be initialized _after_ org-roam.
 #+begin_src elisp
@@ -631,27 +465,171 @@ For this configuration it makes sense to set the directory of /org-ql/ (~org-dir
     (org-directory (file-truename (buoso/get-org-roam-dir))))
 #+end_src
 
-** yasnippet
-#+BEGIN_SRC emacs-lisp
-  ;; require latex snippets in org mode
-  (defun my-org-latex-yas ()
-    "Activate org and LaTeX yas expansion in org-mode buffers."
-    (yas-minor-mode)
-    (yas-activate-extra-mode 'latex-mode))
+** eglot
+#+begin_src elisp
+  (use-package eglot
+    :ensure t
+    :config
+    (if (buoso/file-exists-p 'buoso/omnisharp-server-location)
+      (progn
+        (add-to-list 'eglot-server-programs
+                     `(csharp-mode . (,buoso/omnisharp-server-location "-lsp" "-stdio")))
+        (setq eglot-connect-timeout 3000))
+    (buoso/error "Omnisharp file not found!")))
+#+end_src
 
-  (add-hook 'org-mode-hook #'my-org-latex-yas)
+** corfu
+#+begin_src elisp
+  (use-package corfu
+    :ensure t
+    ;; Optional customizations
+    :custom
+    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto t)                 ;; Enable auto completion
+    (corfu-auto-prefix 2)
+    :init
+    (global-corfu-mode)
+    (corfu-history-mode))
+
+  (use-package corfu-terminal
+    :ensure t)
+#+end_src
+
+** vertico
+#+begin_src elisp
+  (use-package vertico
+    :ensure t
+    :init
+    (vertico-mode)
+
+    ;; Different scroll margin
+    (setq vertico-scroll-margin 0)
+
+    ;; Show more candidates
+    (setq vertico-count 35)
+
+    ;; Grow and shrink the Vertico minibuffer
+    (setq vertico-resize t)
+
+    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+    (setq vertico-cycle t))
+#+end_src
+
+*** vertico-posframe
+#+begin_src elisp
+  (use-package vertico-posframe
+    :after vertico
+    :ensure t
+    :config
+    (vertico-posframe-mode 1))
+#+end_src
+
+** ivy
+#+begin_src elisp
+  (use-package ivy
+    :ensure t)
+#+end_src
+** marginalia
+#+begin_src elisp
+  (use-package marginalia
+    :ensure t
+    :init
+    (marginalia-mode 1))
+#+end_src
+
+** orderless
+#+begin_src elisp
+  (use-package orderless
+  :ensure t
+  :init
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles . (partial-completion))))))
+#+end_src
+
+** projectile
+#+begin_src emacs-lisp
+  (use-package projectile
+    :ensure t
+    :bind
+    (("C-c p p" . 'projectile-switch-project))
+    :config
+    (setq projectile-indexing-method 'hybrid)
+    (projectile-global-mode))
+  (use-package ibuffer-projectile
+    :ensure t)
+#+end_src
+
+** magit
+#+begin_src elisp
+  (use-package magit
+    :ensure t)
+#+end_src
+
+** sly
+#+begin_src elisp
+  (use-package sly
+    :ensure t)
+#+end_src
+
+** cider
+#+begin_src elisp
+  (use-package cider
+    :ensure t)
+#+end_src
+** ibuffer
+#+begin_src emacs-lisp
+  (add-hook 'ibuffer-hook
+      (lambda ()
+        (ibuffer-projectile-set-filter-groups)
+        (unless (eq ibuffer-sorting-mode 'alphabetic)
+          (ibuffer-do-sort-by-alphabetic))))
+#+end_src
+
+** icons
+#+begin_src elisp
+  (use-package all-the-icons
+    :ensure t)
+  (use-package all-the-icons-dired
+    :ensure t)
+  (use-package all-the-icons-ibuffer
+    :ensure t)
+#+end_src
+#+begin_src emacs-lisp
+  (unless (find-font (font-spec :name "all-the-icons"))
+    (all-the-icons-install-fonts t))
+  (setq all-the-icons-scale-factor 1)
+  (all-the-icons-ibuffer-mode 1)
+#+end_src
+
+** flycheck
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :ensure t)
+#+end_src
+
+** dired
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (dired-hide-details-mode)))
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 #+END_SRC
 
-global mode
-#+begin_src emacs-lisp
-  (yas-global-mode 1)
+** ispell
+#+begin_src elisp
+  (when (executable-find "hunspell")
+    (setq ispell-program-name "hunspell"))
 #+end_src
 
 ** ace-window & move window
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-o") 'ace-window)
-  (global-set-key (kbd "s-j") 'windmove-left)
-  (global-set-key (kbd "s-;") 'windmove-right)
+  (use-package ace-window
+    :ensure t
+    :bind
+    (("M-o" . 'ace-window)
+     ("s-j" . 'windmove-left)
+     ("s-;" . 'windmove-right)))
 #+END_SRC
 
 ** sr-speedbar
@@ -661,12 +639,6 @@ global mode
     :init
     (lambda ()
       (display-line-numbers-mode -1)))
-#+end_src
-
-** projectile
-#+begin_src emacs-lisp
-  (setq projectile-indexing-method 'hybrid)
-  (projectile-global-mode)
 #+end_src
 
 ** neotree
@@ -682,18 +654,21 @@ Jump to the current file node when neotree is opened.
   (setq neo-smart-open t)
 #+end_src
 
-Change neotree when switching projectile project (~projectile-switch-project~)
+# Change neotree when switching projectile project (~projectile-switch-project~)
 #+begin_src emacs-lisp
   ;; (setq projectile-switch-project-action 'neotree-projectile-action)
 #+end_src
 
 ** raibow delimiters
 #+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :ensure t
+    :config
     (add-hook 'lisp-mode-hook '(lambda ()
-                                  (rainbow-delimiters-mode)
-                                  (prettify-symbols-mode)
-                                  (display-line-numbers-mode)))
-    (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+                                 (rainbow-delimiters-mode)
+                                 (prettify-symbols-mode)
+                                 (display-line-numbers-mode)))
+    (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 
 ** recentf
@@ -717,7 +692,7 @@ Adds lag when opening a file.
   (save-place-mode 1)
 #+end_src
 
-** highlight symbol
+** COMMENT highlight symbol
 #+begin_src elisp
   (global-set-key [(control f3)] 'highlight-symbol)
   (global-set-key [f3] 'highlight-symbol-next)
@@ -728,7 +703,11 @@ Adds lag when opening a file.
 ** origami
 Show/hide text regions.
 #+begin_src elisp
-  (define-key origami-mode-map (kbd "C-c C-z") 'origami-recursively-toggle-node)
+  (use-package origami
+    :ensure t
+    :bind
+    (:map origami-mode-map
+          ("C-c C-z" . 'origami-recursively-toggle-node)))
 #+end_src
 
 ** org-present
@@ -787,10 +766,17 @@ Set the path to the ditaa executable.
               ("https://sachachua.com/blog/category/emacs/feed/" emacsnews))))
 #+end_src
 
+** vundo
+#+begin_src elisp
+  (use-package vundo
+    :ensure t)
+#+end_src
+
 
 * Languages
 ** C/C++
 #+begin_src elisp
+  (require 'cc-mode)
   (define-key c-mode-base-map (kbd "<f5>") 'compile)
   (define-key c-mode-base-map (kbd "<f6>") 'recompile)
   (add-hook 'c-mode-hook 'origami-mode)
@@ -808,8 +794,23 @@ Check if the ~inferior-lisp-program~ variable is set. If not, try to default it 
         (buoso/error "No lisp compiler identified. Try install sbcl and check if it is in PATH."))))
 #+end_src
 
+** clojure
+#+begin_src elisp
+  (use-package clojure-mode
+    :ensure t)
+  (use-package clojure-mode-extra-font-locking
+    :ensure t)
+            
+#+end_src
+** C#
+#+begin_src elisp
+  (use-package csharp-mode
+    :ensure t)
+#+end_src
 ** latex
 #+BEGIN_SRC emacs-lisp
+  (use-package latex-math-preview
+    :ensure t)
   (add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
   #'TeX-revert-document-buffer)
   (add-to-list 'org-latex-classes
@@ -834,22 +835,48 @@ subtree using the *ignore* tag.
 
 ** pdf
 #+begin_src elisp
-  (add-hook 'pdf-view-mode-hook '(lambda () (pdf-tools-enable-minor-modes)))
-  (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
+  (use-package pdf-tools
+    :ensure t
+    :hook
+    (pdf-view-mode . pdf-tools-enable-minor-modes)
+    :config
+    (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode)))
 #+end_src
 
+** cmake
+#+begin_src elisp
+  (use-package cmake-ide
+    :ensure t)
+
+  (use-package cmake-mode
+    :ensure t)
+
+#+end_src
 ** yaml
 See [[https://melpa.org/#/yaml-mode]]
 #+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-#+end_src
+  (use-package yaml-mode
+    :ensure t
+    :init (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode)))
 
+#+end_src
+** json
+#+begin_src elisp
+  (use-package json-mode
+    :ensure t)
+  (use-package json-reformat
+    :ensure t)
+#+end_src
 ** python
 #+begin_src emacs-lisp
-  (elpy-enable)
-  (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
+  (use-package elpy
+    :ensure t
+    :init
+    (elpy-enable)
+    (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
     (setq elpy-rpc-python-command "python3")
-  (add-hook 'python-mode-hook 'origami-mode)
+    :hook
+    (python-mode . 'origami-mode))
 #+end_src
 
 ** makdown
@@ -868,30 +895,10 @@ From:
 
 ** docker
 #+begin_src elisp
-  (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
-#+end_src
-
-** vue
-See documentation on [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode-website]]
-With ~vue-mode~ and ~lsp-mode~ installed.
-Needs a lsp-backend (e.g. ~M-x lsp-install-server ts-ls~ for JavaScript and TypeScript).
-#+begin_src elisp
-  (use-package lsp-mode
-    :commands lsp)
-
-  (use-package vue-mode
-    :mode "\\.vue\\'"
-    :hook (vue-mode . lsp-deferred))
-
-  (setq js-indent-level 2)
-#+end_src
-
-** javascript
-Same as [[vue][*vue]] -> needs ~lsp-mode~
-#+begin_src elisp
-  (use-package js2-mode
-    :mode "\\.js\\'"
-    :hook (js2-mode . lsp-deferred))
+  (use-package dockerfile-mode
+    :ensure t
+    :init
+    (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode)))
 #+end_src
 
 
@@ -1020,13 +1027,6 @@ Same as [[vue][*vue]] -> needs ~lsp-mode~
   (global-set-key (kbd "M-s M-e") 'inline-src-elisp)
 #+END_SRC
 
-
-* ToDo setup
-** keywords and tags
-#+BEGIN_SRC emacs-lisp
-(setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
-#+END_SRC
 
 
 
