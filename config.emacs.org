@@ -837,9 +837,10 @@ subtree using the *ignore* tag.
 #+begin_src elisp
   (use-package pdf-tools
     :ensure t
-    :hook
-    (pdf-view-mode . pdf-tools-enable-minor-modes)
+    ;; :hook
+    ;; (pdf-view-mode . pdf-tools-enable-minor-modes)
     :config
+    (add-hook 'pdf-view-mode-hook '(lambda () (pdf-tools-enable-minor-modes)))
     (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode)))
 #+end_src
 
