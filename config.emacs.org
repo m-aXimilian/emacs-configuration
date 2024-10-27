@@ -215,18 +215,61 @@ Convenience keybindings
 
 * Custom Variables
 #+begin_src elisp
-  (defun variable-set-p (variable)
-    "Throw an error if VARIABLE is not defined."
-    (when (not (boundp variable))
-      (error (format "The variable '%s' is not defined. Set it in your 'init.el' or '.emacs' config file." variable))))
+  (defcustom buoso/configuration-pedantry-mode nil
+    "Set the level of pedantry throughout the configuration.
+
+  It will be used as an indicator on how to inform consumers about discovered issues.
+  Recognized values are `pedantic', `relaxed', and `yolo'.")
+
+  (defalias 'buoso/error 'error
+    "Custom error function.")
+
+  (defalias 'buoso/warn 'warn
+    "Custom warning function.")
+
+  (defalias 'buoso/info 'message
+    "Custom info function.")
+
+  ((lambda ()
+    (cond
+     ((eq buoso/configuration-pedantry-mode 'pedantic)
+      (defalias 'buoso/error 'error)
+      (defalias 'buoso/warn 'error))
+     ((eq buoso/configuration-pedantry-mode 'relaxed)
+      (defalias 'buoso/error 'warn)
+      (defalias 'buoso/warn 'warn))
+     ((eq buoso/configuration-pedantry-mode 'yolo)
+      (defalias 'buoso/error 'message)
+      (defalias 'buoso/warn 'message)))))
+
 #+end_src
 
 #+begin_src elisp
-  (variable-set-p 'my/omnisharp-server-location)
-  (variable-set-p 'my/plantuml-jar-path)
-  (variable-set-p 'my/ditaa-jar-path)
-  (variable-set-p 'my/ditaa-eps-jar-path)
-  (variable-set-p '*bib-files*)
+  (defun buoso/variable-set-p (variable)
+    "Return t if VARIABLE defined nil otherwise.
+
+  An additional information will be made available with `buoso/warn'."
+    (if (boundp variable)
+        t
+      (progn
+        (buoso/warn (format "The variable '%s' is not defined. Set it in your 'init.el' or '.emacs' config file." variable))
+        nil)))
+
+  (defun buoso/file-exists-p (file)
+    "Return t if the variable FILE is define and the its path exists, nil otherwise.
+
+  Checks the varaible by means of `buoso/variable-set-p'.
+  Note: this works with both variables and string literals to file paths."
+    (and (buoso/variable-set-p file)
+         (file-exists-p (eval file))))
+#+end_src
+
+#+begin_src elisp
+  (buoso/variable-set-p 'buoso/omnisharp-server-location)
+  (buoso/variable-set-p 'buoso/plantuml-jar-path)
+  (buoso/variable-set-p 'buoso/ditaa-jar-path)
+  (buoso/variable-set-p 'buoso/ditaa-eps-jar-path)
+  (buoso/variable-set-p '*bib-files*)
 #+end_src
 
 
@@ -356,7 +399,7 @@ Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-re
         (push file bibtex-completion-bibliography)))
 
   ;; enable org-ref functions and keybindings when there is at least one bib-file present
-  (defun my/bibtex-completion-setting ()
+  (defun buoso/bibtex-completion-setting ()
     "Call this whenever `bibtex-completion-bibliography' was set to a value."
     (if bibtex-completion-bibliography
         (progn
@@ -379,14 +422,14 @@ At some point this junk of stuff should be sparated into source blocks...
   ;; loaddefs
   ;; not sure why this was there in there
   ;; (require 'org-loaddefs)
-  (defun my/org-init ()
+  (defun buoso/org-init ()
     "Only require the packages related to 'org-mode' when using org."
     (let ((org-requirements '(org-bullets org-contrib ox ox-publish ox-latex
                                           ox-beamer ox-twbs ox-extra ob-async)))
       (dolist (req org-requirements)
         (require req))))
 
-  (defun my/org-visual-column-linum ()
+  (defun buoso/org-visual-column-linum ()
     "Appearance configurations for 'org-mode'."
     (progn
       (setq-default visual-fill-column-width 120)
@@ -396,11 +439,11 @@ At some point this junk of stuff should be sparated into source blocks...
       (visual-line-mode)
       (display-line-numbers-mode -1)))
 
-  (defun my/org-settings ()
+  (defun buoso/org-settings ()
     "Consider this for more uncategorized settings like the src-window."
     (setq org-src-window-setup "current-window"))
 
-  (defun my/org-publishing ()
+  (defun buoso/org-publishing ()
     "Publishing specific settings."
     (setq org-publish-project-alist
           '(("org-notes"
@@ -422,7 +465,7 @@ At some point this junk of stuff should be sparated into source blocks...
              )
             ("org" :components ("org-notes" "org-static")))))
 
-  (defun my/org-babel-lang ()
+  (defun buoso/org-babel-lang ()
     "Which languages shall be loaded into babel."
     (org-babel-do-load-languages
      'org-babel-load-languages
@@ -433,7 +476,7 @@ At some point this junk of stuff should be sparated into source blocks...
        (lisp . t)
        (ditaa . t))))
 
-  (defun my/eval-w/o-confirmation ()
+  (defun buoso/eval-w/o-confirmation ()
     "Languages in the list don't require confirmation to be executed."
     (let ((confirmed-babel-langs (lambda (lang body)
                                    (not (or
@@ -450,17 +493,17 @@ At some point this junk of stuff should be sparated into source blocks...
 
 
   (use-package org
-    :init (my/org-init)
+    :init (buoso/org-init)
     :mode (("\\.org$" . org-mode))  
     :ensure t
     :hook
     (org-mode . org-bullets-mode)
-    (org-mode . my/org-visual-column-linum)
-    (org-mode . my/org-publishing)
-    (org-mode . my/org-babel-lang)
-    (org-mode . my/eval-w/o-confirmation)
-    (org-mode . my/org-settings)
-    (org-mode . my/bibtex-completion-setting)
+    (org-mode . buoso/org-visual-column-linum)
+    (org-mode . buoso/org-publishing)
+    (org-mode . buoso/org-babel-lang)
+    (org-mode . buoso/eval-w/o-confirmation)
+    (org-mode . buoso/org-settings)
+    (org-mode . buoso/bibtex-completion-setting)
     :config
     (global-org-modern-mode))
 #+END_SRC
@@ -533,16 +576,16 @@ This configuration makes use of an environment variable pointing to the root dir
 For some of the config here - especially the journaling part, see the excellent content on the [[https://systemcrafters.net/build-a-second-brain-in-emacs/keep-a-journal/][system crafters website]].
 For the respective domain specific part of this config, the ~org-roam-dailies-directory~ can be set to a custom value. Its default is ~"daily"~ . Daily files will end up here. It is relative to the ~org-roam-directory~, i.e., something like this will determine the location of the dailies: ~(expand-file-name org-roam-dailies-directory org-roam-directory)~
 #+begin_src elisp
-  (defun my/get-org-roam-dir ()
+  (defun buoso/get-org-roam-dir ()
     (let ((dir (getenv "ORGROAM")))
       (if (eq nil dir)
-          (error "No environment variable 'ORGROAM' was found. Set one and start again.")
+          (buoso/error "No environment variable 'ORGROAM' was found. Set one and start again.")
         (expand-file-name dir))))
 
   (use-package org-roam
     :ensure t
     :custom
-    (org-roam-directory (file-truename (my/get-org-roam-dir)))
+    (org-roam-directory (file-truename (buoso/get-org-roam-dir)))
     :bind (("C-c n l" . org-roam-buffer-toggle)
            ("C-c n f" . org-roam-node-find)
            ("C-c n g" . org-roam-graph)
@@ -560,7 +603,7 @@ For the respective domain specific part of this config, the ~org-roam-dailies-di
 #+begin_src elisp
   ;; Do not call this outside of the `org-roam-bibtex' use-package section as it depends on this package.
   ;; From the doc of `orb-open-attached-file': CITEKEY must be a list for compatibility with `bibtex-completion'
-  (defun my/orb-open-attached-file-wrapper ()
+  (defun buoso/orb-open-attached-file-wrapper ()
     "Only works in org-roam files wiht a 'ROAM_REFS' section containig a citekey that `orb-get-node-citekey' can grab.
   If there is no file attached, do so with `orb-note-actions'."
     (interactive)
@@ -573,7 +616,7 @@ For the respective domain specific part of this config, the ~org-roam-dailies-di
     :after org-roam
     :bind (("C-c b a" . orb-note-actions)
            ("C-c b i" . orb-insert-link)
-           ("C-c b o" . my/orb-open-attached-file-wrapper))
+           ("C-c b o" . buoso/orb-open-attached-file-wrapper))
     :config
     (require 'org-ref))
 #+end_src
@@ -586,7 +629,7 @@ For this configuration it makes sense to set the directory of /org-ql/ (~org-dir
     :after org-roam
     :ensure t
     :custom
-    (org-directory (file-truename (my/get-org-roam-dir))))
+    (org-directory (file-truename (buoso/get-org-roam-dir))))
 #+end_src
 
 ** yasnippet
@@ -691,18 +734,18 @@ Show/hide text regions.
 
 ** org-present
 #+begin_src elisp
-  (defun my/org-present-mode-hook ()
+  (defun buoso/org-present-mode-hook ()
     "Setup org-present-mode."
     (org-display-inline-images))
 
-  (defun my/org-present-mode-hook-quit ()
-    "Revert settings from my/org-present-mode-hook when leaving org-present-mode."
+  (defun buoso/org-present-mode-hook-quit ()
+    "Revert settings from buoso/org-present-mode-hook when leaving org-present-mode."
     (org-remove-inline-images))
 
   (use-package org-present
     :ensure t
-    :hook ((org-present-mode . my/org-present-mode-hook)
-           (org-present-mode-quit . my/org-present-mode-hook-quit)))
+    :hook ((org-present-mode . buoso/org-present-mode-hook)
+           (org-present-mode-quit . buoso/org-present-mode-hook-quit)))
 #+end_src
 
 ** plantuml
@@ -710,9 +753,9 @@ Show/hide text regions.
   (use-package plantuml-mode
     :ensure t
     :config
-    (when (file-exists-p my/plantuml-jar-path)
-      (setq plantuml-jar-path my/plantuml-jar-path)
-      (setq org-plantuml-jar-path my/plantuml-jar-path))
+    (when (buoso/file-exists-p 'buoso/plantuml-jar-path)
+      (setq plantuml-jar-path buoso/plantuml-jar-path)
+      (setq org-plantuml-jar-path buoso/plantuml-jar-path))
     (setq plantuml-default-exec-mode 'jar)
     (add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode)))
 #+end_src
@@ -720,11 +763,11 @@ Show/hide text regions.
 ** ditaa
 Set the path to the ditaa executable.
 #+begin_src elisp
-  (when (file-exists-p my/ditaa-jar-path)
-    (setq org-ditaa-jar-path my/ditaa-jar-path))
+  (when (buoso/file-exists-p 'buoso/ditaa-jar-path)
+    (setq org-ditaa-jar-path buoso/ditaa-jar-path))
 
-  (when (file-exists-p my/ditaa-eps-jar-path)
-    (setq org-ditaa-eps-jar-path my/ditaa-eps-jar-path))
+  (when (buoso/file-exists-p 'buoso/ditaa-eps-jar-path)
+    (setq org-ditaa-eps-jar-path buoso/ditaa-eps-jar-path))
 #+end_src
 
 ** elfeed
@@ -763,7 +806,7 @@ Check if the ~inferior-lisp-program~ variable is set. If not, try to default it 
     (let ((sbcl (executable-find "sbcl")))
       (if sbcl
           (setq inferior-lisp-program sbcl)
-        (error "No lisp compiler identified. Try install sbcl and check if it is in PATH."))))
+        (buoso/error "No lisp compiler identified. Try install sbcl and check if it is in PATH."))))
 #+end_src
 
 ** latex
