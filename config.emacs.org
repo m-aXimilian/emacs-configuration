@@ -279,13 +279,12 @@ Convenience keybindings
   (use-package eglot
     :ensure t
     :config
-    (let ((omnisharp-server my/omnisharp-server-location))
-      (if (file-exists-p omnisharp-server)
-          (progn
-            (add-to-list 'eglot-server-programs
-                         `(csharp-mode . (,omnisharp-server "-lsp" "-stdio")))
-            (setq eglot-connect-timeout 3000))
-        (error "Omnisharp file not found!"))))
+    (if (buoso/file-exists-p 'buoso/omnisharp-server-location)
+      (progn
+        (add-to-list 'eglot-server-programs
+                     `(csharp-mode . (,buoso/omnisharp-server-location "-lsp" "-stdio")))
+        (setq eglot-connect-timeout 3000))
+    (buoso/error "Omnisharp file not found!")))
 #+end_src
 
 ** corfu
