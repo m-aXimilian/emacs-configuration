@@ -1,0 +1,16 @@
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    # Install Emacs
+    - uses: jcs090218/setup-emacs@master
+      with:
+        version: 29.2
+
+    - name: Check config
+      run: |
+        emacs --batch --eval="(setq buoso/configuration-pedantry-mode 'pedantic)" \
+        --eval="(org-babel-load-file \"~/.emacs.d/config.emacs.org\")"
