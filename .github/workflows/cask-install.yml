@@ -10,10 +10,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    # Install Emacs
-    - uses: jcs090218/setup-emacs@master
-      with:
-        version: 29.2
+    - name: Update apt
+      run: sudo apt update 2> /dev/null
+        
+    - name: Install emacs
+      run: |
+        sudo apt install emacs
 
     - name: Check config
       run: |
