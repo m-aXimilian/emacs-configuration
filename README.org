@@ -1,5 +1,5 @@
 #+startup: indent
-#+Title: Emacs config file
+#+Title: My emacs configuration
 #+subtitle: Basic tweaks for vanilla emacs
 
 * Structure of the configuration
