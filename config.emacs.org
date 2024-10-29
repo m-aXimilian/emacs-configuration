@@ -4,51 +4,6 @@
 
 * Package Sources and Inits
 Try ~package-refresh-contents~ as a quickfix when a package is not found.
-
-** install and require lists
-#+BEGIN_SRC emacs-lisp
-  (setq install-list '(
-                       popup
-                       ivy-bibtex
-                       gnuplot
-                       gnuplot-mode
-                       material-theme
-                       load-relative
-                       highlight-symbol
-                       paredit
-                       ido-completing-read+
-                       tagedit
-                       csharp-mode
-                       ))
-
-
-  (setq require-list '(
-                       bibtex
-                       dirtree
-                       neotree
-                       pdf-tools
-                       popup
-                       company
-                       flycheck
-                       eldoc
-                       all-the-icons
-                       all-the-icons-ibuffer
-                       ;; projectile
-                       ;; ibuffer-projectile
-                       ibuffer-sidebar
-                       load-relative
-                       elpy
-                       cc-mode
-                       yaml-mode
-                       visual-fill-column
-                       dockerfile-mode
-                       sr-speedbar
-                       json-mode
-                       json-reformat
-                       highlight-symbol
-                       origami
-                       ))
-#+END_SRC
 ** archives
 #+BEGIN_SRC emacs-lisp
   (setq package-archives '(("nongnu" . "https://elpa.nongnu.org/nongnu/")
@@ -909,7 +864,13 @@ From:
     (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode)))
 #+end_src
 
-
+** gnuplot
+#+begin_src elisp
+  (use-package gnuplot
+    :ensure t)
+  (use-package gnuplot-mode
+    :ensure t)
+#+end_src
 * User functions
 *Attention* when using interactive: the first character in the string
  for the interactive function determines the type of the value
