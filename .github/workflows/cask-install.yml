@@ -18,4 +18,4 @@ jobs:
     - name: Check config
       run: |
         emacs --batch --eval="(setq buoso/configuration-pedantry-mode 'pedantic)" \
-        --eval="(org-babel-load-file \"~/.emacs.d/config.emacs.org\")"
+        --eval="(org-babel-load-file \"config.emacs.org\")"
