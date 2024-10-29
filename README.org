@@ -2,11 +2,62 @@
 #+Title: Emacs config file
 #+subtitle: Basic tweaks for vanilla emacs
 
-* Usage
-- Clone the repository
-- Put the path to the [[file:config.emacs.org]] in the /init.el/ file. All
-  missing packages will be downloaded automatically upon initial start. 
+* Structure of the configuration
+This configuration aims to be as generic as possible. I.e., there should be no domain-specific information in the [[file:config.emacs.org]] file.
+However, some parts of it rely on domain specific dependencies.
+Should any of these dependencies no be set, the initialization of this configuration will fail by default.
+This can be prevented by setting the ~buoso/configuration-pedantry-mode~ variable. By default, it will be interpreted as if it was set to ~'pedantic~. You can set it to ~'relaxed~ or ~'yolo~ if you don't care about domain-specific warnings/errors.
+For example, set it like
+#+begin_src elisp :results none
+  (setq buoso/configuration-pedantry-mode 'yolo)
+#+end_src
+to turn domain-specific error messages to simple /messages/. With ~'relaxed~ you would get /warnings/, ~'pedantic~ throws /errors/ should one of the following dependencies not be fulfilled:
 
+** Ditaa
+[[https://orgmode.org/worg//org-contrib/babel/languages/ob-doc-ditaa.html][Ditaa source blocks]] require setting an executable ditaa jar path. To make the configuration aware of this set the ~buoso/ditaa-jar-path~ in your init file like
+#+begin_src elisp :results none
+    (defcustom buoso/ditaa-jar-path (expand-file-name "~/.ditaa/ditaa0_9.jar")
+      "The ditaa-jar-path assuming you have a ditaa jar in the ~/.ditaa direcotry.")
+#+end_src
+With the [[https://ditaa-addons.sourceforge.net/][ditaa addons]] it is further possible to export ditaa diagrams to eps files. To do so an additional executable jar is needed. You can add that like
+#+begin_src elisp :results none
+      (defcustom buoso/ditaa-eps-jar-path (expand-file-name "~/.ditaa/DitaaEps.jar")
+        "The jar path to the ditaa eps rendering executable.
+  Assuming you have a ditaaEps jar in the ~/.ditaa direcotry")
+#+end_src
+
+** Plantuml
+Similar to ditaa, you can provide a jar for [[https://github.com/plantuml/plantuml][plantuml]] like
+#+begin_src elisp :results none
+  (defcustom buoso/plantuml-jar-path (expand-file-name "~/.plantuml/plantuml-1.2024.0.jar")
+    "Needed for `plantuml-mode', this requires a plantuml-jar file to parse the *.puml-files.
+  Assuming the ~/.plantuml directory contains the appropriate jar file.")
+#+end_src
+
+** Omnisharp
+When using C# with eglot, it wants a respective lsp-backend. This is set to [[http://www.omnisharp.net/][omnisharp]] in this config and can be set with like so
+#+begin_src elisp :results none
+  (defcustom buoso/omnisharp-server-location "~/.emacs.d/.cache/omnisharp/server/v1.37.13/run"
+  "Must point to an omnisharp server executable.")
+#+end_src
+
+It can be conveniently [[https://github.com/OmniSharp/omnisharp-emacs][installed via melpa]].
+
+** Bibliography files
+You can use the ~*bib-files*~ variable to store your *.bib-files which are then usable by [[https://github.com/jkitchin/org-ref][org-ref]] (via ~C-x ]~) and [[https://github.com/org-roam/org-roam-bibtex][org-roam-bibtex]] (via ~C-c b i~).
+Provide it in your init file like
+#+begin_src elisp :results none
+  (defcustom *bib-files* '("~/mybibliography.bib"
+                           "~/someotherbib.bib"
+                           "~/evenmore.bib")
+    "List of *.bib-files for usage with org-ref.
+  These files will be used for `bibtex-completion-bibliography' if they exist.")
+#+end_src
+
+* Installation
+1. Clone the repository
+2. do a ~org-babel-load-file~ on [[file:config.emacs.org]] in your init file (/init.el/, /.emacs/, etc.)
+   
 ** Example with symbolic link
 With [[file:config.emacs.org]] under ~/home/<user>/emacs~ and /init.el/
 under ~/home/<user>/.emacs.d~
@@ -22,3 +73,7 @@ under ~/home/<user>/.emacs.d~
   file; follow link? (yes or no)'' \rightarrow answer ``yes''
 
 
+* Additional considerations
+** Enable elpy
+After installing, it might be necessary to "install" [[https://github.com/jorgenschaefer/elpy#start-of-content][elpy]] by calling ~M-x elpy-rpc-reinstall-virtualenv~.
+This might also resolve issues with [[https://github.com/joaotavora/eglot#start-of-content][eglot]] and the [[https://github.com/clangd/clangd#start-of-content][clangd]] backend managing C++ projects.
