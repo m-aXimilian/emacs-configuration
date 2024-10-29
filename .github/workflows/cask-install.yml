@@ -15,7 +15,9 @@ jobs:
         
     - name: Install emacs
       run: |
-        sudo apt install emacs
+        sudo add-apt-repository ppa:ubuntuhandbook1/emacs
+        sudo apt update
+        sudo apt install emacs emacs-common
 
     - name: Check config
       run: |
