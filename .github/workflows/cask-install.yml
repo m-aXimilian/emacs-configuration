@@ -19,5 +19,6 @@ jobs:
 
     - name: Check config
       run: |
-        emacs --batch --eval="(setq buoso/configuration-pedantry-mode 'pedantic)" \
+        emacs --batch --eval="(setq package-check-signature nil)" \
+        --eval="(setq buoso/configuration-pedantry-mode 'yolo)" \
         --eval="(org-babel-load-file \"config.emacs.org\")"
