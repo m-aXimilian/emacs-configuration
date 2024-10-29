@@ -594,33 +594,6 @@ For this configuration it makes sense to set the directory of /org-ql/ (~org-dir
      ("s-;" . 'windmove-right)))
 #+END_SRC
 
-** sr-speedbar
-#+begin_src elisp
-  (use-package sr-speedbar
-    :ensure t
-    :init
-    (lambda ()
-      (display-line-numbers-mode -1)))
-#+end_src
-
-** neotree
-See [[https://www.emacswiki.org/emacs/NeoTree][NeoTree Docs]]
-Use icons for file and let the widht be altered.
-#+begin_src emacs-lisp
-  (setq neo-theme 'icons)
-  (setq neo-window-fixed-size nil)
-#+end_src
-
-Jump to the current file node when neotree is opened.
-#+begin_src emacs-lisp
-  (setq neo-smart-open t)
-#+end_src
-
-# Change neotree when switching projectile project (~projectile-switch-project~)
-#+begin_src emacs-lisp
-  ;; (setq projectile-switch-project-action 'neotree-projectile-action)
-#+end_src
-
 ** raibow delimiters
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
