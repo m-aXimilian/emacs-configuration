@@ -440,6 +440,9 @@ For the respective domain specific part of this config, the ~org-roam-dailies-di
     (require 'org-roam-dailies)
     (org-roam-db-autosync-mode)
     (setq org-roam-database-connector 'emacsql-sqlite))
+  (use-package org-roam-ui
+    :ensure t
+    :after org-roam)
 #+end_src
 
 *** org-roam-bibtex
@@ -533,11 +536,6 @@ For this configuration it makes sense to set the directory of /org-ql/ (~org-dir
     (vertico-posframe-mode 1))
 #+end_src
 
-** ivy
-#+begin_src elisp
-  (use-package ivy
-    :ensure t)
-#+end_src
 ** marginalia
 #+begin_src elisp
   (use-package marginalia
