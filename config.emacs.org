@@ -378,6 +378,13 @@ This is just meant to fetch org-modern. The configuration is done in the ~:confi
     (global-org-modern-mode))
 #+end_src
 
+** ivy
+#+begin_src elisp
+  (use-package ivy
+    :ensure t)
+  (use-package ivy-bibtex
+    :ensure t)
+#+end_src
 ** org-ref
 Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
 #+BEGIN_SRC emacs-lisp
@@ -385,6 +392,8 @@ Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-re
   (use-package org-ref
     :ensure t
     :after org
+    :init
+    (require 'org-ref-ivy)
     :config
     (when (and (buoso/variable-set-p '*bib-files*)
                (not (null *bib-files*)))
