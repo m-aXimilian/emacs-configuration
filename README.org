@@ -37,13 +37,13 @@ Similar to ditaa, you can provide a jar for [[https://github.com/plantuml/plantu
 #+end_src
 
 ** Omnisharp
-When using C# with eglot, it wants a respective lsp-backend. This is set to [[http://www.omnisharp.net/][omnisharp]] in this config and can be set with like so
+When using C# with eglot, it wants a respective lsp-backend. This is set to [[http://www.omnisharp.net/][omnisharp]] in this config and can be exposed to the configuration like
 #+begin_src elisp :results none
   (defcustom buoso/omnisharp-server-location "~/.emacs.d/.cache/omnisharp/server/v1.37.13/run"
   "Must point to an omnisharp server executable.")
 #+end_src
 
-It can be conveniently [[https://github.com/OmniSharp/omnisharp-emacs][installed via melpa]].
+Omnisharp itself is conveniently [[https://github.com/OmniSharp/omnisharp-emacs][available in melpa]].
 
 ** Bibliography files
 You can use the ~*bib-files*~ variable to store your *.bib-files which are then usable by [[https://github.com/jkitchin/org-ref][org-ref]] (via ~C-x ]~) and [[https://github.com/org-roam/org-roam-bibtex][org-roam-bibtex]] (via ~C-c b i~).
