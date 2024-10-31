@@ -432,6 +432,13 @@ For this configuration it makes sense to set the directory of /org-ql/ (~org-dir
     (org-directory (file-truename (buoso/get-org-roam-dir))))
 #+end_src
 
+** elpy
+#+begin_src elisp
+  (use-package elpy
+      :ensure t
+      :init
+      (elpy-enable))
+#+end_src
 ** eglot
 #+begin_src elisp
   (use-package eglot
@@ -803,16 +810,17 @@ See [[https://melpa.org/#/yaml-mode]]
   (use-package json-reformat
     :ensure t)
 #+end_src
-** python
+** COMMENT python
+Elpy is installed in the previous section. There should be no more effort needed to enable python completion.
 #+begin_src emacs-lisp
-  (use-package elpy
-    :ensure t
-    :init
-    (elpy-enable)
-    (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
-    (setq elpy-rpc-python-command "python3")
-    :hook
-    (python-mode . 'origami-mode))
+  ;; (use-package elpy
+  ;;   :ensure t
+  ;;   :init
+  ;;   (elpy-enable)
+  ;;   (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
+  ;;   (setq elpy-rpc-python-command "python3")
+  ;;   :hook
+  ;;   (python-mode . 'origami-mode))
 #+end_src
 
 ** makdown
