@@ -2,7 +2,7 @@
 #+Title: My emacs configuration
 #+subtitle: Basic tweaks for vanilla emacs
 
-[[https://github.com/m-aXimilian/emacs-configuration/actions/workflows/cask-install.yml/badge.svg]]
+[[https://github.com/m-aXimilian/emacs-configuration/actions/workflows/config-test.yml/badge.svg]]
 
 * Structure of the configuration
 This configuration aims to be as generic as possible. I.e., there should be no domain-specific information in the [[file:config.emacs.org]] file.
