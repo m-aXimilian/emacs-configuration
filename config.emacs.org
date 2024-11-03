@@ -180,6 +180,15 @@ Convenience keybindings
 
 
 * Mode and Backend settings
+** fonts
+#+begin_src elisp
+  (use-package nerd-icons
+    :ensure t)
+  (use-package nerd-icons-ibuffer
+    :ensure t)
+  (use-package nerd-icons-dired
+    :ensure t)
+#+end_src
 ** org-mode
 Require some dependencies
 #+begin_src elisp
@@ -582,7 +591,8 @@ For this configuration it makes sense to set the directory of /org-ql/ (~org-dir
   (add-hook 'dired-mode-hook
             (lambda ()
               (dired-hide-details-mode)))
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  (add-hook 'dired-mode-hook 'nerd-icons-dired-mode)
 #+END_SRC
 
 ** ispell
@@ -852,6 +862,7 @@ From:
   (use-package gnuplot-mode
     :ensure t)
 #+end_src
+
 * User functions
 *Attention* when using interactive: the first character in the string
  for the interactive function determines the type of the value
