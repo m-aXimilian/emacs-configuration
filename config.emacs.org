@@ -180,6 +180,15 @@ Convenience keybindings
 
 
 * Mode and Backend settings
+** fonts
+#+begin_src elisp
+  (use-package nerd-icons
+    :ensure t)
+  (use-package nerd-icons-ibuffer
+    :ensure t)
+  (use-package nerd-icons-dired
+    :ensure t)
+#+end_src
 ** org-mode
 Require some dependencies
 #+begin_src elisp
@@ -252,7 +261,8 @@ Require some dependencies
        (python . t)
        (C . t)
        (lisp . t)
-       (ditaa . t))))
+       (ditaa . t)
+       (clojure . t))))
 
   (defun buoso/eval-w/o-confirmation ()
     "Languages in the list don't require confirmation to be executed."
@@ -266,7 +276,8 @@ Require some dependencies
                                          (string= lang "python")
                                          (string= lang "dot")
                                          (string= lang "C++")
-                                         (string= lang "ditaa"))))))
+                                         (string= lang "ditaa")
+                                         (string= lang "clojure"))))))
       (setq org-confirm-babel-evaluate confirmed-babel-langs)))
 
 
@@ -582,7 +593,8 @@ For this configuration it makes sense to set the directory of /org-ql/ (~org-dir
   (add-hook 'dired-mode-hook
             (lambda ()
               (dired-hide-details-mode)))
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  (add-hook 'dired-mode-hook 'nerd-icons-dired-mode)
 #+END_SRC
 
 ** ispell
@@ -852,6 +864,7 @@ From:
   (use-package gnuplot-mode
     :ensure t)
 #+end_src
+
 * User functions
 *Attention* when using interactive: the first character in the string
  for the interactive function determines the type of the value
