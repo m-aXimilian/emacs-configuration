@@ -261,7 +261,8 @@ Require some dependencies
        (python . t)
        (C . t)
        (lisp . t)
-       (ditaa . t))))
+       (ditaa . t)
+       (clojure . t))))
 
   (defun buoso/eval-w/o-confirmation ()
     "Languages in the list don't require confirmation to be executed."
@@ -275,7 +276,8 @@ Require some dependencies
                                          (string= lang "python")
                                          (string= lang "dot")
                                          (string= lang "C++")
-                                         (string= lang "ditaa"))))))
+                                         (string= lang "ditaa")
+                                         (string= lang "clojure"))))))
       (setq org-confirm-babel-evaluate confirmed-babel-langs)))
 
 
