@@ -23,8 +23,8 @@ to turn domain-specific error messages to simple /messages/. With ~'relaxed~ you
 #+end_src
 With the [[https://ditaa-addons.sourceforge.net/][ditaa addons]] it is further possible to export ditaa diagrams to eps files. To do so an additional executable jar is needed. You can add that like
 #+begin_src elisp :results none
-      (defcustom buoso/ditaa-eps-jar-path (expand-file-name "~/.ditaa/DitaaEps.jar")
-        "The jar path to the ditaa eps rendering executable.
+  (defcustom buoso/ditaa-eps-jar-path (expand-file-name "~/.ditaa/DitaaEps.jar")
+    "The jar path to the ditaa eps rendering executable.
   Assuming you have a ditaaEps jar in the ~/.ditaa direcotry")
 #+end_src
 
