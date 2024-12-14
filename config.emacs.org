@@ -443,6 +443,14 @@ For this configuration it makes sense to set the directory of /org-ql/ (~org-dir
     (org-directory (file-truename (buoso/get-org-roam-dir))))
 #+end_src
 
+** org-download
+See the [[https://github.com/abo-abo/org-download][project on github]]
+#+begin_src elisp
+  (use-package org-download
+    :ensure t
+    :after org
+    :hook (dired-mode . org-download-enable))
+#+end_src
 ** elpy
 #+begin_src elisp
   (use-package elpy
@@ -528,6 +536,7 @@ For this configuration it makes sense to set the directory of /org-ql/ (~org-dir
 #+end_src
 
 ** projectile
+Project specific compile commands can be set by specifying ~projectile-project-compilation-cmd~ in the project's /.dir-locals.el/.
 #+begin_src emacs-lisp
   (use-package projectile
     :ensure t
@@ -864,6 +873,7 @@ From:
   (use-package gnuplot-mode
     :ensure t)
 #+end_src
+
 
 * User functions
 *Attention* when using interactive: the first character in the string
