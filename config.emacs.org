@@ -444,12 +444,15 @@ For this configuration it makes sense to set the directory of /org-ql/ (~org-dir
 #+end_src
 
 ** org-download
-See the [[https://github.com/abo-abo/org-download][project on github]]
+See the [[https://github.com/abo-abo/org-download][project on github]].
+The ~dired-mode~ hook enables drag-and-drop to dired.
+The ~org-download-image-dir~ causes all downloads to be put in the /figures/ subdirectory.
 #+begin_src elisp
   (use-package org-download
     :ensure t
     :after org
-    :hook (dired-mode . org-download-enable))
+    :hook (dired-mode . org-download-enable)
+    :config (setq-default org-download-image-dir "./figures/"))
 #+end_src
 ** elpy
 #+begin_src elisp
