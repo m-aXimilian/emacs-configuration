@@ -740,6 +740,23 @@ Set the path to the ditaa executable.
     :ensure t)
 #+end_src
 
+** restclient
+The following two packages allow to do something like
+#+begin_example
+#+begin_src restclient :results pure replace :exports none :jq .
+  GET https://jsonplaceholder.typicode.com/users
+#+end_src
+#+end_example
+in org-mode buffers.
+
+
+#+begin_src elisp
+  (use-package restclient
+    :ensure t)
+
+  (use-package ob-restclient
+    :ensure t)
+#+end_src
 
 * Languages
 ** C/C++
