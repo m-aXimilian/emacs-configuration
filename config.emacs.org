@@ -352,6 +352,15 @@ This is just meant to fetch org-modern. The configuration is done in the ~:confi
   (use-package ivy-bibtex
     :ensure t)
 #+end_src
+
+** swiper
+Kind of an "interactive =M-x occur=" that integrates with [[*ivy][ivy]]
+#+begin_src elisp
+  (use-package swiper
+  :ensure t
+  :bind (("C-s" . swiper)
+         ("C-r" . swiper)))
+#+end_src
 ** org-ref
 Configuration copied from [[https://github.com/jkitchin/org-ref][jkitchin/org-ref]]. Append bib files to the *bib-files* list.
 #+BEGIN_SRC emacs-lisp
