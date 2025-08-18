@@ -558,6 +558,7 @@ Project specific compile commands can be set by specifying ~projectile-project-c
     (("C-c p p" . 'projectile-switch-project))
     :config
     (setq projectile-indexing-method 'hybrid)
+    (setq projectile-enable-cmake-presets t)
     (projectile-global-mode))
   (use-package ibuffer-projectile
     :ensure t)
