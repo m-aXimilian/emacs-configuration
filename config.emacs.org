@@ -263,7 +263,8 @@ Require some dependencies
        (lisp . t)
        (ditaa . t)
        (clojure . t)
-       (restclient . t))))
+       (restclient . t)
+       (plantuml . t))))
 
   (defun buoso/eval-w/o-confirmation ()
     "Languages in the list don't require confirmation to be executed."
@@ -278,7 +279,8 @@ Require some dependencies
                                          (string= lang "dot")
                                          (string= lang "C++")
                                          (string= lang "ditaa")
-                                         (string= lang "clojure"))))))
+                                         (string= lang "clojure")
+                                         (string= lang "plantuml"))))))
       (setq org-confirm-babel-evaluate confirmed-babel-langs)))
 
 
