@@ -305,7 +305,7 @@ Require some dependencies
     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
     (setq org-babel-lisp-eval-fn 'sly-eval)
     (setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+          '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "DEFERRED")))
     :bind
     (("C-c a" . 'org-agenda)
      ("C-c l" . 'org-store-link)
