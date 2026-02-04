@@ -581,7 +581,9 @@ Project specific compile commands can be set by specifying ~projectile-project-c
 ** cider
 #+begin_src elisp
   (use-package cider
-    :ensure t)
+    :ensure t
+    :config
+    (setq cider-repl-prompt-function (lambda (ns) (format "🫑 %s:> " ns))))
 #+end_src
 ** ibuffer
 #+begin_src emacs-lisp
