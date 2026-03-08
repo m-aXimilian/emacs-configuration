@@ -171,7 +171,6 @@ Convenience keybindings
 #+end_src
 
 #+begin_src elisp
-  (buoso/variable-set-p 'buoso/omnisharp-server-location)
   (buoso/variable-set-p 'buoso/plantuml-jar-path)
   (buoso/variable-set-p 'buoso/ditaa-jar-path)
   (buoso/variable-set-p 'buoso/ditaa-eps-jar-path)
@@ -478,13 +477,7 @@ The ~org-download-image-dir~ causes all downloads to be put in the /figures/ sub
 #+begin_src elisp
   (use-package eglot
     :ensure t
-    :config
-    (if (buoso/file-exists-p 'buoso/omnisharp-server-location)
-      (progn
-        (add-to-list 'eglot-server-programs
-                     `(csharp-mode . (,buoso/omnisharp-server-location "-lsp" "-stdio")))
-        (setq eglot-connect-timeout 3000))
-    (buoso/error "Omnisharp file not found!")))
+    :config)
 #+end_src
 
 ** corfu
@@ -772,6 +765,7 @@ in org-mode buffers.
     :ensure t)
 #+end_src
 
+
 * Languages
 ** C/C++
 #+begin_src elisp
@@ -779,8 +773,8 @@ in org-mode buffers.
   (define-key c-mode-base-map (kbd "<f5>") 'compile)
   (define-key c-mode-base-map (kbd "<f6>") 'recompile)
   (add-hook 'c-mode-hook 'origami-mode)
-  (add-hook 'c++-mode-hook 'origami-mode)
-  (add-hook 'c++-mode-hook 'display-line-numbers-mode)
+  ;; (add-hook 'c++-mode-hook 'origami-mode)
+  ;; (add-hook 'c++-mode-hook 'display-line-numbers-mode)
 #+end_src
 
 ** common lisp
