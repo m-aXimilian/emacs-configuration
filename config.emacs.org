@@ -259,11 +259,13 @@ Require some dependencies
        (gnuplot . t)
        (python . t)
        (C . t)
+       (csharp . t)
        (lisp . t)
        (ditaa . t)
        (clojure . t)
        (restclient . t)
-       (plantuml . t))))
+       (plantuml . t)
+       (maxima . t))))
 
   (defun buoso/eval-w/o-confirmation ()
     "Languages in the list don't require confirmation to be executed."
@@ -277,9 +279,11 @@ Require some dependencies
                                          (string= lang "python")
                                          (string= lang "dot")
                                          (string= lang "C++")
+                                         (string= lang "csharp")
                                          (string= lang "ditaa")
                                          (string= lang "clojure")
-                                         (string= lang "plantuml"))))))
+                                         (string= lang "plantuml")
+                                         (string= lang "maxima"))))))
       (setq org-confirm-babel-evaluate confirmed-babel-langs)))
 
 
