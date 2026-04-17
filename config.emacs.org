@@ -410,7 +410,11 @@ For the respective domain specific part of this config, the ~org-roam-dailies-di
            ("C-c n f" . org-roam-node-find)
            ("C-c n g" . org-roam-graph)
            ("C-c n i" . org-roam-node-insert)
-           ("C-c n c" . org-roam-capture))
+           ("C-c n c" . org-roam-capture)
+           :map org-roam-dailies-map
+           ("n" . org-roam-dailies-goto-next-note)
+           ("p" . org-roam-dailies-goto-previous-note)
+           ("t" . org-roam-dailies-goto-today))
     :bind-keymap
     ("C-c n d" . org-roam-dailies-map)
     :config
