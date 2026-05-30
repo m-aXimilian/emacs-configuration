@@ -18,14 +18,37 @@ jobs:
     - name: Update apt
       run: sudo apt update 2> /dev/null
 
-    - name: Install emacs
+    - name: Install emacs & deps
       run: |
         sudo add-apt-repository ppa:ubuntuhandbook1/emacs
         sudo apt update
-        sudo apt install emacs emacs-common
+        sudo apt install emacs emacs-common mupdf
+
+    - name: Prepare env
+      run: |
+        mkdir -p ~/.emacs.d
+        cat <<EOF > ~/.emacs.d/early-init.el
+        (let ((bootstrap-file
+               (expand-file-name
+                "straight/repos/straight.el/bootstrap.el"
+                (or (bound-and-true-p straight-base-dir)
+                     user-emacs-directory)))
+              (bootstrap-version 7))
+           (unless (file-exists-p bootstrap-file)
+             (with-current-buffer
+               (url-retrieve-synchronously
+                "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+                'silent 'inhibit-cookies)
+             (goto-char (point-max))
+             (eval-print-last-sexp)))
+         (load bootstrap-file nil 'nomessage))
+        EOF
+        cat ~/.emacs.d/early-init.el
 
     - name: Check config
       run: |
-        emacs --batch --eval="(setq package-check-signature nil)" \
+        emacs -Q --batch \
+        -l ~/.emacs.d/early-init.el \
+        --eval="(setq package-check-signature nil)" \
         --eval="(setq buoso/configuration-pedantry-mode 'yolo)" \
         --eval="(org-babel-load-file \"config.emacs.org\")"
