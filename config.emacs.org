@@ -474,6 +474,21 @@ The ~org-download-image-dir~ causes all downloads to be put in the /figures/ sub
            (org-mode . org-download-enable))
     :config (setq-default org-download-image-dir "./figures/"))
 #+end_src
+
+** emacs-reader
+
+#+begin_src elisp
+  (let ((reader-files
+         (pcase system-type
+           ('darwin '("*.el" "render-core.dylib"))
+           ('gnu/linux '(:defaults "render-core.so"))
+           (t nil))))
+    (use-package reader
+      :straight `(reader :type git :host codeberg :repo "MonadicSheep/emacs-reader"
+       		       :files ,reader-files
+       		       :pre-build ("make" "all"))))
+#+end_src
+
 ** elpy
 #+begin_src elisp
   (use-package elpy
