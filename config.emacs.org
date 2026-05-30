@@ -4,22 +4,13 @@
 
 * Package Sources and Inits
 Try ~package-refresh-contents~ as a quickfix when a package is not found.
-** archives
-#+BEGIN_SRC emacs-lisp
-  (setq package-archives '(("nongnu" . "https://elpa.nongnu.org/nongnu/")
-                           ("gnu" . "https://elpa.gnu.org/packages/") 
-                           ("melpa" . "https://melpa.org/packages/")))
-#+END_SRC
 
-** settings and inits
-#+BEGIN_SRC emacs-lisp
-    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-    (require 'package)
-    (unless package-archive-contents
-      (package-refresh-contents))
-    (unless (package-installed-p 'use-package)
-      (package-install 'use-package))
-#+END_SRC
+install use-package via straight
+#+begin_src elisp
+  (straight-use-package 'use-package)
+  (use-package el-patch
+    :straight t)
+#+end_src
 
 ** appearance
 *** disable splash screen
