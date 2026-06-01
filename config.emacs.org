@@ -8,8 +8,7 @@ Try ~package-refresh-contents~ as a quickfix when a package is not found.
 install use-package via straight
 #+begin_src elisp
   (straight-use-package 'use-package)
-  (use-package el-patch
-    :straight t)
+  (setq straight-use-package-by-default t)
 #+end_src
 
 ** appearance
